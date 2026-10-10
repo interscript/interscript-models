@@ -1713,3 +1713,20 @@ n-grams) → early-EOS truncation visible in the samples. v3's
 once). Clean A/B LAUNCHED (run-046): byt5-base, unfiltered labels, NO
 repetition suppression — vs v2-small's 0.5463 this isolates capacity
 alone. Lesson logged: one variable per arm, always.
+
+## WO31 stage-2 ledger CLOSES at 0.5463 — rules layer stands; ivrit.ai is the open decision (2026-10-11)
+
+run-046 (byt5-base, unfiltered, plain decode — the clean capacity
+A/B): normalized CER **0.6318** vs small's 0.5463 — capacity NEGATIVE
+at 3.2K utterances. Final ledger: v2-small 0.5463 (best) · base
+0.6318 · filtered 0.885 (confounded) · rules layer 0.2393 (shipped,
+stands). Every free lever measured: teacher conventions (fixed via
+pointed-espeak), metric conventions (normalized CER), capacity
+(negative), label filtering (unpromising under noise). The binding
+constraints are structural: 10h FLEURS audio + 0.319-PER teacher.
+
+DECISION FOR OWNER: the path to ReNikud-class (0.0244) Hebrew g2p is
+the ivrit.ai audio scale ($500 → 100+ hours labeled through the
+now-proven pipeline: pointed-espeak targets, tuned CTC teacher,
+normalized-CER gate). All pipeline risk is retired; the remaining
+risk is budget. Without it, the rules layer ships as our g2p answer.
