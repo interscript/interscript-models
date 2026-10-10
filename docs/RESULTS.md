@@ -1693,3 +1693,14 @@ the WO06 filtering pattern; caught+fixed a phonemize-mode bug in the
 reference path pre-launch) + no-repeat generation + normalized CER in
 the in-job verdict. Prediction: filtering trades data volume for
 label precision; the loop failures should collapse.
+
+run-044 (v3) verdict: normalized CER **0.8851 — filtering NEGATIVE**
+(v2 unfiltered: 0.5463). The agreement gate selected an easy-utterance
+subset (3,452 pairs, 2,685 train) whose distribution shift cost more
+than the noise removal bought — selection bias beats cleaning at this
+data scale. run-045 LAUNCHED: v2's unfiltered pointed recipe at
+**byt5-base** (repetition loops are the small-model symptom;
+base-vs-small unmeasured in this regime). This is the last free lever
+before the ivrit.ai scale decision ($500, owner-gated): if base also
+misses < 0.2393, the 10-hour FLEURS ceiling is the binding constraint
+and the rules layer (0.2393) stays shipped.
