@@ -72,6 +72,7 @@ hf jobs run --flavor a100-large -d \
 | 33 | 33-lexicon-disambiguator.md | P1 | 17/32 | NEGATIVE — 18.07/11.44; word-only can't diacritize OOV |
 | 34 | 34-hybrid-word-char.md | P1 | 32/33 | CLOSED — hybrid 13.53, fastText 13.59, vcd ±0, oracle 0.71 (all old-protocol; see 35) |
 | 35 | 35-alternate-protocol.md | P1 | 34 | SCORING ARTIFACT FIXED — OOD 4.10/1.56 (was 10.03/8.95); runtime fixed py#35/ts#108/ruby#805; 1.4-pt program open |
+| 36 | 36-ivrit-scale.md | P1 | 31 | APPROVED — awaiting owner terms-acceptance on ivrit-ai/audio-v2; pipeline spec'd, all stages proven |
 
 ## Schedule
 
