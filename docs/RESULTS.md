@@ -1704,3 +1704,12 @@ base-vs-small unmeasured in this regime). This is the last free lever
 before the ivrit.ai scale decision ($500, owner-gated): if base also
 misses < 0.2393, the 10-hour FLEURS ceiling is the binding constraint
 and the rules layer (0.2393) stays shipped.
+
+run-045 (byt5-base + no_repeat): normalized CER 0.8817 — CONFOUNDED
+READOUT, my error: the no_repeat_ngram_size=3 added in v3 blocks
+legitimate phone-sequence 3-grams (IPA recurringly repeats syllable
+n-grams) → early-EOS truncation visible in the samples. v3's
+"filter-negative" verdict is likewise confounded (two variables at
+once). Clean A/B LAUNCHED (run-046): byt5-base, unfiltered labels, NO
+repetition suppression — vs v2-small's 0.5463 this isolates capacity
+alone. Lesson logged: one variable per arm, always.
