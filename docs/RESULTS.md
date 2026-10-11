@@ -1730,3 +1730,20 @@ the ivrit.ai audio scale ($500 → 100+ hours labeled through the
 now-proven pipeline: pointed-espeak targets, tuned CTC teacher,
 normalized-CER gate). All pipeline risk is retired; the remaining
 risk is budget. Without it, the rules layer ships as our g2p answer.
+
+## WO35 arm 1 verdict — stripped-corpus specialist GATE PASS: 4.0034/1.5457 (2026-10-11)
+
+run-040 (byt5-base, run-029's exact recipe on first-alt-stripped
+corpus, 290,575 units, 36,320 steps, 11h across two resume legs):
+WikiNews first-alt **4.0034 WER / 1.5457 DER** — new best (shipped:
+4.0976/1.5606); raw protocol improves too (9.98 vs 10.03); Sadeed ID
+at parity (5.4840). Alternate emission shrank as designed. Export of
+the stripped model as the ara-diac-news successor is STAGED for the
+owner's version decision (bytes differ; new sha; 1.1 vs 2.0 naming).
+
+run-047 LAUNCHED (WO35 arm 2): byt5-LARGE seq2seq from pretrained
+scratch (no large adapted teacher exists) on the same stripped corpus
+— the untried capacity point in the dominant family. 36h timeout.
+Note: size+init both change vs run-040 (no pure A/B possible);
+the readout answers the practical question: does large beat the base
+specialist at this corpus.
