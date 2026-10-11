@@ -15,16 +15,31 @@ the terms — gated=auto grants immediately. Corpus: ~64K files,
 arxiv:2307.08720. Companion: ivrit-ai/audio-transcripts if v2 ships
 audio-only segments.
 
+## Reality check after access (2026-10-11)
+
+audio-v2 = **>20,000 hours** (not 1,700 — the corpus grew), raw
+episode-length m4a/mp3 by source. Companions are SEPARATELY gated and
+needed for pairing: audio-vad (segment boundaries), audio-transcripts,
+crowd-transcribe-v5 (verified transcripts), audio-labeled (pre-paired
+segments?) — OWNER: accept terms on each (one click per repo).
+License: ivrit.ai v1 — broad research + commercial use; we ship only
+derived models, never audio.
+
+STANDING RULE (owner, 2026-10-11): the corpus NEVER downloads to the
+laptop — everything mounts/streams in HF jobs with the gated token.
+
 ## Pipeline (every stage proven this week in WO31)
 
-1. **Ingest**: download audio-v2 + transcripts to the HF dataset
-   repo `Interscript/ivrit-v2` (resumable, sample-audio verified,
-   total-hours counted).
+1. **Audit** (in-job, cpu): mount/stream the repos, count real
+   hours, inspect schemas, 50-transcript QC — NO copying of audio;
+   pair via the companions' segment indices.
 2. **Point**: transcripts → nikud via our crown (heb-diac-plane-2.0,
    DER 8.18) — the WO31 convention fix. Local/batch, free.
-3. **Teacher at scale**: fine-tune the espeak-cv-ft CTC on the
-   pointed-espeak targets over the FULL corpus (FLEURS 10h gave PER
-   0.319; ~1,700h should drive it far lower). a100, ~10-20 GPU-h.
+3. **Teacher at scale**: fine-tune the espeak-cv-ft CTC on
+   pointed-espeak targets over a 300-500h slice first (gate: PER
+   < 0.25, ~10 GPU-h); scale only if the gate demands it — data is no
+   longer the constraint, compute budget is the dial (20K hours
+   available).
 4. **Label**: run the tuned teacher over all audio (audio-derived
    vowel-full labels; ~$0.28/audio-hour ≈ the $500).
 5. **Student at scale**: byt5-BASE (the capacity verdict was for 3.2K
