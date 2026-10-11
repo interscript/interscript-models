@@ -43,25 +43,25 @@ hf jobs run --flavor a100-large -d \
 | 03 | 03-thai-hybrid-latency.md | P1 | — | DONE (py#31, RESULTS #258) |
 | 04 | 04-hebrew-plane-scaleup.md | P2 | #44 | gate CLEARED — artifact DER 8.18 (int8, runtime protocol); release pending owner version |
 | 05 | 05-external-benchmarks.md | P2 | 01, 07 | DONE (RESULTS #259; MILIM awaiting release) |
-| 06 | 06-arabic-r8-noisy-student.md | P2 | #44 | jobs LAUNCHED (label + train, HF queue) |
+| 06 | 06-arabic-r8-noisy-student.md | P2 | #44 | CLOSED — dose-response mapped (RESULTS wave 2); teacher-quality lesson became the WO31 pattern |
 | 07 | 07-nikud-ipa-rule-layer.md | P3 | — | DONE (py#29, py#30) |
-| 08 | 08-thai-small-tier.md | P3 | #44 | job LAUNCHED (run-025, l4x4) |
+| 08 | 08-thai-small-tier.md | P3 | #44 | CLOSED — see 12 (sub-10MB tier negative) |
 | 09 | 09-hebrew-audio-pseudolabel-probe.md | P3 (parked probe) | — | DONE as parked probe (script only) |
 | 10 | 10-heb-plane-2-release.md | P1 | 04 | DONE (release, index-v9, 3 pin bumps, card, golden, HF mirror #28) |
-| 11 | 11-arabic-r8-chain.md | P1 | — | jobs RUNNING (a100) |
+| 11 | 11-arabic-r8-chain.md | P1 | — | CLOSED — r8a/b/c/d verdicts in RESULTS waves 2-4; specialist shipped |
 | 12 | 12-thai-tiny-contract.md | P2 | — | NEGATIVE (caveated) — PER 2038%; sub-10MB closed |
 | 13 | 13-thai-lexicon-release.md | P2 | 03 | DONE (tha-lexicon-kaikki-1.0 + sha, CC BY-SA) |
 | 14 | 14-ts-plane-port.md | P2 | — | DONE (ts#99/#100/#101, CI leg models#265) |
 | 15 | 15-api-edge.md | P2 | 14 | DONE (api#29: edge-first /v1/infer, kind in index) |
 | 16 | 16-parking-lot.md | — | — | parked (not now) |
-| 17 | 17-arabic-register-closure.md | P1 | 11 | dose-response MAPPED (RESULTS wave 2); r8d knee-seeking RUNNING; specialist option staged |
-| 18 | 18-parity-runs.md | P1 | 10 | pending |
+| 17 | 17-arabic-register-closure.md | P1 | 11 | CLOSED — register-specialist doctrine; specialist shipped; numbers superseded by WO35 corrected protocol |
+| 18 | 18-parity-runs.md | P1 | 10 | DONE via WO10+WO23 — golden attached, 3-leg parity GREEN |
 | 19 | 19-lexicon-loader.md | P2 | 13 | DONE (py#33) |
 | 20 | 20-hebrew-large-arm.md | P1 | 04 | NEGATIVE — 8.48 vs base 8.18; base stays shipped |
 | 21 | 21-arabic-plane-transfer.md | P2 | 17 | VERDICT: OOD −3.14 WER, ID +1.66 (Pareto) — specialist candidate staged |
 | 22 | 22-runtime-releases.md | P1 | 14 | PREPARED — owner-gated versions |
 | 23 | 23-ort-alignment.md | P1 | 18 | CLOSED — characterization complete; 3-leg parity GREEN at documented bound |
-| 24 | 24-verdict-wave.md | P1 | 17 | r8a/b/c + run-026 + thai CLOSED; r8d (knee) RUNNING |
+| 24 | 24-verdict-wave.md | P1 | 17 | CLOSED — all verdict waves recorded in RESULTS |
 | 25 | 25-ar-news-specialist.md | P1 | 17 | VERDICT: OOD 10.13/8.98 (crown), ID 5.50; export staged |
 | 27 | 27-ar-large-id-arm.md | P1 | — | NEGATIVE — 2.5765 parity with r7; capacity closed on AR too |
 | 28 | 28-oracle-complementarity.md | P2 | — | CLOSED — ceiling 96.78 real; naive voting catastrophic |
