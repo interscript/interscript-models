@@ -33,8 +33,9 @@ laptop — everything mounts/streams in HF jobs with the gated token.
 1. **Audit** (in-job, cpu): mount/stream the repos, count real
    hours, inspect schemas, 50-transcript QC — NO copying of audio;
    pair via the companions' segment indices.
-2. **Point**: transcripts → nikud via our crown (heb-diac-plane-2.0,
-   DER 8.18) — the WO31 convention fix. Local/batch, free.
+2. **Point** (in-job): transcripts → nikud via our crown
+   (heb-diac-plane-2.0, DER 8.18) — the WO31 convention fix; artifact
+   zip fetched into the job, pointed text written to the bucket.
 3. **Teacher at scale**: fine-tune the espeak-cv-ft CTC on
    pointed-espeak targets over a 300-500h slice first (gate: PER
    < 0.25, ~10 GPU-h); scale only if the gate demands it — data is no
