@@ -1747,3 +1747,13 @@ scratch (no large adapted teacher exists) on the same stripped corpus
 Note: size+init both change vs run-040 (no pure A/B possible);
 the readout answers the practical question: does large beat the base
 specialist at this corpus.
+
+WO36 audit verdict (2026-10-11): audio-v2 = 35,629 audio files,
+1.21TB (README floor >20K hours; header probes 404'd on the smallest
+files — hour count deferred to the teacher stage). The decisive find:
+**crowd-transcribe-v5 (~165K rows) and audio-labeled (~87K rows) are
+SELF-CONTAINED pairs** (audio bytes + verified transcript embedded)
+— no VAD, no cutting, no pairing engineering. ~250K ready pairs ≈
+10-20× FLEURS. Stage 2 RUNNING (run-049): text extraction + crown
+nikud pointing over all pairs, 8-way multiprocessed in-job per the
+no-local rule; audio stays in the parquets until the teacher stage.
