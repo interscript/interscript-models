@@ -75,12 +75,11 @@ laptop — everything mounts/streams in HF jobs with the gated token.
   (pointed-espeak targets, tokenizer he backend), gates: FLEURS dev
   PER < 0.25 AND ivrit-heldout PER reported. fp32 features, bf16
   autocast, step-ckpts, 12h timeout.
-- run-052: **label** — tuned teacher decodes the slice (audio-derived
-  vowel-full labels) to label tars in the bucket.
-- run-053: **student v3** — byt5-BASE text→IPA on the labels (capacity
-  verdict was for 3.2K pairs; at ~50K+ pairs base is right), gate:
-  normalized CER < 0.2393; ladder: Nakdimon 0.1102 · phonikud 0.0495
-  · ReNikud 0.0244.
+- run-052 (IMPLEMENTED + uploaded, combines 052+053): resumable
+  labeler (teacher decodes the slice → labels.jsonl, LABEL_DONE
+  checkpoint) + byt5-BASE student (byte-correct collate) + normalized
+  CER gate in-job; ladder: Nakdimon 0.1102 · phonikud 0.0495 ·
+  ReNikud 0.0244. Full chain now executable end-to-end.
 - GPU budget: stages 3+4 ≈ 12-20 GPU-h total (teacher slice is the
   dial); well under the $500 envelope.
 
