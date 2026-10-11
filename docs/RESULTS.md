@@ -1765,3 +1765,11 @@ routing not worth building. A 3-way re-probe (adding run-047 large)
 opens when its verdict lands. Successor export STAGED as
 ara-diac-news-1.1 (provisional id; owner renames at ship):
 int8 IMF v1 zip with the corrected metrics in the manifest.
+
+Successor artifact STAGED (2026-10-11): ara-diac-news-1.1.zip —
+399,193,366 bytes, sha256 7441914844a4782519326da0bfca6a25ef1925b489
+9ee086d5dea2e506c0faa0 (run-040-strip-alt/export/ in the bucket),
+int8 IMF v1, ORT sanity green, corrected metrics in the manifest
+(4.0034/1.5457). SHIP GATE: owner names the version (1.1 vs 2.0) and
+cuts the GitHub Release + models.yaml entry + index bump + 3 runtime
+pins (the established chain).
