@@ -1757,3 +1757,11 @@ SELF-CONTAINED pairs** (audio bytes + verified transcript embedded)
 10-20× FLEURS. Stage 2 RUNNING (run-049): text extraction + crown
 nikud pointing over all pairs, 8-way multiprocessed in-job per the
 no-local rule; audio stays in the parquets until the teacher stage.
+
+Oracle re-probe under the corrected protocol (shipped r029 vs stripped
+r040, both first-alt): **3.7302 WER / 1.4715 DER ceiling** — only
+0.27 over the stripped best (threshold 2.0): same-family overlap,
+routing not worth building. A 3-way re-probe (adding run-047 large)
+opens when its verdict lands. Successor export STAGED as
+ara-diac-news-1.1 (provisional id; owner renames at ship):
+int8 IMF v1 zip with the corrected metrics in the manifest.
