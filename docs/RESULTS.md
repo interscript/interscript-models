@@ -1773,3 +1773,11 @@ int8 IMF v1, ORT sanity green, corrected metrics in the manifest
 (4.0034/1.5457). SHIP GATE: owner names the version (1.1 vs 2.0) and
 cuts the GitHub Release + models.yaml entry + index bump + 3 runtime
 pins (the established chain).
+
+WO36 stage-2 debugging ledger: r2 died on missing model deps; r3
+stalled 4h with ZERO shards — systematic-debugging probe (standalone
+shard read: 1.4s total) isolated the classic fork+requests deadlock:
+the module-level HfFileSystem forked into the 8-worker pool inherits
+the parent's live connection state and hangs on first use. Fix:
+worker-local fs construction. r4 running; lesson = never fork a
+process that owns an HTTP session created pre-fork.
