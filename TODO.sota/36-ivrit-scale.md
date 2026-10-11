@@ -58,6 +58,32 @@ laptop — everything mounts/streams in HF jobs with the gated token.
 - After (5): if the gate misses at 10× data, the diagnosis is student
   capacity/data quality, not pipeline — one iteration, then park.
 
+## Execution manifest (run-level, 2026-10-11)
+
+- run-048 DONE: audit — v2 raw 1.21TB (>20K h); companions are
+  self-contained pairs: crowd-transcribe-v5 ~165K rows, audio-labeled
+  ~87K rows (schema: uuid + audio bytes + verified text).
+- run-049 DONE/RUNNING: pointing — ~250K transcripts through the
+  crown nikud model, 8-way in-job; output pairs-pointed.jsonl.
+- run-050: **webdataset builder** — stream both pair-repos, decode
+  embedded audio to 16-bit WAV (native sr, recorded), pair by uuid
+  with pointed text, tar-shard ~500MB each into
+  run-050-ivrit-wds/, CAP_HOURS slice (default 200h) with real
+  decoded-duration stats; deterministic shard order (extend by
+  raising the cap). Filter: 1s <= dur <= 30s.
+- run-051: **teacher v2** — espeak-cv-ft CTC fine-tune on the slice
+  (pointed-espeak targets, tokenizer he backend), gates: FLEURS dev
+  PER < 0.25 AND ivrit-heldout PER reported. fp32 features, bf16
+  autocast, step-ckpts, 12h timeout.
+- run-052: **label** — tuned teacher decodes the slice (audio-derived
+  vowel-full labels) to label tars in the bucket.
+- run-053: **student v3** — byt5-BASE text→IPA on the labels (capacity
+  verdict was for 3.2K pairs; at ~50K+ pairs base is right), gate:
+  normalized CER < 0.2393; ladder: Nakdimon 0.1102 · phonikud 0.0495
+  · ReNikud 0.0244.
+- GPU budget: stages 3+4 ≈ 12-20 GPU-h total (teacher slice is the
+  dial); well under the $500 envelope.
+
 ## Alternative noted
 
 micsell/hebrew_speech_{campus,kan}_nikud — Hebrew speech with GOLD
