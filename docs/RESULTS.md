@@ -1887,3 +1887,12 @@ reference stands at ours (0.1565 raw / 0.1075 normalized), and a
 future arm would need real phoneme-model improvements (data scale
 beyond the 610K dictionary, or multilingual transfer) — queued as
 the portfolio's optional arm, not an active chase.
+
+run-051 teacher verdict — GATE PASS on FLEURS (0.2069 < 0.25, vs
+0.319 from 10h) but in-domain ivrit dev PER anomalous at 0.8722 —
+almost certainly an evaluation-convention artifact in the dev-gold
+reconstruction path (a model trained ON ivrit cannot plausibly score
+87% on ivrit). Decisive test launched (run-052): the labeler+student
+chain against this teacher — its phonikud CER is the ground-truth
+diagnostic. If the student screams, the dev path gets the fix; if it
+clears < 0.2393, the anomaly was cosmetic.
