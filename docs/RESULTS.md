@@ -1809,3 +1809,24 @@ sha256 93e318714f3f792db8d29764990cdba2df8315addf0185ce9b32770353de27
 server-tier deployment; the 100MB-capped edge tier remains on
 ara-diac-small. Both staged artifacts await the owner's naming +
 release chain (GitHub Release + models.yaml + index + 3 pins).
+
+## WO37 verdict — portfolio reference numbers PUBLISHED (2026-10-12)
+
+run-056 (run-056-portfolio-eval): our shipped artifacts on their own
+held-out test splits, protocol now published (char CER + word accuracy,
+n=3000 slices, artifacts sha-verified from the release chain):
+
+| artifact | n | CER | word acc |
+|---|---|---|---|
+| fas-g2p-1.0 (HomoRich test) | 3000 | **0.0147** | 0.6307 |
+| urd-diac-1.0 (held-out split) | 3000 | **0.0386** | 0.6750 |
+| urd-g2p-1.0 (humair025 test) | 3000 | **0.1578** | 0.3313 |
+
+Reading: fas-g2p at 1.47% CER is crown-grade (rules-layer league);
+urd-diac 3.86% is strong; urd-g2p 15.78% is measured against the
+harsh convention (IPA with stress + syllable dots, char-level) —
+33% exact-word is the honest weak spot and the only candidate for a
+future training arm. No external frontier exists for any of the
+three (WO37 survey) — these published numbers + protocol ARE the
+reference (define-and-lead). Full-split runs (n≈12K) can refine the
+slices on demand.
