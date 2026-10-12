@@ -1838,3 +1838,10 @@ narrow IPA vs the HomoRich broad scheme) vs our fas-g2p-1.0's
 published design. The measured lead is ~25× notation-robust. The fas
 row of the portfolio closes: reference protocol published, artifact
 verified, only competitor measured and beaten.
+
+WO38 launched (run-059): urd-g2p byt5-base arm on the full 610K
+humair025 pairs, gate CER < 0.1578 (1.0's WO37 number) on the full
+12.7K test split; export as urd-g2p-2.0 if passed (owner names).
+Launch-dep notes for the WO36 chain: run-050 builder needs soundfile
+in pip; run-051 teacher additionally needs torchaudio (native-sr
+resample) + espeak-ng/phonemizer/protobuf (the tokenizer contract).
