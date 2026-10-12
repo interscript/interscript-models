@@ -34,4 +34,16 @@ makes the claim honest: "best published, protocol included".
    benchmark axis — measure with the maps-corpus conformance suite
    instead (round-trip + corpus fixtures).
 
-## Status: spec'd; implementation queued behind WO36 chain
+## Status: IMPLEMENTED (2026-10-12)
+
+- Portfolio numbers PUBLISHED (run-056, n=3000): fas 0.0147 ·
+  urd-diac 0.0386 · urd-g2p 0.1578 CER.
+- fas anchor CONFIRMED (run-058, n=1000): g2p-fa = 0.3629
+  consonant-skeleton CER / 0.7025 raw (notation-mismatched) vs our
+  0.0147 — measured lead ~25×, methodology published (word-by-word
+  per its design; both metrics reported for fairness).
+- Full-split refinement (run-057) in flight.
+- khm: maps-conformance spec'd. urd anchors: no reproducible tool
+  found (survey stands) — our protocol remains the reference.
+- urd-g2p (15.78 CER): the one language with headroom — candidate
+  training arm when compute frees (byt5-base on 635K pairs).
