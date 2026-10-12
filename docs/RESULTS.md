@@ -1830,3 +1830,11 @@ future training arm. No external frontier exists for any of the
 three (WO37 survey) — these published numbers + protocol ARE the
 reference (define-and-lead). Full-split runs (n≈12K) can refine the
 slices on demand.
+
+fas anchor CONFIRMED (run-058-r3, n=1000): g2p-fa scores **0.3629
+consonant-skeleton CER** (0.7025 raw char CER — notation mismatched:
+narrow IPA vs the HomoRich broad scheme) vs our fas-g2p-1.0's
+**0.0147 total CER** on the identical split, word-by-word per its
+published design. The measured lead is ~25× notation-robust. The fas
+row of the portfolio closes: reference protocol published, artifact
+verified, only competitor measured and beaten.
