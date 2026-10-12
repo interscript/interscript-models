@@ -1860,3 +1860,9 @@ root-caused in the ledger; the thread design + resume markers
 delivered). run-050 LAUNCHED: webdataset builder over the pair repos
 (200h slice cap, WAV shards to the bucket, real hour count at
 completion) — the teacher's runway.
+
+run-050 COMPLETE (40.6 min): **200.61 audio-hours, 126 WAV tar
+shards** in the bucket (1s-30s filter, pointed text paired by uuid,
+deterministic order — extendable by rerun with a higher cap).
+Teacher (run-051) staged and fires when an a100 slot frees (run-055
+and run-059 both finish within ~2h; the ≤2-GPU law holds).
