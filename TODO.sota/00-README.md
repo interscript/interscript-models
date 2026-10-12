@@ -73,7 +73,7 @@ hf jobs run --flavor a100-large -d \
 | 34 | 34-hybrid-word-char.md | P1 | 32/33 | CLOSED — hybrid 13.53, fastText 13.59, vcd ±0, oracle 0.71 (all old-protocol; see 35) |
 | 35 | 35-alternate-protocol.md | P1 | 34 | arm 2 PASS — large-strip 3.5983/1.4715 NEW BEST (0.90 to frontier); 1.1+1.2 staged; 3-way oracle ceiling 2.9484 |
 | 36 | 36-ivrit-scale.md | P1 | 31 | RUNNING — access granted; audit DONE (250K self-contained pairs); pointing (spawn-fixed) in flight; 050-052 staged |
-| 37 | 37-portfolio-sota.md | P2 | — | SPEC'D — fas/khm/urd: no external frontiers exist; protocol-packaging program (define-and-lead) queued behind WO36 |
+| 37 | 37-portfolio-sota.md | P2 | — | REFERENCE NUMBERS PUBLISHED — fas 1.47 / urd-diac 3.86 / urd-g2p 15.78 CER (n=3000, protocol+artifacts sha'd); urd-g2p = the one future arm |
 
 ## Schedule
 
