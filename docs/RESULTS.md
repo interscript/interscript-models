@@ -1907,3 +1907,12 @@ cost, family-consistent). Gap to QCRI 2.70: **0.86 WER**.
 routing stays closed <2). Re-export of ara-diac-news-1.2 from the
 e6 ckpt LAUNCHED (replaces the staged 4-epoch zip; same provisional
 name pending owner).
+
+run-060-r2 EXPORT VERIFIED: ara-diac-news-1.2.zip (e6 checkpoint) —
+821,320,781 bytes, sha256 12cb294d73318c7717b8e24ed1b95642d1510c2af
+515127eb329fb88b1950548, ORT sanity green. Root cause of the failed
+r2 recorded: torch.onnx.export auto-selects external-data format when
+the model crosses the 2GB protobuf boundary (the e6 large encoder
+crossed it; run-054's export sat just under) — fixed by pinning
+use_external_data_format=False in both export calls (committed in
+train repo PR #133's export script).
