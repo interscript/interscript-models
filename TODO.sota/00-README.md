@@ -74,6 +74,7 @@ hf jobs run --flavor a100-large -d \
 | 35 | 35-alternate-protocol.md | P1 | 34 | arm 2 PASS — large-strip 3.5983/1.4715 NEW BEST (0.90 to frontier); 1.1+1.2 staged; 3-way oracle ceiling 2.9484 |
 | 36 | 36-ivrit-scale.md | P1 | 31 | RUNNING — access granted; audit DONE (250K self-contained pairs); pointing (spawn-fixed) in flight; 050-052 staged |
 | 37 | 37-portfolio-sota.md | P2 | — | REFERENCE NUMBERS PUBLISHED — fas 1.47 / urd-diac 3.86 / urd-g2p 15.78 CER (n=3000, protocol+artifacts sha'd); urd-g2p = the one future arm |
+| 38 | 38-urd-g2p-base.md | P1 | 37 | RUNNING — byt5-base on 610K humair025 pairs; gate CER < 0.1578 (1.0) on full 12.7K test |
 
 ## Schedule
 
