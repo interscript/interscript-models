@@ -1866,3 +1866,13 @@ shards** in the bucket (1s-30s filter, pointed text paired by uuid,
 deterministic order — extendable by rerun with a higher cap).
 Teacher (run-051) staged and fires when an a100 slot frees (run-055
 and run-059 both finish within ~2h; the ≤2-GPU law holds).
+
+WO38 verdict — MARGINAL PASS (2026-10-12): urd-g2p byt5-base (610K
+pairs, 5h23m): full-split CER **0.1565** vs 1.0's 0.1592 (word acc
+0.3273 → 0.3467). Gate passes but the delta is thin — both models
+cap near ~16% CER because the dictionary's IPA convention itself
+carries ambiguity (stress/syllabification variants per word). The
+meaningful next lever is the spec's fallback: data-quality arm
+(dedupe/normalize targets) before any bigger swing. Export staging =
+owner's call given the thin margin; recommendation: hold for the
+data-quality arm.
