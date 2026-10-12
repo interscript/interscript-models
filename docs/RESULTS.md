@@ -1896,3 +1896,14 @@ reconstruction path (a model trained ON ivrit cannot plausibly score
 chain against this teacher — its phonikud CER is the ground-truth
 diagnostic. If the student screams, the dev path gets the fix; if it
 clears < 0.2393, the anomaly was cosmetic.
+
+run-055 verdict (e6 leg, 12h16m): first-alt **3.5607 WER / 1.4588
+DER** — new best (4-epoch: 3.5983/1.4715; the +2 epochs bought
++0.038 WER: the leg is CONVERGED, tail thin like run-029c). Raw
+protocol improves too (9.66 vs 9.98 → under 10 for the first time
+on the unstripped-protocol comparison). Sadeed ID 7.48 (register
+cost, family-consistent). Gap to QCRI 2.70: **0.86 WER**.
+3-way oracle with e6 preds: 2.9861/1.2828 (complementarity holds;
+routing stays closed <2). Re-export of ara-diac-news-1.2 from the
+e6 ckpt LAUNCHED (replaces the staged 4-epoch zip; same provisional
+name pending owner).
