@@ -1845,3 +1845,10 @@ humair025 pairs, gate CER < 0.1578 (1.0's WO37 number) on the full
 Launch-dep notes for the WO36 chain: run-050 builder needs soundfile
 in pip; run-051 teacher additionally needs torchaudio (native-sr
 resample) + espeak-ng/phonemizer/protobuf (the tokenizer contract).
+
+run-057 FULL-SPLIT confirmation (n = full test splits): fas-g2p-1.0
+**0.0148** (10,576) · urd-diac-1.0 **0.0377** (11,940) · urd-g2p-1.0
+**0.1592** (12,699) — all within 0.001 of the n=3000 slices. The
+published portfolio protocols now stand on full splits: fas 1.48% CER
+(crown-grade, anchor beaten 25×), urd-diac 3.77% (reference), urd-g2p
+15.92% (the WO38 byt5-base arm's target: < 0.1578 slice / ≈0.159 full).
