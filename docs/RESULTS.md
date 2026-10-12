@@ -1876,3 +1876,14 @@ meaningful next lever is the spec's fallback: data-quality arm
 (dedupe/normalize targets) before any bigger swing. Export staging =
 owner's call given the thin margin; recommendation: hold for the
 data-quality arm.
+
+urd-g2p error anatomy (run-059-anatomy, full test): normalized CER
+**0.1075** (stress/dots carried only ~5pp of the raw 0.1565); the
+remaining errors are genuine phonology — vowels/diacritics 41.7%
+(short-vowel reduction ə/ɪ/a choices), consonants 34.2% (retroflex/
+aspirate inventory), insertions 24.2% (epenthetic vowels, e.g.
+fiːlæm for film). No notation escape hatch exists; the axis's
+reference stands at ours (0.1565 raw / 0.1075 normalized), and a
+future arm would need real phoneme-model improvements (data scale
+beyond the 610K dictionary, or multilingual transfer) — queued as
+the portfolio's optional arm, not an active chase.
