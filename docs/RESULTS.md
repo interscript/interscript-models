@@ -1781,3 +1781,24 @@ the module-level HfFileSystem forked into the 8-worker pool inherits
 the parent's live connection state and hangs on first use. Fix:
 worker-local fs construction. r4 running; lesson = never fork a
 process that owns an HTTP session created pre-fork.
+
+## run-047 verdict — GATE PASS: byt5-large stripped 3.5983/1.4715, NEW BEST; gap to frontier 0.90 (2026-10-12)
+
+run-047 (byt5-large from pretrained scratch, stripped corpus, 4
+epochs, 23h39m): WikiNews first-alt **3.5983 WER / 1.4715 DER** —
+beats base-strip (4.0034/1.5457) and shipped (4.0976/1.5606); raw
+protocol improves too (9.68 vs 10.03); Sadeed ID 7.39 (register cost
+of the news specialist, consistent with the family). **Capacity
+DOES pay in the dominant family once the corpus is stripped** — the
+old large≈base finding was measured on the unstripped recipe.
+Ladder: large-strip 3.60 > base-strip 4.00 > shipped 4.10; gap to
+QCRI 2.70 = **0.90 WER**.
+
+3-way N-way oracle {shipped, base-strip, large-strip}: **2.9484 WER
+/ 1.2743 DER** — arms are complementary (0.65 over best single) and
+the ceiling sits 0.25 from the frontier. Routing stays closed
+(<2 threshold); the portfolio-ceiling claim is recorded.
+
+run-054: export STAGED as ara-diac-news-1.2 (provisional id; int8
+IMF v1; owner names at ship). Ship candidates now: 1.1 (base-strip)
+and 1.2 (large-strip) — the latter dominates on both OOD protocols.
