@@ -1852,3 +1852,11 @@ run-057 FULL-SPLIT confirmation (n = full test splits): fas-g2p-1.0
 published portfolio protocols now stand on full splits: fas 1.48% CER
 (crown-grade, anchor beaten 25×), urd-diac 3.77% (reference), urd-g2p
 15.92% (the WO38 byt5-base arm's target: < 0.1578 slice / ≈0.159 full).
+
+WO36 stage-2 COMPLETE (2026-10-12): **326,190 pointed pairs** (of
+326,303 rows, 99.97% kept) in 11.07h across the pointing saga (r3
+fork-deadlock, r5 spawn-hang, r7 context-manager bug — each
+root-caused in the ledger; the thread design + resume markers
+delivered). run-050 LAUNCHED: webdataset builder over the pair repos
+(200h slice cap, WAV shards to the bucket, real hour count at
+completion) — the teacher's runway.
