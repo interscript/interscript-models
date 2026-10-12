@@ -1802,3 +1802,10 @@ the ceiling sits 0.25 from the frontier. Routing stays closed
 run-054: export STAGED as ara-diac-news-1.2 (provisional id; int8
 IMF v1; owner names at ship). Ship candidates now: 1.1 (base-strip)
 and 1.2 (large-strip) — the latter dominates on both OOD protocols.
+
+run-054 artifact verified: ara-diac-news-1.2.zip — 821,291,775 bytes,
+sha256 93e318714f3f792db8d29764990cdba2df8315addf0185ce9b32770353de27
+77, ORT sanity green. NOTE: 2× the 1.1 artifact (large backbone) —
+server-tier deployment; the 100MB-capped edge tier remains on
+ara-diac-small. Both staged artifacts await the owner's naming +
+release chain (GitHub Release + models.yaml + index + 3 pins).
