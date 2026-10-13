@@ -1436,3 +1436,513 @@ evaluation conventions (the corpus IS their model's output), and
 tuning maturity. Implication: lexical knowledge is the battleground —
 and byt5 byte pretraining (run-033, RUNNING) is our version of that
 channel. The char-only BiLSTM closes as an anchor, not a contender.
+
+## WO26 rerun + WO33 launch — Hebrew noisy student re-confirmed negative; the word channel decomposed (2026-10-10)
+
+run-030-heb-noisy (HF rerun of the noisy student: 50K gold + 40K
+hewiki pseudo, K=3, 16,350 steps): **DER 8.72** vs crown 8.18 — gate
+failed, WO26 negative re-confirmed on the new substrate. Hebrew text
+levers remain exhausted (capacity 8.48, noisy 8.72, convergence 10.03);
+the remaining path is audio (WO09/31).
+
+WO33 — lexical-channel decomposition (local, free): pure
+most-frequent-reading lookup over the same corpus scores **25.15 WER /
+13.18 DER** with **18.10% OOV** (482,609-type table). So: lexical
+memorization ≈ 75% of words; the rest is context disambiguation among
+each word's few observed readings — exactly the word-identity channel
+(WO32's battleground). run-035 (RUNNING): variant-disambiguation
+tagger — word-emb 128 + char-CNN (k=2..5) → BiLSTM 2×512 → head over
+{variant 0..5, OOV}, 62M params, fp32, same corpus as run-033/034.
+Gates: <14.30 = word channel real; <10.13 = new news-successor
+candidate; else the residue is convention alignment, closed under the
+register-specialist doctrine. Complement probe (oracle-min over
+run-029/035) staged post-verdict.
+
+## WO33 verdict + WO34 launch — word-only fails on OOV; the synthesis arm is the joint design (2026-10-10)
+
+run-035 (word-level variant disambiguator): **18.07 / 11.44** multiref,
+Sadeed Total DER 18.75 — both gates failed. The failure mode is clean:
+18.1% of benchmark word types are OOV to the corpus table and are
+emitted bare, collapsing ID DER; the word channel in isolation cannot
+compose unseen words. Combined with run-034 (char-only, 14.30/10.10),
+the decomposition now says each half alone loses to the shipped
+specialist (10.13/8.98) — Fadel's joint design (word identity AS A
+FEATURE of a char-level tagger) is the actual recipe.
+
+Convention-style probe (local): marked-letter density 0.8127 /
+0.7625 / 0.7432 across WikiNews-2024 refs, wikinews2014 gold, and
+news silver — the style-mismatch hypothesis is closed; there are no
+cheap diacritic-drop points.
+
+run-036 (RUNNING): char-emb ⊕ per-char bare-word embedding → 3×BiLSTM
+→ plane head; same corpus, fp32. Gates <14.30 (word channel validated)
+/ <10.13 (news-successor candidate). Variant-constrained decode and
+the oracle-min complement probe staged post-verdict.
+
+Tooling built while arms grind (2026-10-10): oracle_min.py (unit-tested
+complement probe mirroring the multiref scorer); eval_r8_wikinews_preds
+(exact-protocol regen of run-029 WikiNews preds); run-037 trainer
+(hybrid + pretrained fastText cc.ar.300 word channel — the
+lexical-density hypothesis; staged, launches on slot-free).
+
+Launch incident (2026-10-10): run-036 v1 died at the 30-minute DEFAULT
+job timeout (mid-training, no intra-run ckpt — lost). Lesson added to
+the launch checklist: ALWAYS pass explicit --timeout (4h standard for
+a100 arms). Relaunched as run-036-hybrid-r2 with 4h. run-037 hardened
+pre-launch: ft_init cache (skips 1.2GB re-parse), periodic step-ckpt +
+seeded-generator resume. Monitor coverage hole fixed: poll ps --all
+(terminal states) — the ps-only monitors stayed silent on
+disappearance.
+
+WO34 tooling complete (2026-10-10): variant-constrained decoder
+implemented + uploaded (scores observed variants under the hybrid's
+per-position log-softmax vs free-greedy; OOV keeps free decode);
+sweep knobs HYB_LR/HYB_HID wired into the hybrid trainer (grid queued
+behind the three primary arms). All five follow-ups are now built or
+running: run-033 (~98%), run-036-r2 (30%), run-037 staged, vcd + eval
+jobs queued on slot-free.
+
+## run-033 verdict — plane-large route closes Pareto-loser (2026-10-10)
+
+run-033 (byt5-large plane + full 900K silver, news-pure, 3ep, K=3):
+WikiNews-2024 multiref **10.78 / 9.16** (from 18.69/11.35 — large
+backbone + dose moved OOD by 7.9 WER), Sadeed windowed **DER 6.80 /
+WER 23.80**. Gate <10 missed by 0.78; the shipped seq2seq specialist
+DOMINATES on both surfaces (10.13/8.98; ID 5.50). The plane family's
+large route closes; the contested axis is the word channel class
+(run-036-r2 hybrid + run-037 fastText). run-029 preds-regen launched
+for the oracle probe.
+
+## run-036 verdict — word channel VALIDATED (+0.77 WER), density hypothesis sharpens (2026-10-10)
+
+run-036-r2 (char-emb ⊕ per-char word-emb → 3×BiLSTM → plane head,
+36.2M params, 20,460 steps): WikiNews multiref **13.53 / 9.92**,
+Sadeed DER 5.90. Gate 1 PASS (<14.30): the word channel is real at
+char level — 0.77 WER over the char-only anchor (14.30). Gate 2
+FAIL (>10.13): scratch 128-d embeddings over 156K types carry too
+little lexical density. Hierarchy now: specialist 10.13 > plane-large
+10.78 > hybrid 13.53 > char-only 14.30 > word-only 18.07. Data note:
+silver pool = 202,680 units — the 900K cap never binds; corpus scale
+is exhausted at what we hold. run-037 (fastText cc.ar.300, billion-word
+lexical density) LAUNCHED — the decisive density arm.
+
+## Oracle probe — routed blend closes NEGATIVE; run-037 is the last live arm (2026-10-10)
+
+run-029 preds regenerated under the exact protocol: 10.032/8.9521 —
+matches the converged number bit-for-bit at reporting precision.
+Oracle-min over {run-029 specialist, run-036 hybrid}: **9.33 WER /
+8.77 DER** — only **0.71 WER** over the specialist solo (decision
+threshold was >2). Their errors overlap; the hybrid's word channel
+adds nothing the specialist lacks on this benchmark. Confidence-routed
+blending closes (WO28 lineage). vcd launched on run-036's ckpt
+(last WO34 follow-up in flight).
+
+## vcd verdict — constraint is an ID-only tweak, OOD untouched (2026-10-10)
+
+run-036+vcd: Sadeed DER 5.90→5.75 (−0.16), multiref **13.5268/9.9211 —
+bit-identical to free decode**. On every in-table word the free-greedy
+candidate already wins the variant scoring; the hybrid's OOD residual
+is not lexical-variant selection (consistent with the 0.71 oracle
+gap). vcd closes as not-worth-integrating; WO34's live surface is
+run-037 alone.
+
+## run-037 verdict + WO34 CLOSES — the OOD front reaches its measured terminal state (2026-10-10)
+
+run-037 (hybrid + fastText cc.ar.300, 93.9% coverage, 63.8M params):
+multiref **13.59 / 9.89** — statistically identical to the scratch
+channel (13.53/9.92), ID worse (6.50 vs 5.90). **Lexical density is
+REFUTED as the bottleneck.** The tuning sweep is closed as
+not-worth-compute: the hybrid class sits 3.5 WER behind the specialist
+— no optimizer setting closes that.
+
+WO34 final ledger — every lever measured, none moves OOD past the
+specialist: converged training (10.03) · plane-large (10.78, dominated)
+· char-only (14.30) · word-only (18.07) · joint hybrid (13.53) ·
+billion-word vectors (13.59) · constrained decode (±0.00 OOD) · routed
+blend (0.71 oracle ceiling). Corpus scale exhausted at 202,680 units.
+
+TERMINAL READING: the shipped specialist (ara-diac-news-1.0, 10.13
+shipped / 10.03 converged) is the crown on the comparable surface at
+our data scale. The 2.70 delta lives in QCRI's FULL silver release +
+their self-consistent label conventions — an external dependency
+(their complete corpus is theirs to share), not a lever we hold.
+Even the literal reconstruction of their architecture lands at 14.3
+at our scale: the gap is data, not code.
+
+## WO35 — THE ALTERNATE-FORMAT SCORING ARTIFACT: OOD corrects 10.03 → 4.10/1.56 (2026-10-10)
+
+Error-typography probe of the specialist's 1,065 wrong words found 74%
+were LENGTH mismatches — not reading errors. Root cause: the model,
+trained on QCRI multi-reference silver, emits '/'-separated alternate
+sets per token (7.44% of tokens; e.g. وِكَالَةُ/وِكَالَةُ); the multiref
+scorer treated each such token as one word, breaking letter alignment
+— every alternate-emitting word scored wrong even when the primary
+choice was correct.
+
+Same preds, same benchmark, first-alternate decode (deterministic,
+shippable):
+
+| protocol | WER | DER |
+|---|---|---|
+| prior scorer | 10.032 | 8.9521 |
+| **first-alternate** | **4.0976** | **1.5606** |
+| symmetric any-vs-any | 3.1839 | — |
+
+run-036 hybrid re-scores 13.53 → 8.85/2.84 — the specialist remains
+dominant. The 2.70 frontier is now a 1.4-point WER gap (and our DER
+1.56 likely leads on letter-level). WO32-34 verdict waves were scored
+on the broken surface; rankings hold (dominance unchanged) but every
+absolute number above shifts under the corrected protocol.
+
+Runtime contract FIXED in all three runtimes (TDD, parity):
+interscript-py#35, interscript-ts#108, interscript-ruby#805 —
+`first_alternates` strips to the primary choice in seq2seq translate;
+plane family unaffected. Follow-ups: Sadeed rescore under first-alt
+(12.6% of ID rows emit alternates; DER 5.50 is inflated), models.yaml
+metric correction + card text, and the re-opened 1.4-point program
+(sweep/stack arms now worth compute again).
+
+## WO31 GREEN-LIT — the Hebrew audio program launches (2026-10-10)
+
+Owner green-light received. run-038-heb-asr-ft RUNNING (stage 1):
+espeak-ng transcript targets (do_phonemize disabled — targets arrive
+pre-phonemized; the tokenizer's en-us default would have silently
+mislabeled every utterance), per-phone dev PER gate < 0.395,
+step-checkpoints, 4h timeout. run-039-heb-ipa-v1 STAGED: audio-derived
+relabel with the tuned teacher + v0 student recipe (byte-correct
+collate), gate CER < 0.2393 vs the rules layer on the phonikud
+benchmark. This is the only open path to the HE g2p frontier
+(ReNikud 0.0244).
+
+Sadeed rescore under first-alt (WO35 follow-up 1, closed): Total DER
+5.5008 → **5.4814**, Morphological DER 4.4458 — the ID surface was NOT
+materially inflated (the evaluator letter-aligns tolerantly; alternate
+words skipped rather than poisoning alignment). The artifact lived
+almost entirely on the multiref surface: OOD −5.9 WER vs ID −0.02 DER.
+
+WO31 stage-1 debugging ledger (2026-10-10): r1 missing protobuf
+(vocab parse), r2 missing phonemizer (backend init runs even for
+pre-phonemized input), r3 aborted by the unk-rate guard — root cause
+was MY espeak --ipa segmentation assumption: espeak emits contiguous
+phone strings per word; my space-split produced one giant token per
+word → unk 0.9996. Fix: phonemize through the tokenizer itself
+(init_backend("he")), whose separator conventions ARE the vocab's —
+verified locally first (unk 0.0000 on a Hebrew sentence). r4 running.
+The guard did its job: no garbage-trained checkpoint shipped.
+
+## WO31 stage-1 verdict — GATE PASS: tuned ASR hears Hebrew at PER 0.2306 (2026-10-10)
+
+run-038-r4 (30 epochs, 12,150 steps, 47m on a100): dev **PER 0.2306**
+vs the universal model's 0.395 — a 42% teacher improvement. The
+teacher bottleneck from WO30 v0 (CER 1.18) is broken. Stage 2 LAUNCHED
+(run-039): relabel FLEURS with the tuned teacher (audio-derived
+labels) → byt5-small v1 student → gate CER < 0.2393 on the phonikud
+heb-g2p benchmark (rules layer). ReNikud 0.0244 is the frontier
+beyond; ivrit.ai scale stays parked until this gate reads out.
+
+## WO31 stage-2 verdict — CER 0.9142, gate FAILED; root cause is a CONVENTION, not the teacher (2026-10-10)
+
+run-039 (tuned-teacher labels, v0 student recipe): CER **0.9142**
+(v0: 1.18; gate < 0.2393). The samples decode the failure: the student
+learned the teacher's inventory — espeak-he over UNPOINTED text emits
+consonant skeletons (`h u t s f h`), while the benchmark gold is
+espeak over POINTED (nikud) text — vowel-full with stress
+(`hˈuʔ tsˈafah bəsˈeret`). Verified locally in one command:
+unpointed → `hˈu tsfh vsrt`; pointed → `hˈuʔ tsˈafah bəsˈeret`.
+
+The gold's generator was nikud-then-espeak. Our fix uses our own
+crown asset (heb-diac-plane-2.0, DER 8.18; sha-verified release
+artifact) to point the FLEURS transcripts before espeak — no LLM
+teachers, no external dependency. run-041 (stage 1b): re-fine-tune
+with pointed-espeak targets → stage 2 relabel + student re-run.
+Prediction if the convention reading is right: stage-1 PER will move
+only modestly (targets get denser), stage-2 CER collapses toward the
+gate.
+
+run-041 LAUNCHED (stage 1b): all 4,335 FLEURS transcripts pointed by
+our own crown nikud model (100% coverage, spot-checked correct),
+espeak now sees pointed text → vowel-full + stress targets matching
+the benchmark's convention. Stage-2 rerun (run-042) fires on gate
+pass, reusing the proven relabel+student script against the new
+teacher.
+
+run-041 stage-1b GATE PASS: dev PER 0.319 (< 0.395) on the vowel-full
+inventory (denser target space + nikud noise account for the rise
+from the consonantal 0.2306 — different inventories, not comparable).
+The teacher now hears vowels in the benchmark's convention.
+run-042 LAUNCHED (stage 2 rerun): relabel with the pointed teacher →
+v2 student → gate CER < 0.2393. This is the decisive read on the
+convention hypothesis.
+
+run-042 verdict: raw CER 1.3021 — GATE-METRIC ARTIFACT, third of the
+campaign. The v2 student predicts vowels in the right convention
+(`tsafeh beseret` ≈ `tsafˈa besˈeʁet`) but its labels are
+space-per-phone while gt.tsv gold is space-per-word; the string CER
+counts every inter-phone space as an error (v0/v1 carried the same
+mismatch — their CERs were also inflated). run-043 RUNNING: the fair
+gate — space-and-stress-stripped char CER on both sides, the same
+contiguous convention the rules layer's 0.2393 was measured under —
+on the saved v2 checkpoint, with truncation flagging.
+
+run-043 normalized gate: **CER 0.5463** — honest miss (rules 0.2393),
+but the error anatomy is clean: repetition loops (byt5-small on 3.2K
+noisy utterances) + vowel drift, labels carrying the teacher's 0.319
+PER. WO31 iteration 3 LAUNCHED (run-044): pseudo-label quality gate
+(audio-decode must agree with espeak(pointed text) within 0.35 nCER —
+the WO06 filtering pattern; caught+fixed a phonemize-mode bug in the
+reference path pre-launch) + no-repeat generation + normalized CER in
+the in-job verdict. Prediction: filtering trades data volume for
+label precision; the loop failures should collapse.
+
+run-044 (v3) verdict: normalized CER **0.8851 — filtering NEGATIVE**
+(v2 unfiltered: 0.5463). The agreement gate selected an easy-utterance
+subset (3,452 pairs, 2,685 train) whose distribution shift cost more
+than the noise removal bought — selection bias beats cleaning at this
+data scale. run-045 LAUNCHED: v2's unfiltered pointed recipe at
+**byt5-base** (repetition loops are the small-model symptom;
+base-vs-small unmeasured in this regime). This is the last free lever
+before the ivrit.ai scale decision ($500, owner-gated): if base also
+misses < 0.2393, the 10-hour FLEURS ceiling is the binding constraint
+and the rules layer (0.2393) stays shipped.
+
+run-045 (byt5-base + no_repeat): normalized CER 0.8817 — CONFOUNDED
+READOUT, my error: the no_repeat_ngram_size=3 added in v3 blocks
+legitimate phone-sequence 3-grams (IPA recurringly repeats syllable
+n-grams) → early-EOS truncation visible in the samples. v3's
+"filter-negative" verdict is likewise confounded (two variables at
+once). Clean A/B LAUNCHED (run-046): byt5-base, unfiltered labels, NO
+repetition suppression — vs v2-small's 0.5463 this isolates capacity
+alone. Lesson logged: one variable per arm, always.
+
+## WO31 stage-2 ledger CLOSES at 0.5463 — rules layer stands; ivrit.ai is the open decision (2026-10-11)
+
+run-046 (byt5-base, unfiltered, plain decode — the clean capacity
+A/B): normalized CER **0.6318** vs small's 0.5463 — capacity NEGATIVE
+at 3.2K utterances. Final ledger: v2-small 0.5463 (best) · base
+0.6318 · filtered 0.885 (confounded) · rules layer 0.2393 (shipped,
+stands). Every free lever measured: teacher conventions (fixed via
+pointed-espeak), metric conventions (normalized CER), capacity
+(negative), label filtering (unpromising under noise). The binding
+constraints are structural: 10h FLEURS audio + 0.319-PER teacher.
+
+DECISION FOR OWNER: the path to ReNikud-class (0.0244) Hebrew g2p is
+the ivrit.ai audio scale ($500 → 100+ hours labeled through the
+now-proven pipeline: pointed-espeak targets, tuned CTC teacher,
+normalized-CER gate). All pipeline risk is retired; the remaining
+risk is budget. Without it, the rules layer ships as our g2p answer.
+
+## WO35 arm 1 verdict — stripped-corpus specialist GATE PASS: 4.0034/1.5457 (2026-10-11)
+
+run-040 (byt5-base, run-029's exact recipe on first-alt-stripped
+corpus, 290,575 units, 36,320 steps, 11h across two resume legs):
+WikiNews first-alt **4.0034 WER / 1.5457 DER** — new best (shipped:
+4.0976/1.5606); raw protocol improves too (9.98 vs 10.03); Sadeed ID
+at parity (5.4840). Alternate emission shrank as designed. Export of
+the stripped model as the ara-diac-news successor is STAGED for the
+owner's version decision (bytes differ; new sha; 1.1 vs 2.0 naming).
+
+run-047 LAUNCHED (WO35 arm 2): byt5-LARGE seq2seq from pretrained
+scratch (no large adapted teacher exists) on the same stripped corpus
+— the untried capacity point in the dominant family. 36h timeout.
+Note: size+init both change vs run-040 (no pure A/B possible);
+the readout answers the practical question: does large beat the base
+specialist at this corpus.
+
+WO36 audit verdict (2026-10-11): audio-v2 = 35,629 audio files,
+1.21TB (README floor >20K hours; header probes 404'd on the smallest
+files — hour count deferred to the teacher stage). The decisive find:
+**crowd-transcribe-v5 (~165K rows) and audio-labeled (~87K rows) are
+SELF-CONTAINED pairs** (audio bytes + verified transcript embedded)
+— no VAD, no cutting, no pairing engineering. ~250K ready pairs ≈
+10-20× FLEURS. Stage 2 RUNNING (run-049): text extraction + crown
+nikud pointing over all pairs, 8-way multiprocessed in-job per the
+no-local rule; audio stays in the parquets until the teacher stage.
+
+Oracle re-probe under the corrected protocol (shipped r029 vs stripped
+r040, both first-alt): **3.7302 WER / 1.4715 DER ceiling** — only
+0.27 over the stripped best (threshold 2.0): same-family overlap,
+routing not worth building. A 3-way re-probe (adding run-047 large)
+opens when its verdict lands. Successor export STAGED as
+ara-diac-news-1.1 (provisional id; owner renames at ship):
+int8 IMF v1 zip with the corrected metrics in the manifest.
+
+Successor artifact STAGED (2026-10-11): ara-diac-news-1.1.zip —
+399,193,366 bytes, sha256 7441914844a4782519326da0bfca6a25ef1925b489
+9ee086d5dea2e506c0faa0 (run-040-strip-alt/export/ in the bucket),
+int8 IMF v1, ORT sanity green, corrected metrics in the manifest
+(4.0034/1.5457). SHIP GATE: owner names the version (1.1 vs 2.0) and
+cuts the GitHub Release + models.yaml entry + index bump + 3 runtime
+pins (the established chain).
+
+WO36 stage-2 debugging ledger: r2 died on missing model deps; r3
+stalled 4h with ZERO shards — systematic-debugging probe (standalone
+shard read: 1.4s total) isolated the classic fork+requests deadlock:
+the module-level HfFileSystem forked into the 8-worker pool inherits
+the parent's live connection state and hangs on first use. Fix:
+worker-local fs construction. r4 running; lesson = never fork a
+process that owns an HTTP session created pre-fork.
+
+## run-047 verdict — GATE PASS: byt5-large stripped 3.5983/1.4715, NEW BEST; gap to frontier 0.90 (2026-10-12)
+
+run-047 (byt5-large from pretrained scratch, stripped corpus, 4
+epochs, 23h39m): WikiNews first-alt **3.5983 WER / 1.4715 DER** —
+beats base-strip (4.0034/1.5457) and shipped (4.0976/1.5606); raw
+protocol improves too (9.68 vs 10.03); Sadeed ID 7.39 (register cost
+of the news specialist, consistent with the family). **Capacity
+DOES pay in the dominant family once the corpus is stripped** — the
+old large≈base finding was measured on the unstripped recipe.
+Ladder: large-strip 3.60 > base-strip 4.00 > shipped 4.10; gap to
+QCRI 2.70 = **0.90 WER**.
+
+3-way N-way oracle {shipped, base-strip, large-strip}: **2.9484 WER
+/ 1.2743 DER** — arms are complementary (0.65 over best single) and
+the ceiling sits 0.25 from the frontier. Routing stays closed
+(<2 threshold); the portfolio-ceiling claim is recorded.
+
+run-054: export STAGED as ara-diac-news-1.2 (provisional id; int8
+IMF v1; owner names at ship). Ship candidates now: 1.1 (base-strip)
+and 1.2 (large-strip) — the latter dominates on both OOD protocols.
+
+run-054 artifact verified: ara-diac-news-1.2.zip — 821,291,775 bytes,
+sha256 93e318714f3f792db8d29764990cdba2df8315addf0185ce9b32770353de27
+77, ORT sanity green. NOTE: 2× the 1.1 artifact (large backbone) —
+server-tier deployment; the 100MB-capped edge tier remains on
+ara-diac-small. Both staged artifacts await the owner's naming +
+release chain (GitHub Release + models.yaml + index + 3 pins).
+
+## WO37 verdict — portfolio reference numbers PUBLISHED (2026-10-12)
+
+run-056 (run-056-portfolio-eval): our shipped artifacts on their own
+held-out test splits, protocol now published (char CER + word accuracy,
+n=3000 slices, artifacts sha-verified from the release chain):
+
+| artifact | n | CER | word acc |
+|---|---|---|---|
+| fas-g2p-1.0 (HomoRich test) | 3000 | **0.0147** | 0.6307 |
+| urd-diac-1.0 (held-out split) | 3000 | **0.0386** | 0.6750 |
+| urd-g2p-1.0 (humair025 test) | 3000 | **0.1578** | 0.3313 |
+
+Reading: fas-g2p at 1.47% CER is crown-grade (rules-layer league);
+urd-diac 3.86% is strong; urd-g2p 15.78% is measured against the
+harsh convention (IPA with stress + syllable dots, char-level) —
+33% exact-word is the honest weak spot and the only candidate for a
+future training arm. No external frontier exists for any of the
+three (WO37 survey) — these published numbers + protocol ARE the
+reference (define-and-lead). Full-split runs (n≈12K) can refine the
+slices on demand.
+
+fas anchor CONFIRMED (run-058-r3, n=1000): g2p-fa scores **0.3629
+consonant-skeleton CER** (0.7025 raw char CER — notation mismatched:
+narrow IPA vs the HomoRich broad scheme) vs our fas-g2p-1.0's
+**0.0147 total CER** on the identical split, word-by-word per its
+published design. The measured lead is ~25× notation-robust. The fas
+row of the portfolio closes: reference protocol published, artifact
+verified, only competitor measured and beaten.
+
+WO38 launched (run-059): urd-g2p byt5-base arm on the full 610K
+humair025 pairs, gate CER < 0.1578 (1.0's WO37 number) on the full
+12.7K test split; export as urd-g2p-2.0 if passed (owner names).
+Launch-dep notes for the WO36 chain: run-050 builder needs soundfile
+in pip; run-051 teacher additionally needs torchaudio (native-sr
+resample) + espeak-ng/phonemizer/protobuf (the tokenizer contract).
+
+run-057 FULL-SPLIT confirmation (n = full test splits): fas-g2p-1.0
+**0.0148** (10,576) · urd-diac-1.0 **0.0377** (11,940) · urd-g2p-1.0
+**0.1592** (12,699) — all within 0.001 of the n=3000 slices. The
+published portfolio protocols now stand on full splits: fas 1.48% CER
+(crown-grade, anchor beaten 25×), urd-diac 3.77% (reference), urd-g2p
+15.92% (the WO38 byt5-base arm's target: < 0.1578 slice / ≈0.159 full).
+
+WO36 stage-2 COMPLETE (2026-10-12): **326,190 pointed pairs** (of
+326,303 rows, 99.97% kept) in 11.07h across the pointing saga (r3
+fork-deadlock, r5 spawn-hang, r7 context-manager bug — each
+root-caused in the ledger; the thread design + resume markers
+delivered). run-050 LAUNCHED: webdataset builder over the pair repos
+(200h slice cap, WAV shards to the bucket, real hour count at
+completion) — the teacher's runway.
+
+run-050 COMPLETE (40.6 min): **200.61 audio-hours, 126 WAV tar
+shards** in the bucket (1s-30s filter, pointed text paired by uuid,
+deterministic order — extendable by rerun with a higher cap).
+Teacher (run-051) staged and fires when an a100 slot frees (run-055
+and run-059 both finish within ~2h; the ≤2-GPU law holds).
+
+WO38 verdict — MARGINAL PASS (2026-10-12): urd-g2p byt5-base (610K
+pairs, 5h23m): full-split CER **0.1565** vs 1.0's 0.1592 (word acc
+0.3273 → 0.3467). Gate passes but the delta is thin — both models
+cap near ~16% CER because the dictionary's IPA convention itself
+carries ambiguity (stress/syllabification variants per word). The
+meaningful next lever is the spec's fallback: data-quality arm
+(dedupe/normalize targets) before any bigger swing. Export staging =
+owner's call given the thin margin; recommendation: hold for the
+data-quality arm.
+
+urd-g2p error anatomy (run-059-anatomy, full test): normalized CER
+**0.1075** (stress/dots carried only ~5pp of the raw 0.1565); the
+remaining errors are genuine phonology — vowels/diacritics 41.7%
+(short-vowel reduction ə/ɪ/a choices), consonants 34.2% (retroflex/
+aspirate inventory), insertions 24.2% (epenthetic vowels, e.g.
+fiːlæm for film). No notation escape hatch exists; the axis's
+reference stands at ours (0.1565 raw / 0.1075 normalized), and a
+future arm would need real phoneme-model improvements (data scale
+beyond the 610K dictionary, or multilingual transfer) — queued as
+the portfolio's optional arm, not an active chase.
+
+run-051 teacher verdict — GATE PASS on FLEURS (0.2069 < 0.25, vs
+0.319 from 10h) but in-domain ivrit dev PER anomalous at 0.8722 —
+almost certainly an evaluation-convention artifact in the dev-gold
+reconstruction path (a model trained ON ivrit cannot plausibly score
+87% on ivrit). Decisive test launched (run-052): the labeler+student
+chain against this teacher — its phonikud CER is the ground-truth
+diagnostic. If the student screams, the dev path gets the fix; if it
+clears < 0.2393, the anomaly was cosmetic.
+
+run-055 verdict (e6 leg, 12h16m): first-alt **3.5607 WER / 1.4588
+DER** — new best (4-epoch: 3.5983/1.4715; the +2 epochs bought
++0.038 WER: the leg is CONVERGED, tail thin like run-029c). Raw
+protocol improves too (9.66 vs 9.98 → under 10 for the first time
+on the unstripped-protocol comparison). Sadeed ID 7.48 (register
+cost, family-consistent). Gap to QCRI 2.70: **0.86 WER**.
+3-way oracle with e6 preds: 2.9861/1.2828 (complementarity holds;
+routing stays closed <2). Re-export of ara-diac-news-1.2 from the
+e6 ckpt LAUNCHED (replaces the staged 4-epoch zip; same provisional
+name pending owner).
+
+run-060-r2 EXPORT VERIFIED: ara-diac-news-1.2.zip (e6 checkpoint) —
+821,320,781 bytes, sha256 12cb294d73318c7717b8e24ed1b95642d1510c2af
+515127eb329fb88b1950548, ORT sanity green. Root cause of the failed
+r2 recorded: torch.onnx.export auto-selects external-data format when
+the model crosses the 2GB protobuf boundary (the e6 large encoder
+crossed it; run-054's export sat just under) — fixed by pinning
+use_external_data_format=False in both export calls (committed in
+train repo PR #133's export script).
+
+WO36 CORRECTION — the pointed-convention bug, caught before the gate
+(2026-10-13): label spot-check revealed run-052's labels are
+CONSONANT SKELETONS — run-051's teacher trained on r["text"]
+(UNPOINTED transcripts → espeak-he → consonant skeletons) instead of
+the crown-nikud pointed transcripts sitting in the same tars; the
+labeling decode additionally ran on 2×-time-warped 32k audio (run
+before the resample fix). run-052 killed at 15% student training —
+training toward those labels was waste. FIXES: teacher v3 (run-061,
+RUNNING) trains on the pointed field (vowel-full targets, primary
+gate = ivrit dev same-convention; FLEURS reported as
+convention-shifted); the labeler carries the resample fix; the
+student gate (phonikud, vowel-full gold) is then CONSISTENT
+end-to-end for the first time. The WO31 lesson generalizes: the
+pointed-vs-unpointed convention must be asserted at EVERY stage —
+targets, gates, and labels — not just the first espeak call.
+
+Seed-variance result (run-061b, seed 1337 vs run-061 seed 42):
+FLEURS 0.2055 vs 0.2069 · ivrit dev 0.8745 vs 0.8722 — seeds agree to
+±0.002, so BOTH numbers are stable measurements. Conclusion: the
+FLEURS gate pass is real (teacher improved 0.319 → 0.206 at 200h),
+and the 0.87 ivrit-dev is seed-independent → confirmed as the EVAL
+BUG hypothesized earlier: asr_phones' dict branch ignores the
+recorded 32000 Hz sample rate (2×-time-warped audio → garbage decode).
+The training path resamples correctly (pcm_to_16k uses r["sr"]).
+run-062 LAUNCHED: labeler+student with the v3 teacher in a FRESH run
+dir (run-062, not run-052 — the stale consonant-skeleton labels.jsonl
+from the wrong-convention teacher cannot resume). Gate tonight:
+phonikud nCER < 0.2393 on vowel-full labels — the first
+end-to-end-consistent Hebrew g2p measurement.
