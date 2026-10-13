@@ -1916,3 +1916,19 @@ the model crosses the 2GB protobuf boundary (the e6 large encoder
 crossed it; run-054's export sat just under) — fixed by pinning
 use_external_data_format=False in both export calls (committed in
 train repo PR #133's export script).
+
+WO36 CORRECTION — the pointed-convention bug, caught before the gate
+(2026-10-13): label spot-check revealed run-052's labels are
+CONSONANT SKELETONS — run-051's teacher trained on r["text"]
+(UNPOINTED transcripts → espeak-he → consonant skeletons) instead of
+the crown-nikud pointed transcripts sitting in the same tars; the
+labeling decode additionally ran on 2×-time-warped 32k audio (run
+before the resample fix). run-052 killed at 15% student training —
+training toward those labels was waste. FIXES: teacher v3 (run-061,
+RUNNING) trains on the pointed field (vowel-full targets, primary
+gate = ivrit dev same-convention; FLEURS reported as
+convention-shifted); the labeler carries the resample fix; the
+student gate (phonikud, vowel-full gold) is then CONSISTENT
+end-to-end for the first time. The WO31 lesson generalizes: the
+pointed-vs-unpointed convention must be asserted at EVERY stage —
+targets, gates, and labels — not just the first espeak call.
