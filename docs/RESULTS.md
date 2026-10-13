@@ -1932,3 +1932,17 @@ student gate (phonikud, vowel-full gold) is then CONSISTENT
 end-to-end for the first time. The WO31 lesson generalizes: the
 pointed-vs-unpointed convention must be asserted at EVERY stage —
 targets, gates, and labels — not just the first espeak call.
+
+Seed-variance result (run-061b, seed 1337 vs run-061 seed 42):
+FLEURS 0.2055 vs 0.2069 · ivrit dev 0.8745 vs 0.8722 — seeds agree to
+±0.002, so BOTH numbers are stable measurements. Conclusion: the
+FLEURS gate pass is real (teacher improved 0.319 → 0.206 at 200h),
+and the 0.87 ivrit-dev is seed-independent → confirmed as the EVAL
+BUG hypothesized earlier: asr_phones' dict branch ignores the
+recorded 32000 Hz sample rate (2×-time-warped audio → garbage decode).
+The training path resamples correctly (pcm_to_16k uses r["sr"]).
+run-062 LAUNCHED: labeler+student with the v3 teacher in a FRESH run
+dir (run-062, not run-052 — the stale consonant-skeleton labels.jsonl
+from the wrong-convention teacher cannot resume). Gate tonight:
+phonikud nCER < 0.2393 on vowel-full labels — the first
+end-to-end-consistent Hebrew g2p measurement.
