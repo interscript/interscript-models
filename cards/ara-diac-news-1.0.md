@@ -10,8 +10,16 @@ IMF v1 int8, 399 MB.
 
 | benchmark | this model | ara-diac-2.0 (generalist) |
 |---|---|---|
-| WikiNews-2024 multiref WER/DER | **10.13 / 8.98** | 17.38 / 11.83 |
-| SadeedDiac-25 Total DER | 5.5008 | **2.2864** |
+| WikiNews-2024 multiref WER/DER (first-alternate protocol) | **4.10 / 1.56** | 17.38 / 11.83 |
+| SadeedDiac-25 Total DER | 5.4814 | **2.2864** |
+
+## Decode contract (runtime >= py 0.2.0 / npm 5.8.0 / gem 3.1.0)
+
+This model emits slash-separated alternates on some tokens; the
+runtimes above return the primary choice automatically
+(`first_alternates`). Artifact bytes are unchanged and the sha256
+remains valid. Runtimes older than the versions above require the
+caller to strip alternates before scoring.
 
 Use this model for news-domain text; use ara-diac-2.0 for
 classical/MSA. Two families, never averaged (RESULTS.md: the
