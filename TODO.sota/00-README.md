@@ -83,6 +83,7 @@ hf jobs run --flavor a100-large -d \
 | 44 | 44-release-plan.md | P1 | owner | PROPOSAL — naming law + publication order + decisions D1-D5 (owner states, I execute) |
 | 45 | 45-large-static-int8.md | P2 | 44 | PARKED — 3 toolchain walls (ORT-static, fp16-refuse, torch-dynamic trace); large tier = measurement; artifact needs external-data-in-zip (runtime-arch) |
 | 46 | 46-int8-artifact-remediation.md | P1 | 44 | ACTIVE — zipcheck under test; 1.0 fp32 re-export queued; release-asset replacement path defined |
+| 47 | 47-fas-diac-release.md | P1 | — | NEW GAP FOUND — fas-diac trained at 0.52% CER, NEVER released; checkpoint on a Modal volume; probe queued |
 
 ## Schedule
 
