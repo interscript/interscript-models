@@ -81,7 +81,7 @@ hf jobs run --flavor a100-large -d \
 | 42 | 42-heb-label-filter.md | P2 | 40 | STAGED (conditional — fires if e12 misses; self-consistency filter, 10 GPU-h) |
 | 43 | 43-heb-gold-nikud.md | P2 | 36/42 | STAGED — micsell campus GOLD nikud verified (28.6GB, public); license check then queue after WO41 |
 | 44 | 44-release-plan.md | P1 | owner | PROPOSAL — naming law + publication order + decisions D1-D5 (owner states, I execute) |
-| 45 | 45-large-static-int8.md | P2 | 44 | STAGED — byt5-large encoder cannot ship single-file at fp32/fp16 (2GB protobuf cap); static-int8 arm defined |
+| 45 | 45-large-static-int8.md | P2 | 44 | PARKED — 3 toolchain walls (ORT-static, fp16-refuse, torch-dynamic trace); large tier = measurement; artifact needs external-data-in-zip (runtime-arch) |
 
 ## Schedule
 

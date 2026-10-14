@@ -2165,3 +2165,10 @@ the broken isc artifact (parsanol#5), the rake.yml PR-overlay fix
 repo-wide standardrb cleanup, and the windows tampered-zip platform
 skip. CI: 10/10 green — the rake workflow's first fully green run in
 its history (29 prior failures, 0 successes).
+
+LARGE TIER PARKED (2026-10-14): third single-file toolchain attempt
+(torch.ao quantize_dynamic → ONNX) failed on untraceable quantized
+attention modules. WO45 fallback fires — 3.5607/1.4588 stands as the
+measurement; the artifact awaits external-data-in-zip (runtime-arch).
+The release ships ara-diac-news-1.0 + 1.1 + urd-g2p-base-1.0, all
+verified.
