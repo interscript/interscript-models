@@ -15,4 +15,9 @@ urd-g2p-2.0).
 Fallback if missed: small was capacity-capped, base underperformed →
 data-quality arm (dedupe/normalize) before any bigger swing.
 
-Status: RUNNING (run-059-urd-g2p-base, a100, 24h).
+Status: GATE PASS — run-059 full-split CER **0.1565 < 0.1578**
+(a100, 5h23m; verdict processed 2026-10-14). Anatomy: nCER 0.1075;
+errors = vowels 41.7% / consonants 34.2% / ins 24.2%. Ship chain:
+int8 IMF export + torch-vs-ONNX parity job (run-059-export-parity,
+RUNNING); zip staged as urd-g2p-base-staged — release name/number is
+the owner's call.
