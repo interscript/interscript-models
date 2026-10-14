@@ -453,8 +453,8 @@ models:
     precision: fp32
     filename: urd-g2p-base-1.0.zip
     url: https://github.com/interscript/interscript-models/releases/download/urd-g2p-base-1.0/urd-g2p-base-1.0.zip
-    sha256: ae3c9445656585cffdea2dbc4e3b383e87f476e29e1e07c586d61686da3e0436
-    size: 2159598099
+    sha256: 0aacaf58a61441d81295c5cadd229ff7943f774c16aa222d25380aeee01ce7e1
+    size: 2159598509
     metrics:
       - {name: cer, value: 15.65, source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base}
       - {name: cer_normalized, value: 10.75, source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base}
