@@ -456,8 +456,8 @@ models:
     sha256: 0aacaf58a61441d81295c5cadd229ff7943f774c16aa222d25380aeee01ce7e1
     size: 2159598509
     metrics:
-      - {name: cer, value: 15.65, source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base}
-      - {name: cer_normalized, value: 10.75, source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base}
+      - {name: cer, value: 15.65, protocol: "greedy decode, full 11940-row test split (WO37 protocol)", source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base}
+      - {name: cer_normalized, value: 10.75, protocol: "greedy decode, full 11940-row test split (WO37 protocol)", source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base}
     parity: {samples: 300, cer_delta: 0.024}
     license: BSD-3-Clause
   ara-diac-news-1.1:
@@ -469,6 +469,6 @@ models:
     sha256: 2f55e2a3c9e97da3666ef236e8ba31a24399257c9cc448363cc19f96541eb3ba
     size: 2160091218
     metrics:
-      - {name: wer_wikinews2024_multiref, value: 8.85, source: interscript/interscript-models docs/RESULTS.md (WO35 first-alt protocol)}
-      - {name: der_total_greedy, value: 2.84, source: interscript/interscript-models docs/RESULTS.md (WO35 first-alt protocol)}
+      - {name: wer_wikinews2024_multiref, value: 8.85, protocol: "greedy decode, first-alternate protocol, WikiNews-2024 multiref (WO35)", source: interscript/interscript-models docs/RESULTS.md}
+      - {name: der_total_greedy, value: 2.84, protocol: "greedy decode, first-alternate protocol, WikiNews-2024 multiref (WO35)", source: interscript/interscript-models docs/RESULTS.md}
     license: BSD-3-Clause
