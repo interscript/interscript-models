@@ -419,9 +419,9 @@ models:
     sha256: e5a52b1530dfa6d6c7ef8970443206ce33af865d0337a58d145945adab33484e
     size: 399018923
     metrics:
-      - {name: wer_wikinews2024_multiref, value: 10.1262, source: interscript/interscript-models docs/RESULTS.md#sota-verdict-wave-4--ood-crown-1013-capacity-closed-on-arabic-too-audio-alignment-go-2026-10-09}
-      - {name: der_wikinews2024_multiref, value: 8.9818, source: interscript/interscript-models docs/RESULTS.md#sota-verdict-wave-4--ood-crown-1013-capacity-closed-on-arabic-too-audio-alignment-go-2026-10-09}
-      - {name: der_total_greedy, value: 5.5008, source: interscript/interscript-models docs/RESULTS.md#sota-verdict-wave-4--ood-crown-1013-capacity-closed-on-arabic-too-audio-alignment-go-2026-10-09}
+      - {name: wer_wikinews2024_multiref, value: 4.0976, source: interscript/interscript-models docs/RESULTS.md#wo35--the-alternate-format-scoring-artifact-ood-corrects-1003--410156-2026-10-10}
+      - {name: der_wikinews2024_multiref, value: 1.5606, source: interscript/interscript-models docs/RESULTS.md#wo35--the-alternate-format-scoring-artifact-ood-corrects-1003--410156-2026-10-10}
+      - {name: der_total_greedy, value: 5.4814, source: interscript/interscript-models docs/RESULTS.md#wo35--the-alternate-format-scoring-artifact-ood-corrects-1003--410156-2026-10-10}
     license: BSD-3-Clause
   heb-diac-plane-1.0:
     task: diacritization
@@ -446,4 +446,29 @@ models:
     size: 415901226
     metrics:
       - {name: der_total_greedy, value: 8.18, source: interscript/interscript-models docs/RESULTS.md#run-022-heb-plane-base--818-der-at-the-artifact-level-gate-cleared-hebrew--430pp-2026-10-07}
+    license: BSD-3-Clause
+  urd-g2p-base-1.0:
+    task: g2p
+    scripts: [Arab, IPA]
+    precision: fp32
+    filename: urd-g2p-base-1.0.zip
+    url: https://github.com/interscript/interscript-models/releases/download/urd-g2p-base-1.0/urd-g2p-base-1.0.zip
+    sha256: 14c2ebf81999f24b624c7f3c9d223a16c36fee465863785b6ceea88b3d1f371a
+    size: 2159598592
+    metrics:
+      - {name: cer, value: 15.65, protocol: "greedy decode, full 11940-row test split (WO37 protocol)", source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base-gate-pass}
+      - {name: cer_normalized, value: 10.75, protocol: "greedy decode, full 11940-row test split (WO37 protocol)", source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base-gate-pass}
+    parity: {samples: 300, cer_delta: 0.024}
+    license: BSD-3-Clause
+  ara-diac-news-1.1:
+    task: diacritization
+    scripts: [Arab, Arab]
+    precision: fp32
+    filename: ara-diac-news-1.1.zip
+    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-news-1.1/ara-diac-news-1.1.zip
+    sha256: 2f55e2a3c9e97da3666ef236e8ba31a24399257c9cc448363cc19f96541eb3ba
+    size: 2160091218
+    metrics:
+      - {name: wer_wikinews2024_multiref, value: 8.85, protocol: "greedy decode, first-alternate protocol, WikiNews-2024 multiref (WO35)", source: interscript/interscript-models docs/RESULTS.md}
+      - {name: der_total_greedy, value: 2.84, protocol: "greedy decode, first-alternate protocol, WikiNews-2024 multiref (WO35)", source: interscript/interscript-models docs/RESULTS.md}
     license: BSD-3-Clause
