@@ -1961,6 +1961,8 @@ continuation from the epoch-3 checkpoint (run-062-ivrit-student-e12,
 LAUNCHED — epoch-resume machinery now works). If still >0.24: label
 quality filter, then WO36 stage-3 teacher scale (300-500h).
 
+## run-059 urd-g2p-base gate pass
+
 run-059 urd-g2p-base — GATE PASS, processed late (2026-10-14; job
 completed 2026-10-12, verdict unprocessed until now): full 12,699-row
 test split CER **0.1565 < 0.1578** (urd-g2p-1.0) — byt5-base on 610K
