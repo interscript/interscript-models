@@ -89,3 +89,17 @@ micsell/hebrew_speech_{campus,kan}_nikud — Hebrew speech with GOLD
 nikud annotations (would upgrade stage 2 from model-pointed to gold-
 pointed). Secondary; check availability while awaiting audio-v2
 access.
+
+## Status log
+
+- 2026-10-13: teacher v3 (run-061, pointed-convention targets) gates
+  PASS (FLEURS 0.2069/0.2055 seed-stable); correction of the
+  run-051 unpointed-target bug recorded in RESULTS.md.
+- 2026-10-14: run-062-r11 (v3 teacher labels, 200h, byt5-base, 4 ep)
+  → phonikud nCER **0.4415** vs gate 0.2393 — MISS but first valid
+  measurement (prior numbers were convention/resample-broken). Loss
+  still descending → undertrained, not converged. Continuation
+  launched: run-062-ivrit-student-e12 (+8 epochs from epoch-3).
+- Pending: if e12 still misses → (a) label-quality filter
+  (teacher-confidence/SNR), (b) stage-3 teacher scale 300-500h
+  (spec'd gate PER < 0.25), then re-label + re-student.

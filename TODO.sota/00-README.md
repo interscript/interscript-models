@@ -72,9 +72,16 @@ hf jobs run --flavor a100-large -d \
 | 33 | 33-lexicon-disambiguator.md | P1 | 17/32 | NEGATIVE — 18.07/11.44; word-only can't diacritize OOV |
 | 34 | 34-hybrid-word-char.md | P1 | 32/33 | CLOSED — hybrid 13.53, fastText 13.59, vcd ±0, oracle 0.71 (all old-protocol; see 35) |
 | 35 | 35-alternate-protocol.md | P1 | 34 | arm 2 PASS — large-strip 3.5983/1.4715 NEW BEST (0.90 to frontier); 1.1+1.2 staged; 3-way oracle ceiling 2.9484 |
-| 36 | 36-ivrit-scale.md | P1 | 31 | RUNNING — access granted; audit DONE (250K self-contained pairs); pointing (spawn-fixed) in flight; 050-052 staged |
+| 36 | 36-ivrit-scale.md | P1 | 31 | e12 CONVERGED 0.4462 (+8ep bought nothing) — undertraining refuted; residual structural; label-filter arm next, teacher v4 last resort |
 | 37 | 37-portfolio-sota.md | P2 | — | REFERENCE NUMBERS PUBLISHED — fas 1.47 / urd-diac 3.86 / urd-g2p 15.78 CER (n=3000, protocol+artifacts sha'd); urd-g2p = the one future arm |
-| 38 | 38-urd-g2p-base.md | P1 | 37 | RUNNING — byt5-base on 610K humair025 pairs; gate CER < 0.1578 (1.0) on full 12.7K test |
+| 38 | 38-urd-g2p-base.md | P1 | 37 | GATE PASS 0.1565 < 0.1578 (12.7K full split); export+parity RUNNING; staged urd-g2p-base-staged |
+| 40 | 40-heb-teacher-reeval.md | P1 | 36 | VERDICT 0.1382 TRUE (was 0.87 bug) — student-bottleneck; teacher v4 demoted to last resort |
+| 39 | 39-ar-oracle-distill.md | P1 | 35 | RUNNING — stage-1 relabel on l4x1 (chunk-resume, 9 tests green); stage-2 continue-train queued on a100 |
+| 41 | 41-urd-diac-base.md | P2 | 38 | STAGED — script in bucket; last in a100 queue (after WO39 stage 2) |
+| 42 | 42-heb-label-filter.md | P2 | 40 | STAGED (conditional — fires if e12 misses; self-consistency filter, 10 GPU-h) |
+| 43 | 43-heb-gold-nikud.md | P2 | 36/42 | STAGED — micsell campus GOLD nikud verified (28.6GB, public); license check then queue after WO41 |
+| 44 | 44-release-plan.md | P1 | owner | PROPOSAL — naming law + publication order + decisions D1-D5 (owner states, I execute) |
+| 45 | 45-large-static-int8.md | P2 | 44 | STAGED — byt5-large encoder cannot ship single-file at fp32/fp16 (2GB protobuf cap); static-int8 arm defined |
 
 ## Schedule
 
@@ -83,39 +90,42 @@ Wave 2 (HF training, launched together): WO04 (a100-large), WO06
 (a100-large), WO08 (l4x1) — run concurrently, watch via `hf jobs ls`.
 Wave 3: WO05 tables after 01+07 land; WO09 probe only.
 
-## Path-to-success graph + SOTA matrix (2026-10-10, post-WO35)
+## Path-to-success graph + SOTA matrix (2026-10-14, post-WO38/39)
 
 ```
 ARABIC ── WikiNews-2024 multiref (OOD news, WER/DER, first-alt protocol)
-  ara-diac-news-1.0  4.10 WER / 1.56 DER  [CROWN-tier; DER likely leads]
-  frontier 2.70 WER → gap = 1.4 points, program RE-OPENED (WO35):
-    hybrid-2 stack + sweep (knobs wired); Sadeed rescore pending
-  pre-WO35 numbers (broken scorer, for the record): specialist 10.03
-    > plane-large 10.78 > hybrid 13.53 ≈ fastText 13.59 > char 14.30
-    > word-only 18.07; rankings hold, absolutes shifted
-  convention alignment SOLVED in-run: the model already emits their
-    alternate format; runtimes now return the primary choice
-    (py#35 / ts#108 / ruby#805)
+  ladder: shipped 4.10 > base-strip 4.00 > large-strip e6 **3.5607/1.4588**
+  frontier 2.70 → gap 0.86; 3-way oracle ceiling 2.9861 (routing closed <2)
+  → WO39 ORACLE-DISTILL (the capture path): relabel 300K QCRI rows with
+    per-row best arm → continue-train e6 → gate < 3.5607, stretch <= 2.70
+  runtimes return primary choice (py#35 / ts#108 / ruby#805)
 
 ARABIC ── SadeedDiac-25 (ID): r7 2.2864 [BEST dedicated]; specialist
-  5.48 first-alt rescore DONE — ID surface was never inflated (the
-  alternate artifact was OOD-only: −5.9 WER there vs −0.02 DER here)
+  5.4814 first-alt rescored — ID was never inflated (artifact OOD-only)
 
-HEBREW ── nikud DER: 8.18 crown (2× runner-up); text levers closed
-  → WO31 AUDIO PROGRAM GREEN-LIT + RUNNING (2026-10-10):
-    run-038 ASR fine-tune (dev PER gate < 0.395) → run-039 v1 student
-    (gate CER < 0.2393 rules layer) → only then ivrit.ai scale ($500)
-HEBREW ── g2p CER: rules 0.2393 · ReNikud 0.0244 (the WO31 target)
+HEBREW ── nikud DER: 8.18 crown (2x runner-up); all text levers closed
+HEBREW ── g2p CER (the open frontier): rules 0.2393 · ReNikud 0.0244
+  audio chain (WO36) now END-TO-END CONSISTENT: v3-teacher labels 200h
+  → student 4ep nCER 0.4415 (first valid number; beat FLEURS-student 0.546)
+  → e12 +8-epoch continuation RUNNING (undertrained hypothesis)
+  → if miss: label filter, then 500h slice (building now) → teacher v4
+URDU ── g2p: run-059 base GATE PASS 0.1565 < 0.1578 (1.0) on full 12.7K
+  split; int8 export + torch/ORT parity in flight; staged
+  urd-g2p-base-staged (owner names release)
 THAI ── PER: hybrid 0.1478 @0.73ms [crown]
+FAS ── g2p 1.47 full-split [anchor beaten 25x]
 CLIENT SURFACE: 3-runtime parity ✓ · preserve ✓ · edge /v1/infer ✓
-  index-v10 · npm 5.7.0 · 29 HF mirrors
+  index-v10 · 29+ HF mirrors
 ```
 
 | axis | ours | 2026 frontier | status |
 |---|---|---|---|
 | AR in-domain DER | 2.2864 | 1.39 (LLM API) | #1 dedicated (LLM = no-teacher law) |
-| AR OOD multiref WER | **4.10** (DER **1.56**) | 2.70 | 1.4-pt program re-opened (WO35) |
-| HE nikud DER | **8.18** | — (we lead) | crown held; audio = WO31 running |
-| HE g2p CER | 0.2393 (rules) | 0.0244 (audio) | WO31 stages 1-2 in flight |
-| TH PER | **0.1478** | 26.9 (latency play) | crown held + hybrid latency tier |
+| AR OOD multiref WER | **3.5607** (DER 1.4588) | 2.70 | 0.86 gap → WO39 distill READY |
+| HE nikud DER | **8.18** | — (we lead) | crown held |
+| HE g2p CER | 0.4415 (audio, e12 running) | 0.0244 (ReNikud) | OPEN — undertrained→scale levers queued |
+| UR g2p CER | **15.65** full-split (base) | — | GATE PASS; export+parity in flight |
+| UR diac CER | 3.77 full-split | — | shipped |
+| FAS g2p CER | 1.47 full-split | — | shipped |
+| TH PER | **0.1478** | 26.9 (latency play) | crown held + latency tier |
 | client surface | 3 runtimes + edge | none exists | moat maintained |
