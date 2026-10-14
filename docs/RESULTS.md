@@ -1946,3 +1946,222 @@ dir (run-062, not run-052 — the stale consonant-skeleton labels.jsonl
 from the wrong-convention teacher cannot resume). Gate tonight:
 phonikud nCER < 0.2393 on vowel-full labels — the first
 end-to-end-consistent Hebrew g2p measurement.
+
+run-062-r11 verdict — first end-to-end-consistent Hebrew g2p
+measurement (2026-10-14): phonikud nCER **0.4415** (raw 0.6779) vs
+gate 0.2393 (rules layer) — **GATE MISS**, but the first VALID number
+of the whole audio-arm saga (everything before was convention-broken
+or resample-broken). Context: beats the FLEURS-scale student's 0.546
+despite spontaneous-speech labels; loss was still descending at
+training end (0.30→0.17 over 4 epochs, no plateau) → the model is
+UNDERTRAINED, not converged. Residual-error hypothesis: 200h-derived
+labels carry podcast noise (hesitations, music, code-switching) the
+teacher faithfully transcribed. NEXT LEVER (cheap first): +8 epochs
+continuation from the epoch-3 checkpoint (run-062-ivrit-student-e12,
+LAUNCHED — epoch-resume machinery now works). If still >0.24: label
+quality filter, then WO36 stage-3 teacher scale (300-500h).
+
+run-059 urd-g2p-base — GATE PASS, processed late (2026-10-14; job
+completed 2026-10-12, verdict unprocessed until now): full 12,699-row
+test split CER **0.1565 < 0.1578** (urd-g2p-1.0) — byt5-base on 610K
+humair025 pairs beats the small-tier shipped model. word_acc 0.3467.
+Anatomy (run-059-anatomy): cer_normalized **0.1075**; error mass —
+vowels/diacritics 41.7% (sub 4368 / del 1366), consonants 34.2%,
+insertions 24.2%. Ship per WO38: byt5-base IMF export staged (owner
+names the release). Lesson (repeat offender): a COMPLETED job with an
+unprocessed verdict is lost work — verdict-fetch must be part of the
+launch, not an afterthought.
+
+INFRA INCIDENT — hf upload ≠ bucket upload (2026-10-14): `hf upload
+Interscript/isx-training <local> <path>` silently created a PUBLIC
+MODEL repo of the same name on the org and wrote there instead of the
+bucket (commit URLs printed = false success). Consequences caught:
+run-059 export job died on a missing script; run-063 500h WDS build
+ran the STALE bucket builder (no S_OUT) and started rewriting the
+run-050 slice in place — killed at shard-0091; prefix is deterministic
+but may diverge if ivrit repos grew → treat the 200h slice as
+superseded by the 500h rebuild for any future labeling. All scripts
+re-pushed via `hf buckets cp` and verified by listing; both jobs
+relaunched green (run-063-v2 writes run-063 confirmed, export-parity-v2).
+Phantom repo flagged to owner for deletion. Rule saved to memory:
+bucket uploads = `hf buckets cp` + verify with `hf buckets ls` BEFORE
+launching the consuming job.
+
+run-059 EXPORT VERIFIED: urd-g2p-base-staged.zip — 399,894,914 bytes
+(int8 tier), sha256 b1d9a319879d110c0d79d3377191b4a45be88c67fb8f2d40
+325c706c0ce59f1a, ORT sanity green; task g2p, scripts [Arab, IPA].
+Torch engine on the 300 parity rows: CER 0.1397 (full-split 0.1565 —
+sample noise). First parity attempt crashed (numpy broadcast: assigning
+(L+1,) np.append into an (L,) row view of the growing decoder input) —
+fixed with a vectorized column append; parity-only job relaunched.
+
+WO39-41 WAVE (2026-10-14, "SOTA everywhere" sweep of untried levers):
+- WO39 stage-1 relabel LAUNCHED on l4x1 (a100 decontention): 300K QCRI
+  rows × 3 arms, chunk-resume added (completed_lines truncation logic,
+  9 tests green — catches partial trailing lines from killed jobs).
+- WO40 teacher true-PER re-eval LAUNCHED (l4x1): run-061/best with the
+  FIXED eval — decides WO36's next lever (<0.35 student-bottleneck,
+  else teacher v4@500h mandatory). En route: found my morning resample
+  patch had gone to the v2 script copy (run-051 dir); the v3 script
+  (run-061 dir, pointed-override lineage) had a DIFFERENT eval bug
+  shape — dict branch ignoring r["sr"] — now patched in bucket+local.
+- WO41 urd-diac-base STAGED: the last untried tier lever in the
+  portfolio (urd-diac-1.0 is small-tier; tha/fas/urd-g2p all have base
+  tiers). run-059 recipe 1:1, gate < 0.0377, queued last on a100.
+- Tier-lever audit: tha-g2p-base-1.0 and fas-g2p-base already shipped
+  (models.yaml sizes 2.78GB = base fp32) — no other tiers remain.
+
+WO40 VERDICT — teacher true-PER 0.1382 (2026-10-14): the fixed-eval
+re-measurement of run-061/best gives ivrit_dev_per_true **0.1382**
+(13.8%) vs the 0.8722 buggy report, and FLEURS 0.2059 (seed-consistent
+with 0.2055/0.2069). Decision rule fires LOW: **the STUDENT is the
+bottleneck; labels are good.** Consequences: (a) teacher v4@500h
+(WO36 stage 3) DEMOTED to last-resort — only if e12 AND the
+label-filter arm both fail; (b) the 200h slice is producing far better
+labels than assumed — the 0.4415 student miss is a student-side
+problem (undertraining being tested by e12 now; residual after
+convergence would be podcast-vs-benchmark domain gap → label-filter
+arm targets domain/quality outliers); (c) the 500h build keeps
+running as cheap contingency (a 3.6% teacher-PER improvement might
+still buy the last points). The eval-bug lesson repeats in miniature:
+the SAME sr-ignoring bug had two shapes (v2: bytes+sf.read; v3: dict
+branch) — one fix did not cover both.
+
+PHANTOM REPO CLEANED (2026-10-14, owner-authorized): the accidental
+public model repo Interscript/isx-training deleted (was created by
+the hf-upload misuse; contained only training scripts, no secrets).
+Org namespace verified: 29 legitimate mirrors, zero strays; rhtse
+namespace clean. Memory rule stands: bucket writes = hf buckets cp.
+
+RELEASE WAVE SPECS (WO42-44 written): label-filter arm (conditional,
+self-consistency design), gold-nikud speech arm (micsell campus
+VERIFIED available 28.6GB public), and the full release plan
+(naming law derived from the 29-mirror convention; publish-state
+audit: py 0.2.0 never published, npm 5.7.0 predates ts#108, gem
+3.0.1 predates ruby#805; semver-minor recommendation 5.8.0/3.1.0/
+0.2.0; index-v11; owner decisions D1-D5 enumerated).
+
+CRITICAL FINDING — dynamic int8 destroys seq2seq decode quality
+(2026-10-14, the release gate did its job): urd-g2p-base staged int8
+zip parity FAILED (ONNX CER 0.4399 vs torch 0.1397, 5% row match).
+Discrimination: the SAME decode loop on the fp32 ONNX graphs gives
+CER 0.1633 vs torch 0.1397 (70% row match; the 0.024 residual is
+bf16-autocast-vs-fp32 compute) — the loop is correct, the
+QUANTIZATION is the killer. Consequences: (a) all seq2seq artifacts
+ship FP32 (export script default EXPORT_PRECISION=fp32; 2-3 part
+zips under the 2GiB part cap); (b) parity now verifies the SHIPPED
+ZIP BYTES (zip mode), not loose graphs; (c) the SHIPPED
+ara-diac-news-1.0 int8 zip is under suspicion — zip-check running
+(run-029-zipcheck); static int8 remains the proven tier (plane
+family 3-leg parity green), dynamic-int8 is a documented negative
+(consistent with the DeepSeek campaign's "static-int8 the one
+positive lever").
+
+RELEASE WAVE STATUS (owner-approved D1-D5): npm interscript@5.8.0
+PUBLISHED (provenance, GH release created; earlier 5.7.0 reading was
+registry lag). py 0.2.0 BLOCKED on red CI — root cause: the release
+workflow installed bare `-e .` while tests import
+interscript.ml.loader (module-level `import yaml`); test.yml red on
+main for the same reason since py#35. Fix PR interscript-py#36
+(pyyaml in dev extra + release workflow mirrors test.yml maps
+checkout). gem 3.1.0: bump PR interscript-ruby#806 open; PR CI fails
+on PRE-EXISTING main failures (ml golden/imf fixture specs,
+Isc::ParseError — present on the #805 merge run itself); also the
+v3.x gem line has no working CI release path (the v3.0.0 workflow
+run failed; 3.0.x were pushed manually) → gem ships via the
+hand-rolled build+push path after main's specs are green.
+
+fp32 re-export wave LAUNCHED (4 jobs, l4): urd-g2p-base-1.0 (final
+id), ara-diac-news-large-1.0 (e6), ara-diac-news-1.1 (run-040) —
+each export+zip-parity; plus the run-029 shipped-zip diagnostic.
+GH Releases for the three models wait on green parity.
+
+GEM CI ROOT CAUSE + FIX (2026-10-14): the red ml specs trace to ONE
+map — acadsin-zho-Hani-Latn-2002.isc — which the SHIPPED parg
+artifact misparses (rejects lowercase system codes at line 1 char 17;
+charset = legacy uppercase+escape class) while the .parg source and
+the Ruby-DSL grammar both accept it. The artifact carries no source
+hash → staleness undetectable at load. Fix shipped on the release PR
+(interscript-ruby#806): parser prefers the artifact, retries the DSL
+grammar on ParseFailed (TDD: regression spec + end-to-end verified on
+the failing map). parsanol issue DRAFTED for owner review: artifacts
+should embed source-grammar hash + compiler version.
+
+fp32 re-export relaunch: e6 + run-040 v1 jobs died on an
+export-script bug (ORT sanity block referenced int8-only vars in
+fp32 mode) — sanity now runs over the SHIPPED bytes; both relaunched
+(run-047/040-export-fp32-v2). urd job was still queued → will mount
+the fixed script.
+
+parsanol issue FILED (owner-approved): parsanol/parsanol-ts#5 — PARG
+artifacts should embed source-grammar SHA-256 + compiler version so
+loaders can detect stale artifacts; includes the acadsin repro and
+the compiler-mistranslation question. Our runtime fallback (#806)
+defends independently; the artifact recompile via the parsanol
+toolchain remains the upstream fix.
+
+CLEAN-DATA RESOLUTION for the ISC artifact (2026-10-14, owner
+directive "no legacy, fully clean"): the DSL-retry fallback was
+REVERTED — the gem ships no known-bad derived bytes instead. Findings
+that forced it: a FRESH `parsanol parg compile` (gem 1.3.91) of the
+current isc.parg reproduces the identical misparse (expects the
+test_line rule's `input` capture at the system line) → the parg
+COMPILER mistranslates the grammar; the artifact path has never
+parsed this corpus correctly (the long-standing red×77). The gem now
+ships WITHOUT isc.artifact.json — the .parg source stays (canonical),
+the runtime uses its documented artifact-missing→Ruby-DSL path, and
+the artifact-dependent specs guard-skip (restored once the compiler
+is fixed). parsanol#5 updated with the confirmed compiler repro.
+Release train #806 now = version bump + #805 contract + clean-artifact
+removal.
+
+EXPORT WAVE FIXES: (1) export sanity now runs over the SHIPPED bytes
+(fp32 mode previously referenced int8-only vars); (2) byt5-LARGE fp32
+exceeds the protobuf boundary — torch emits external-data files and
+the zip ships a stub encoder (the OLD staged e6 int8 zip was quantized
+from that stub — doubly broken); the large tier now exports FP16
+(single-file, gate numbers were bf16 anyway) via EXPORT_DTYPE=fp16;
+(3) parity feeds ONNX sessions POSITIONALLY from get_inputs() — the
+hardcoded encoder_hidden_states name did not match the declared graph
+inputs. run-040 zip (2.16GB fp32) verified intact; its parity
+relaunched.
+
+PARITY LOOP CLOSED (2026-10-14): the "invalid input name" failures
+were MY variable bug in parity_ar_imf_hf.py gen_windows — the DECODER
+run was issued on the ENCODER session variable (sess), so the error
+implicated the feed names spuriously; positional feeds were fine.
+Fix: ds.run. Separately, byt5-large's fp16 ENCODER still split to
+external data (decoder halved to 871MB fine) — export now post-processes
+both graphs: onnx.load(load_external_data=True) + onnx.save inlines
+them into single-file protobufs (fp16 graphs fit the 2GB cap).
+Relaunched: run-040-parity-v3, run-029-zipcheck-v3, run-047-export-fp16-v2.
+
+LARGE-TIER SHIP BLOCKED on a hard wall (2026-10-14): byt5-large's
+encoder serializes >2GB at BOTH fp32 and fp16 (onnx.save EncodeError
+on the re-fuse attempt) — single-file ONNX is impossible; external-
+data files are outside the IMF zip contract. Old staged 1.2 int8 zip
+confirmed quantized-from-stub (never shippable). Decision: the large
+tier's 3.5607/1.4588 stands as a measurement; the artifact ships via
+WO45 static-int8 (the proven lever) — spec written, arm staged.
+
+e12 VERDICT — the student is CONVERGED at ~0.44 (2026-10-14): +8
+epochs moved nCER 0.4415 → 0.4462 (noise). Undertraining REFUTED;
+the undertrained-hypothesis lever is closed. The residual vs the
+0.2393 gate is structural: podcast spontaneous-speech labels vs the
+dictionary/read-style benchmark (plus whatever noise the 13.8%-PER
+teacher passes through). Next per WO36/42: the label-filter arm
+(decodes on l4 after the parity wave; retrain queued behind the AR
+chain) with expectation set honestly — filtering narrows the gap,
+the gold-nikud arm (WO43) attacks the OTHER contender path.
+Fleet: a100 FREED by e12 → the l4 oracle-relabel (1-2 rows/s) was
+KILLED and WO39 stage-1 relaunched on the a100 with per-arm resume
+(~15h for all three arms) — the MUST-fix AR acceleration.
+
+GEM 3.1.0 SHIPPED (2026-10-14): interscript 3.1.0 registered on
+rubygems.org. The release train (interscript-ruby#806) carried:
+version bump, the #805 decode contract (first_alternates), removal of
+the broken isc artifact (parsanol#5), the rake.yml PR-overlay fix
+(bootstrap tested remote main — PRs never exercised their own code),
+repo-wide standardrb cleanup, and the windows tampered-zip platform
+skip. CI: 10/10 green — the rake workflow's first fully green run in
+its history (29 prior failures, 0 successes).
