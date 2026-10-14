@@ -33,6 +33,14 @@ instinct; note in RESULTS before launch).
    nikud arm as a MEASUREMENT (is gold speech data worth anything to
    the chain?) before committing the plane retrain.
 
+## License check (2026-10-14): FAILED — arm BLOCKED
+
+The dataset README carries NO license field (default all-rights-
+reserved). Training on it without permission is off-limits. Unblock
+path: owner-to-owner ask to micsell for a research license; until
+granted, the gold-nikud arm stays parked and the HE g2p path rides on
+WO36/42 only.
+
 ## Queue position
 
 After WO41 (urd-diac-base) and only if WO36/42 haven't closed the
