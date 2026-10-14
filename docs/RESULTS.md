@@ -2174,3 +2174,14 @@ attention modules. WO45 fallback fires — 3.5607/1.4588 stands as the
 measurement; the artifact awaits external-data-in-zip (runtime-arch).
 The release ships ara-diac-news-1.0 + 1.1 + urd-g2p-base-1.0, all
 verified.
+
+RELEASE VERIFICATION CATCH (2026-10-14): post-publish smoke of npm
+5.8.0 found imf.firstAlternates UNREACHABLE — the imf barrel never
+re-exported it (ts#108's tests used source-tree imports). Fixed in
+interscript-ts#109 (barrel + public-surface test), shipped as 5.8.1
+(verified loading + export). Gem 3.1.0 smoke passed (loads,
+first_alternates reachable). Also: fas-diac checkpoint CONFIRMED
+alive on the Modal volume (sanctioned one-time export run; bucket
+run-073-fas-diac/best) — WO47 proceeds to protocol verification.
+UR lexicon lever DEAD (probe: oracle 0.2268 worse than model 0.1565).
+he-wiki vocalized mining DUD (1,244 pairs) → Wikisource pivot spec'd.

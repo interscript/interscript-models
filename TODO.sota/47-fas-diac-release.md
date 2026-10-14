@@ -35,3 +35,12 @@ Name: fas-diac-1.0 (tier-in-name if base: fas-diac-base-1.0).
 
 - PROBE QUEUED behind the l4 wave (a Modal read-only export job or a
   volume-listing probe).
+
+## Probe result (2026-10-14): CHECKPOINT ALIVE — recovered
+
+`persian-diacrit-checkpoints/persian_diacrit/run-001/best` exists
+(byt5-small per the repo docs; ~1.2GB safetensors) and is now in the
+training bucket at run-073-fas-diac/best/ via the sanctioned Modal
+volume export. Next: verify config/task (which objective — the 0.52%
+CER eval), rebuild the eval on the current protocol (scripted in the
+repo), then the standard ship chain (fp32 IMF, repack tool, publish).
