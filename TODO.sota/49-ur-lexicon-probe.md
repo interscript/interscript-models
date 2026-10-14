@@ -21,3 +21,11 @@ lexicon layer (3-runtime work item); else the lever is DEAD — recorded.
 
 Lexicon artifact (tha-lexicon pattern) + loader fallback in the
 seq2seq translate path — owner-gated runtime work, WO22-adjacent.
+
+## Verdict (2026-10-14): DEAD
+
+covered_frac 0.303 · lexicon-oracle CER on covered rows **0.2268**
+vs the model's 0.1565 gate — the train-consensus reading is NOISIER
+than the model (multi-reading votes + segmenter drift on multi-word
+rows). A runtime lexicon layer would degrade quality. Closed at
+probe cost (zero GPU, one cpu job).
