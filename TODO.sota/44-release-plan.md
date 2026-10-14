@@ -98,3 +98,23 @@ need first_alternates or score raw).
 - PARITY GATE: int8 zip FAILED (0.44 vs 0.14 CER) → fp32 shipping
   decision; 4-job fp32 re-export wave in flight; GH Releases gated
   on green zip parity.
+
+## Release-notes drafts (owner reviews wording before posting)
+
+**Runtime wave (shipped: npm 5.8.0 ✓, gem 3.1.0 ✓; py 0.2.0 pending
+the PyPI trusted-publisher entry):**
+> Seq2seq models trained on multi-reference corpora emit
+> slash-separated alternates; the decode contract now returns the
+> primary choice by default and exposes `first_alternates` /
+> `firstAlternates` for callers who want the full set. Fixes the
+> WikiNews-style scoring artifact (raw-protocol numbers were
+> inflated); models.yaml metrics are stated under the corrected
+> first-alternate protocol.
+
+**Model wave (gated on parity/releases):**
+> urd-g2p-base-1.0: base-tier Urdu G2P, full-split CER 15.65 (beats
+> the small tier's 15.78 gate); fp32, shipped-bytes parity verified.
+> ara-diac-news-1.1: alternate-free base-tier news specialist
+> (no decode-contract dependency). ara-diac-news-large-1.0: NEW BEST
+> 3.5607/1.4588 first-alt on WikiNews-2024 multiref (ship pending
+> WO45 static-int8 — the fp32/fp16 graphs exceed the 2GB ONNX cap).
