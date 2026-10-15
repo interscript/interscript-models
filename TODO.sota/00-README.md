@@ -84,7 +84,7 @@ hf jobs run --flavor a100-large -d \
 | 45 | 45-large-static-int8.md | P2 | 44 | PARKED — 3 toolchain walls (ORT-static, fp16-refuse, torch-dynamic trace); large tier = measurement; artifact needs external-data-in-zip (runtime-arch) |
 | 46 | 46-int8-artifact-remediation.md | P1 | 44 | ACTIVE — zipcheck under test; 1.0 fp32 re-export queued; release-asset replacement path defined |
 | 47 | 47-fas-diac-release.md | P1 | — | NEW GAP FOUND — fas-diac trained at 0.52% CER, NEVER released; checkpoint on a Modal volume; probe queued |
-| 48b | (48 ext) | P2 | 48 | he-wiki DUD (1,244 pairs); pivot spec'd: he.wikisource CC BY-SA (10-50K gold pairs), queued behind fleet drain |
+| 48b | (48 ext) | P2 | 48 | API routes exhausted (wiki thin, wikisource-extracts empty ×2) — supply pivots to Wikisource DB dumps (next session); trainer READY |
 | 49 | 49-ur-lexicon-probe.md | P2 | 38 | DEAD — lexicon-oracle 0.2268 WORSE than model 0.1565 on 30% coverage; lever closed at zero GPU |
 | 50 | 50-imf-external-data-contract.md | P3 | 45 | PROPOSAL — IMF v2 external-data contract; unblocks the large-tier artifact; owner-gated release train |
 
