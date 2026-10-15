@@ -2286,3 +2286,13 @@ bf16 gate numbers were numerics mirages and the base tiers genuinely
 perform ~0.14-0.28 (retrain-for-robustness decision); if fp32-torch ≈
 bf16-torch, the ONNX conversion is defective (fix the export). ALL
 byt5-base publishes stay HELD pending that answer.
+
+THREE-WAY PROBE VERDICT (2026-10-16, run-066-probe3way): torch-bf16
+0.0343 / torch-fp32 0.0343 / agree 1.000 — the MODEL is numerically
+robust. ORT 0.1301 / agree 0.8867 vs both — **the opset-14 ONNX
+export is the defect**, diverging on ~11% of rows. The retrain-
+for-robustness path is CLEARED; the fix is the export (candidates:
+opset 17+, per-token logit diff on a failing row to find the first
+diverging op, or the known T5 relative-position-bias export issue).
+All byt5-base publishes remain HELD until an export passes parity at
+its gate level. The fix is bounded debugging, next session's opener.
