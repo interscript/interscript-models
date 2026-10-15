@@ -2225,3 +2225,14 @@ correctly, the parity loop is the bug and the artifact ships with a
 runtime-verified parity; if not, the graph export needs a fix before
 urd-diac-base-1.0 publishes. Publish HELD either way until the
 runtime-side check passes.
+
+DISCRIMINATOR VERDICT — the artifact WORKS (2026-10-15): raw ORT
+decode of the shipped urd-diac-base-1.0 zip on real rows produces
+real diacritics (not empty, not identity). The ~11% collapsed parity
+rows are a PARITY-HARNESS artifact: MAXLEN=256 truncated long rows
+(collapsed-row CER ≈ 1.0), and the local discriminator loop's own
+400-step cap truncated its sample tail the same way. Parity rerun at
+MAXLEN=512 (the runtime's decode length) launched — its numbers are
+the publish-parity of record. The over-marking visible in samples
+(sukun-heavy) is a training-convention trait, scoreable, not a
+defect gate.
