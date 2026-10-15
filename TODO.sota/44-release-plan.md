@@ -118,3 +118,27 @@ the PyPI trusted-publisher entry):**
 > (no decode-contract dependency). ara-diac-news-large-1.0: NEW BEST
 > 3.5607/1.4588 first-alt on WikiNews-2024 multiref (ship pending
 > WO45 static-int8 — the fp32/fp16 graphs exceed the 2GB ONNX cap).
+
+## QCRI full-silver ask draft (owner review — the AR outside lever)
+
+Subject: Full silver diacritization release + convention notes — research request (Interscript)
+
+Salaam — we build Interscript, a BSD-3-Clause transliteration and
+diacritization toolchain. Our news-register specialist, trained on the
+QCRI silver you published with the EMNLP 2025 paper, scores 3.56 WER /
+1.46 DER on WikiNews-2024 multiref under the first-alternate protocol
+(vs 4.10/1.56 trained on the public release) — your data taught our
+model your conventions, which was the decisive factor.
+
+Two asks, either alone would help:
+1. The FULL silver release (our training used a 900K-window slice):
+   wider coverage would directly close part of our remaining 0.86 WER
+   to your reported frontier.
+2. Convention notes for the multi-reference alternates (when the
+   annotator emits alternates, what the primary choice represents) —
+   we reverse-engineered the first-alternate convention from the data
+   and want to confirm it.
+
+We publish everything BSD-3-Clause and will cite your datasets/paper.
+Happy to share our eval harness (WikiNews-2024 multiref) and full
+results.
