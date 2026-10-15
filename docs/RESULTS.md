@@ -2270,3 +2270,19 @@ runtime ships bf16 graphs. Next-session: the three-way probe, then
 the export fix or the retrain decision. ALL THREE byt5-base
 publishes remain HELD. (The plane family remains unaffected —
 static-int8, its own parity GREEN.)
+
+urd-g2p-base-1.0 PUBLISH HELD — artifact-truth measured (2026-10-15):
+the fp32 zip's 1,000-row parity: torch 0.1429 / **ONNX 0.2783**
+(delta 0.135, 73% row-exact) vs the 0.1578 gate — the artifact misses
+by ~1.8×, unambiguous at this sample size. Combined with the diac-base
+signature (torch 0.0352 / ONNX 0.1391, 89% exact) the finding is
+CONFIRMED on two models: byt5-base fp32 ONNX exports diverge from
+torch-bf16 by ~0.08-0.14 CER with 73-90% row-exact and the remainder
+cascading. The small-tier artifacts (urd-g2p-1.0, parity delta 0.0)
+are FINE — the divergence scales with model size/sequence length.
+NEXT SESSION OPENER — the three-way probe (torch-fp32-decode vs
+torch-bf16 vs ORT-fp32 on identical rows): if fp32-torch ≈ ORT, the
+bf16 gate numbers were numerics mirages and the base tiers genuinely
+perform ~0.14-0.28 (retrain-for-robustness decision); if fp32-torch ≈
+bf16-torch, the ONNX conversion is defective (fix the export). ALL
+byt5-base publishes stay HELD pending that answer.
