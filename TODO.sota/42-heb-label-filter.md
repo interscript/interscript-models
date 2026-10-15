@@ -38,3 +38,16 @@ offsets; the WO39 completed_lines pattern).
 - If the filtered-retrain does not beat e12, CLOSE the audio arm at
   its best number, keep rules 0.2393 shipped, and route remaining
   budget to WO43.
+
+## Verdict (2026-10-15): PARKED — smoke data kills the cost-benefit
+
+Batched smoke (2 shards, timed): shard 1 = **3,817s / 1,215 rows**
+(~64 min/shard → the full 126-shard filter ≈ 134 GPU-h — not viable).
+THE FINDING that matters: **retention = 88%** (1,072/1,215 kept at
+0.15 phone-error tolerance) — the labels are largely SELF-CONSISTENT
+under ±10% time-stretch, refuting the "lots of noise" hypothesis.
+The student's 0.4462 gap is therefore DOMAIN MISMATCH (podcast
+acoustics vs citation forms), which no label filter can close.
+HE g2p path: WO48b (gold-nikud supply → nikud model → rules chain).
+The filter tool remains in the repo if a cheaper formulation
+(e.g., single-pass confidence) ever earns it.
