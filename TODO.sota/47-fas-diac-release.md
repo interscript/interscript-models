@@ -44,3 +44,8 @@ training bucket at run-073-fas-diac/best/ via the sanctioned Modal
 volume export. Next: verify config/task (which objective — the 0.52%
 CER eval), rebuild the eval on the current protocol (scripted in the
 repo), then the standard ship chain (fp32 IMF, repack tool, publish).
+
+- 2026-10-15: test split (1.87MB jsonl) exported from the Modal
+  volume to run-073-fas-diac/test.jsonl. Verification eval job next:
+  decode the 9,288 held-out rows with run-073/best, confirm ~0.52%
+  CER, then the ship chain.
