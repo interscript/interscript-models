@@ -2255,3 +2255,18 @@ single-file fits at base size), (b) a torch-fp32 vs ORT-fp32
 three-way probe to separate conversion error from model-edge
 sensitivity. The plane family is unaffected (static int8, its own
 parity GREEN).
+
+FP16 EXPORT REFUTED — refined divergence hypothesis (2026-10-15):
+urd-diac-base fp16 export (1.35GB zip, sanity green) parity → ONNX
+0.1938 vs torch-bf16 0.0352 (delta 0.159, 89% row-exact — same
+signature). Weight precision is NOT the variable: fp32→0.139,
+fp16→0.194, both ~4-5× the gate engine. Remaining discriminator:
+torch-fp32-decode vs torch-bf16 on identical rows — if fp32-torch
+also collapses, the MODEL is numerically fragile (razor-edge
+autoregressive decisions) and NO faithful export can carry the torch
+gate number; the honest artifact CER (~0.14) becomes the gate, and
+either the model retrains with numeric-robustness awareness or the
+runtime ships bf16 graphs. Next-session: the three-way probe, then
+the export fix or the retrain decision. ALL THREE byt5-base
+publishes remain HELD. (The plane family remains unaffected —
+static-int8, its own parity GREEN.)
