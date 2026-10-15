@@ -2213,3 +2213,15 @@ garbage) — BUT the ONNX artifact tracked torch at delta 0.046 / 65%
 row-exact even on garbage input: fp32 conversion fidelity confirmed
 on a second model independent of data. v3 rerun on the correct
 data-diacrit split pending (PARITY_DATA env added to the harness).
+
+urd-diac-base PARITY v3 (correct split, 2026-10-15): torch 0.0352
+(harness validated — matches the 0.0357 gate ✓) but ONNX zip CER
+0.1391 with 89.3% row-exact — the arithmetic signature of ~11% rows
+collapsing to near-empty outputs. Two hypotheses: (a) my python
+parity decode loop has an edge-case (batch padding/EOS interaction),
+(b) the exported graph drops rows. DISCRIMINATOR queued: run the
+actual py runtime IMF loader on this zip — if the runtime decodes
+correctly, the parity loop is the bug and the artifact ships with a
+runtime-verified parity; if not, the graph export needs a fix before
+urd-diac-base-1.0 publishes. Publish HELD either way until the
+runtime-side check passes.
