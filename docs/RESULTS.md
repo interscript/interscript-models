@@ -2185,3 +2185,13 @@ alive on the Modal volume (sanctioned one-time export run; bucket
 run-073-fas-diac/best) — WO47 proceeds to protocol verification.
 UR lexicon lever DEAD (probe: oracle 0.2268 worse than model 0.1565).
 he-wiki vocalized mining DUD (1,244 pairs) → Wikisource pivot spec'd.
+
+WO42 PARKED WITH DATA (2026-10-15): the batched filter smoke (2
+shards) shows 88% label retention under ±10% stretch-decode
+self-consistency — the teacher's labels are largely stable; the
+0.4462 student gap is podcast-vs-citation DOMAIN mismatch. Filter
+cost would be ~134 GPU-h for a lever that cannot close a 2× domain
+gap → parked. HE g2p path consolidates on WO48b (vocalized-supply →
+nikud model → shipped rules chain). Also: the original 12h "hang"
+was re-diagnosed — bs-1 decodes at ~95 min/shard with prints only
+every 20 shards (a sizing bug, not a hang).
