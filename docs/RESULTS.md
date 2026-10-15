@@ -2236,3 +2236,22 @@ MAXLEN=512 (the runtime's decode length) launched — its numbers are
 the publish-parity of record. The over-marking visible in samples
 (sukun-heavy) is a training-convention trait, scoreable, not a
 defect gate.
+
+THE BF16-IMPORT/FP32-ARTIFACT DIVERGENCE — session-closing finding
+(2026-10-15): urd-diac-base parity at MAXLEN 512 is IDENTICAL to 256
+(row-exact 89.33% both) — truncation REFUTED. The ~11% rows that
+collapse to near-total mismatch are a NUMERIC cascade: the gate
+engine runs torch under bf16 autocast (as trained); the exported
+ONNX artifact is fp32 — when an autoregressive row crosses a
+decision boundary under different numerics it cascades to garbage.
+The same signature explains the urd-g2p fp32 delta growth (0.024@300
+→ 0.078@1K) and likely part of the int8 "catastrophe". CONSEQUENCE:
+byt5-base fp32 artifacts carry an artifact-level CER ~3-4× their
+torch gate (0.176 vs 0.0357 measured here) — ALL THREE staged
+byt5-base publishes (urd-g2p-base-1.0, urd-diac-base-1.0,
+ara-diac-news-1.1) are HELD until resolved. Next-session fix
+candidates: (a) EXPORT_DTYPE=fp16 (numerics-match the bf16 gate;
+single-file fits at base size), (b) a torch-fp32 vs ORT-fp32
+three-way probe to separate conversion error from model-edge
+sensitivity. The plane family is unaffected (static int8, its own
+parity GREEN).
