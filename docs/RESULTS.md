@@ -2195,3 +2195,14 @@ gap → parked. HE g2p path consolidates on WO48b (vocalized-supply →
 nikud model → shipped rules chain). Also: the original 12h "hang"
 was re-diagnosed — bs-1 decodes at ~95 min/shard with prints only
 every 20 shards (a sizing bug, not a hang).
+
+AR PARITY HARNESS ANOMALY (2026-10-15): the v5 parity jobs (bs-8
+variant) scored torch WER ~73.14/73.17 — nearly IDENTICAL garbage on
+TWO DIFFERENT checkpoints (run-040 and run-029) that score 4.00-4.33
+under the v3 configuration. Identical garbage across different
+models = harness/scoring failure in that configuration, not model
+quality. Reverted to the exact v3 config (bs 16, no env) and
+relaunched the shipped-1.0 diagnostic (run-029-zipcheck-v6); the 1.1
+zip parity retries after v6 confirms the harness. Lesson: the AR
+parity harness has a bs-sensitive failure mode — keep the known-good
+configuration frozen until root-caused.
