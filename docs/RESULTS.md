@@ -2206,3 +2206,10 @@ relaunched the shipped-1.0 diagnostic (run-029-zipcheck-v6); the 1.1
 zip parity retries after v6 confirms the harness. Lesson: the AR
 parity harness has a bs-sensitive failure mode — keep the known-good
 configuration frozen until root-caused.
+
+urd-diac-base PARITY v2-vs-v3 (2026-10-15): v2 accidentally fed the
+G2P test split to the diac model (torch CER 1.2188 = wrong-data
+garbage) — BUT the ONNX artifact tracked torch at delta 0.046 / 65%
+row-exact even on garbage input: fp32 conversion fidelity confirmed
+on a second model independent of data. v3 rerun on the correct
+data-diacrit split pending (PARITY_DATA env added to the harness).
