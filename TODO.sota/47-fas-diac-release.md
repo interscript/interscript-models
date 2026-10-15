@@ -49,3 +49,13 @@ repo), then the standard ship chain (fp32 IMF, repack tool, publish).
   volume to run-073-fas-diac/test.jsonl. Verification eval job next:
   decode the 9,288 held-out rows with run-073/best, confirm ~0.52%
   CER, then the ship chain.
+
+## Retrain verdict (2026-10-16): 0.65% CER — MISS vs 0.52% docs
+
+run-076 (byt5-small, 445,869 pairs, 3 epochs, WO41 trainer chain):
+full-split CER **0.65%** / word_acc 81.08% vs the documented 0.52%.
+The recovered checkpoint proved non-functional, so 0.65% is the best
+VERIFIED number in hand. Next-session options: (a) one more epoch
+arm (the original recipe likely trained longer — check configs/),
+(b) ship 0.65% as the verified artifact with the docs discrepancy
+noted. Both are cheap; (a) first.
