@@ -2321,3 +2321,20 @@ publishes (urd-g2p-base-1.0, urd-diac-base-1.0, ara-diac-news-1.1)
 unblock with a decode-contract note. Next session: implement
 repetition penalty in the parity harness + the three runtimes
 (penalty ~1.2 / no-repeat-3gram), re-run gates, publish.
+
+PENALTY PARITY FINAL (2026-10-16): with repetition_penalty 1.2 +
+3-gram blocking, BOTH engines converge (torch 0.1834 / ONNX 0.2010,
+delta 0.018 — engine parity restored, conversion fidelity confirmed)
+but NEITHER recovers the 0.0357 gate. Conclusion: the repetition
+loop was a symptom; the root is BATCH-COMPOSITION-DEPENDENT collapse
+in the model — the gate's 0.0357 was measured at bs 16, and
+different batching exposes ~11% collapse rows. The artifact question
+reduces to model numeric robustness: urd-diac-base-1.0's honest
+decode numbers are ~0.18-0.20 (penalty decode) or ~0.14-0.28
+(free decode) vs the 0.0357 torch-at-training-batching number.
+NEXT SESSION: (1) characterize the collapse rows (input properties,
+batch-position dependence), (2) evaluate at the trainer's EXACT
+batching (bs 16) through ORT — if ORT@bs16 matches 0.0357, the
+runtime fix is decode-batching standardization (decode at fixed bs
+16 in the loaders), (3) re-gate and publish on the honest number.
+ALL HOLDS REMAIN.
