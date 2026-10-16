@@ -31,3 +31,13 @@ The 1.1 fp32 base artifact is unaffected (verified fp32 lineage).
 - Exporter for the re-export: export_imf_hf.py EXPORT_PRECISION=fp32
   (one-shot validator-clean metadata: protocols, parity, README — the
   urd publish loop's lessons).
+
+## Audit verdict (2026-10-16): shipped 1.0 asset VERIFIED GOOD
+
+zipcheck-v8 (30-row sample, harness-validated): ONNX int8 decode of
+the RELEASED ara-diac-news-1.0 zip → WER **4.15 / DER 1.04** — inside
+the model's known range, nowhere near garbage. **No withdrawal
+needed.** The int8 catastrophe was specific to the urd-g2p-base
+export (its own investigation, WO51-adjacent). The fp32 re-export
+(2.16GB, sha 280f6be9…) stands ready as an optional replacement but
+is NOT required. WO46 audit CLOSED: shipped int8 fleet clean.

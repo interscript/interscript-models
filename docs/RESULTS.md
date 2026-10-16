@@ -2296,3 +2296,11 @@ opset 17+, per-token logit diff on a failing row to find the first
 diverging op, or the known T5 relative-position-bias export issue).
 All byt5-base publishes remain HELD until an export passes parity at
 its gate level. The fix is bounded debugging, next session's opener.
+
+WO46 CLOSED — shipped int8 fleet clean (2026-10-16): zipcheck-v8 on
+the RELEASED ara-diac-news-1.0 int8 zip: WER 4.15/DER 1.04 (30-row
+harness-validated sample) — no withdrawal needed. The urd-g2p int8
+catastrophe remains isolated to that export. Note: the int8 ONNX CPU
+decode is extremely slow (~hours/batch) — the 30-row envelope was
+required; future int8 parity runs need the CUDA EP or GPU-adjacent
+environments.
