@@ -2338,3 +2338,13 @@ batching (bs 16) through ORT — if ORT@bs16 matches 0.0357, the
 runtime fix is decode-batching standardization (decode at fixed bs
 16 in the loaders), (3) re-gate and publish on the honest number.
 ALL HOLDS REMAIN.
+
+RELABEL DURABLE-SYNC: first fix wrong (2026-10-16). HfApi.upload_file
+rejects repo_type="bucket" — valid types are [None, model, dataset,
+space]. Decode is HEALTHY (resumed at 20,640 ✓, running). Next
+session: change repo_type to None (bucket surfaces as a None-type
+repo) or shell out to `hf buckets cp` in-job; verify one sync
+succeeds, then the p047 remainder (~4h) + p029 + consolidation run
+death-proof. The mount (/ckpt = the bucket) may itself be durable
+for properly-closed files — untested; the explicit sync removes the
+doubt.
