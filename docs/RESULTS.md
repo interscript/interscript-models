@@ -2304,3 +2304,20 @@ catastrophe remains isolated to that export. Note: the int8 ONNX CPU
 decode is extremely slow (~hours/batch) — the 30-row envelope was
 required; future int8 parity runs need the CUDA EP or GPU-adjacent
 environments.
+
+LOGIT-DIFF PROBE VERDICT — case closed, fix reclassified (2026-10-16):
+the local probe on the shipped zip shows enc_max_gap 0.0 (ONNX
+encoder bit-identical to torch), first_divergence null (torch and
+ORT argmax agree at EVERY step), and degenerate repetition-loop
+predictions (ڈْھُواڈْھْوا...) with NUL bytes — **the MODEL itself
+collapses to repetition loops on ~11% of rows in BOTH engines**. The
+export is fully exonerated; the trainer's 0.0357 gate differed only
+because the collapse is BATCH-NUMERICS-DEPENDENT (bs-16 eval masked
+it; bs-1 inference exposes it). THE FIX IS DECODE-SIDE: repetition
+penalty (or 3-gram blocking) in the three runtimes' seq2seq decode —
+no retrain, no export change. All byt5-base artifact gates
+re-evaluate WITH repetition-penalty decode; if clean, the held
+publishes (urd-g2p-base-1.0, urd-diac-base-1.0, ara-diac-news-1.1)
+unblock with a decode-contract note. Next session: implement
+repetition penalty in the parity harness + the three runtimes
+(penalty ~1.2 / no-repeat-3gram), re-run gates, publish.
