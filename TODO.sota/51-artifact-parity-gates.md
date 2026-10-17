@@ -1,7 +1,7 @@
 # WO51 — Artifact parity gates: the bf16/fp32 "export defect" case
 
-Status: OPEN (decisive probe `run-066-single-parity` in flight)
-Priority: blocks urd-diac-base, urd-g2p-base, fas-diac publishes (held)
+Status: **CLOSED 2026-10-17** — artifact exonerated; the harness was the defect
+Priority: unblocks urd-diac-base / urd-g2p-base / ara publishes (ship flavor = fp16)
 
 ## The anomaly
 
@@ -27,17 +27,24 @@ diverged only in batch-of-8; logit-diff agreed only single-row;
 zipcheck-v8 (runtime = single-window) verified GOOD; "single-window
 parity untouched".
 
-**CONFIRMED (run-066-single-parity, 2026-10-17):**
+**CONFIRMED + CLOSED (run-066-single-parity, 2026-10-17):**
 `PAD_GAPS [0.048, 0.0769, 0.063, 0.1078, 0.0, 0.0541, 0.1338, 0.0607]`
 — 7/8 rows' encoder states differ single-vs-padded-batch (0.0 rows =
-longest-in-batch, nothing padding them); torch-batched-with-mask
-reproduces the gate CER exactly (0.0352). Awaiting ort_single_cer to
-close; every prior observation is explained by the missing mask.
+longest-in-batch, nothing padding them); `ort_single_cer = 0.0352` ==
+torch-batched-mask == gate; `single_vs_batched_agree = 1.0` on 300/300
+rows. **The artifact was always correct; the maskless batched parity
+harness was the entire defect.** No re-export required.
 
-**Remedies, pick per lane:**
-(a) contract: IMF byt5 artifacts decode single-row (current runtime
-already does) — write into IMF spec + gates; or
-(b) re-export encoder WITH attention_mask input for batched serving.
+**fp16 recheck (run-066-fp16-single): `ort_single_cer = 0.0352`,
+`single_vs_batched_agree = 1.0` — fp16 ≡ fp32 ≡ gate.** The 0.1938
+"refutation" was entirely the poisoned harness. **Ship flavor: fp16**
+(1.35GB) over fp32 (2.16GB), identical verified quality.
+
+**Remedy adopted: (a) + (b) as capability.** Current artifacts ship
+under the single-row decode contract (runtime already conforms;
+contract now schema-enforced in recipes via `parity.mode`); the
+framework exporter (WO52 M5) grows an attention-mask option for future
+batched serving, gated by a batched-parity conformance fixture.
 
 ## Permanent gate redesign (feeds WO52)
 
@@ -57,6 +64,9 @@ already does) — write into IMF spec + gates; or
 
 ## Release posture
 
-urd/ara/fas publishes stay HELD until the single-parity verdict lands.
-If export is exonerated: publish with the fp32 zip + recorded
-three-way numbers; fp16 stays unpublished (worse, no benefit).
+urd-diac-base: fp16 zip CLEARED (gate 0.0357 torch / artifact 0.0352
+single-row). urd-g2p-base and ara int8 cleared by the same contract
+(their zipchecks ran the real single-window runtime path). Publishing
+waits for the complete ship set (WO52 M2 proof lane + fas run-077
+verdict + relabel stage-2) per the owner's only-ship-when-complete
+order — nothing ships half-fixed.
