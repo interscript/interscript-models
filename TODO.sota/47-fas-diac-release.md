@@ -59,3 +59,18 @@ VERIFIED number in hand. Next-session options: (a) one more epoch
 arm (the original recipe likely trained longer — check configs/),
 (b) ship 0.65% as the verified artifact with the docs discrepancy
 noted. Both are cheap; (a) first.
+
+## 2026-10-18: the gap is the backbone, not epochs
+
+- run-076 (small, 3ep): 0.65% · run-077 (small, 6ep): **0.60%** — both
+  MISS vs docs 0.52%; epochs saturating.
+- Gate split verified byte-identical to the docs split (data/test.jsonl
+  9,288 rows; sha256 67513aa16ec142ab matches the staged bucket copy) —
+  the comparison was always apples-to-apples.
+- rababa-farsi/docs/RESULTS.md records the docs recipe explicitly:
+  **ByT5-base, 3 epochs**, 464K derived pairs. Our arms ran byt5-small
+  — wrong backbone. Corpus count (445,869 after in-training filters of
+  the 464K usable) is not the variable.
+- **run-078-fas-diac-base launched** (byt5-base, 3ep, same corpus and
+  gate). recipes/fas-diac.yaml corrected to byt5-base. Expect ~27h;
+  epoch-resume relaunch if the 23h timeout lands first.

@@ -3,13 +3,16 @@ task: diacritization
 corpora:
   train: fas-dia@v1
   test: fas-dia@v1#test
-model: byt5-small
+model: byt5-base
 stages:
   - stage: sft
     route: legacy:interscript-train/train_fas_diac_hf.py
-    params: {epochs: 6, bs: 16, accum: 2, gate: 0.0052}
+    params: {epochs: 3, bs: 16, accum: 2, gate: 0.0052}
 gates:
   quality: {cer_max: 0.0052}
   parity: {mode: single-row, agree_min: 0.98, three_way: true}
 negative_results:
-  - 3-epoch arm reached 0.65% vs docs 0.52% — epoch arm running (run-077)
+  - byt5-small undershoots the docs recipe on the same split and data
+    (0.65% at 3ep, 0.60% at 6ep vs docs 0.52%) — the docs 0.52% line is
+    ByT5-base 3ep on the 464K derived pairs (rababa-farsi RESULTS.md);
+    backbone, not epochs, is the variable (run-077/run-078)
