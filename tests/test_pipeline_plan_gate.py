@@ -47,6 +47,20 @@ def test_metadata_stage_yields_no_job() -> None:
     assert plan_stage(recipe, recipe.stages[1], run="r1") is None
 
 
+def test_env_prefix_and_dataset_mounts() -> None:
+    recipe = load_recipe(RECIPES / "ara-diac.yaml")
+    relabel = plan_stage(recipe, recipe.stages[0], run="run-x")
+    assert relabel is not None
+    assert relabel.env["D_SUBSET"] == "300000"
+    assert relabel.env["D_RUN"] == "run-x"
+    urls = {v.url for v in relabel.volumes}
+    assert "hf://datasets/Interscript/arabic-r8" in urls
+    mounts = {v.mount: v.mode for v in relabel.volumes}
+    assert mounts["/train_data"] == "ro" and mounts["/ckpt"] == "rw"
+    sft = plan_stage(recipe, recipe.stages[1], run="run-x")
+    assert sft.env["O_EPOCHS"] == "2" and sft.env["O_RUN"] == "run-x"
+
+
 def test_quality_gate() -> None:
     recipe = load_recipe(RECIPES / "urd-diac.yaml")
     ok = evaluate(recipe, CORPORA, metrics={"cer": 0.0352}, parity=None)

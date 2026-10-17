@@ -23,7 +23,8 @@ METRIC_KEYS = ("cer_max", "wer_max", "per_max")
 KNOWN_STAGES = frozenset(
     {"sft", "oracle_relabel", "distill", "decode_policy", "plane", "lexicon_fusion"}
 )
-LANG_RE = re.compile(r"^[a-z]{2,3}-[a-z0-9-]+$")
+LANG_RE = re.compile(r"^[a-z]{2,3}-[a-z0-9-]+$")  # recipes: <lang>-<task>
+CORPUS_ID_RE = re.compile(r"^[a-z][a-z0-9-]*$")  # corpora: source names
 CORPUS_REF_RE = re.compile(
     r"^(?P<name>[a-z][a-z0-9-]*)@"
     r"(?P<pin>\d{4}-\d{2}-\d{2}|v\d+(?:\.\d+)*)"
@@ -52,7 +53,7 @@ class SplitSpec(_Strict):
 
 
 class CorpusSpec(_Strict):
-    id: str = Field(pattern=LANG_RE.pattern)
+    id: str = Field(pattern=CORPUS_ID_RE.pattern)
     task: TaskKind
     sources: list[CorpusSource] = Field(min_length=1)
     splits: dict[str, SplitSpec]
@@ -95,6 +96,7 @@ class StageSpec(_Strict):
     stage: str
     route: str | None = None
     params: dict[str, Any] = Field(default_factory=dict)
+    env_prefix: str = Field(default="U", pattern=r"^[A-Z]{1,3}$")
 
     @model_validator(mode="after")
     def _implementable(self) -> StageSpec:

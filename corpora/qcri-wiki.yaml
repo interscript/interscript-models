@@ -1,0 +1,16 @@
+id: qcri-wiki
+task: diacritization
+sources:
+  # QCRI's published Wikipedia_20240420.diac.jsonl (~5M words, BiLSTM
+  # silver ~3% WER), staged on our dataset repo for training mounts.
+  # WO17: "provenance + license recorded in the dataset repo" — the
+  # QCRI terms still need to be read; gate blocks publish until then.
+  - kind: hf-dataset
+    id: Interscript/arabic-r8
+    revision: main
+    license: UNVERIFIED  # read QCRI dataset terms — gate blocks publish until resolved
+    mount: /train_data
+splits:
+  train: {path: qcri-wiki.jsonl}  # pin rows+sha256 from dataset manifest (M3)
+  test: {path: wikinews/}  # WikiNews-2024 multiref (OOD register gate)
+  sadeed: {path: sadeeddiac-25.parquet}  # SadeedDiac-25 (identity gate)

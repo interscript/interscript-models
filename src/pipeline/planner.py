@@ -33,8 +33,9 @@ def plan_stage(
         return None
     corpora_dir = corpora_dir or DEFAULT_CORPORA_DIR
     script = stage.route.split(":", 1)[-1].rsplit("/", 1)[-1]
-    env = {f"U_{k.upper()}": str(v) for k, v in stage.params.items()}
-    env["U_RUN"] = run
+    prefix = stage.env_prefix
+    env = {f"{prefix}_{k.upper()}": str(v) for k, v in stage.params.items()}
+    env[f"{prefix}_RUN"] = run
     volumes = [Volume(CKPT_BUCKET, CKPT_MOUNT, "rw")]
     seen: set[str] = set()
     idx = 0
@@ -45,10 +46,15 @@ def plan_stage(
         seen.add(name)
         corpus = load_corpus(corpora_dir / f"{name}.yaml")
         for src in corpus.sources:
-            if src.kind != "bucket":
-                continue
+            if src.kind == "gh-release":
+                continue  # release assets are fetched at runtime, not mounted
+            url = (
+                f"hf://buckets/{src.id}"
+                if src.kind == "bucket"
+                else f"hf://datasets/{src.id}"
+            )
             mount = src.mount or f"/data/{idx}"
-            volumes.append(Volume(f"hf://buckets/{src.id}", mount, "ro"))
+            volumes.append(Volume(url, mount, "ro"))
             idx += 1
     return JobSpec(
         name=run,

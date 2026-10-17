@@ -151,8 +151,12 @@ def test_shipped_contracts_validate() -> None:
     unverified = [p for p in problems if "UNVERIFIED" in p]
     unexpected = [p for p in problems if "UNVERIFIED" not in p]
     assert unexpected == [], f"contract drift: {unexpected}"
+    open_corpora = {"urd-dia", "qcri-wiki", "urd-g2p-dict"}
     for p in unverified:
-        assert "urd-dia" in p or "fas-dia" in p, p
+        assert any(c in p for c in open_corpora), p
+    assert not any("fas-dia" in p for p in unverified), (
+        "fas CC0 verification must keep the fas lane clear"
+    )
 
 
 def test_load_corpus_roundtrip() -> None:

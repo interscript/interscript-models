@@ -1,11 +1,14 @@
 id: urd-dia
 task: diacritization
 sources:
+  # Upstream: paper-derived Urdu diacritization dataset — terms not yet
+  # read. See rababa-urdu/docs/paper-urdu/main.pdf (upload path was
+  # /opt/urdu/data in rababa-urdu/modal_app_diacrit.py).
   - kind: bucket
     id: rhtse/jobs-artifacts/rababa-urdu-cc174b96
     revision: data-diacrit
-    license: UNVERIFIED  # provenance review open — gate blocks publish until resolved
+    license: UNVERIFIED  # read paper-urdu dataset terms — gate blocks publish until resolved
     mount: /data-dia
 splits:
-  train: {path: data-diacrit/train.jsonl}  # pin rows+sha256 from bucket manifest (M2)
+  train: {path: data-diacrit/train.jsonl}  # pin rows+sha256 from bucket manifest (M3)
   test: {path: data-diacrit/test.jsonl}

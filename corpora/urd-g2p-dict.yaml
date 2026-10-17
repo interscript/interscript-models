@@ -1,0 +1,18 @@
+id: urd-g2p-dict
+task: g2p
+sources:
+  # HF card declares "license: other" (custom terms) — read the card
+  # text before publishing anything trained on it.
+  - kind: hf-dataset
+    id: humair025/urdu-g2p-dictionary
+    revision: main
+    license: UNVERIFIED  # custom terms ("other") — read card text — gate blocks publish
+  # Staged copy consumed by training (610K pairs via rababa-urdu/data).
+  - kind: bucket
+    id: rhtse/jobs-artifacts/rababa-urdu-cc174b96
+    revision: data
+    license: UNVERIFIED  # inherits upstream custom terms
+    mount: /data
+splits:
+  train: {path: data/train.jsonl}  # pin rows+sha256 from bucket manifest (M3)
+  test: {path: data/test.jsonl}
