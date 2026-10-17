@@ -155,6 +155,12 @@ def load_corpus(path: Path) -> CorpusSpec:
     return CorpusSpec.model_validate(body)
 
 
+def _license_blocked(lic: str) -> bool:
+    # UNVERIFIED = terms not read; LicenseRef-* = read but restricted
+    # (non-commercial, unlicensed, custom) — both need owner review.
+    return lic == "UNVERIFIED" or lic.startswith("LicenseRef-")
+
+
 def validate_recipe_dir(recipes_dir: Path, corpora_dir: Path) -> list[str]:
     problems: list[str] = []
     corpora: dict[str, CorpusSpec] = {}
@@ -188,10 +194,15 @@ def validate_recipe_dir(recipes_dir: Path, corpora_dir: Path) -> list[str]:
                     f"recipe task '{r.task}'"
                 )
             if r.gates.license and any(
-                s.license == "UNVERIFIED" for s in c.sources
+                _license_blocked(s.license) for s in c.sources
             ):
+                blocked = ", ".join(
+                    f"{s.id}={s.license}"
+                    for s in c.sources
+                    if _license_blocked(s.license)
+                )
                 problems.append(
-                    f"{rpath.name}: corpus '{c.id}' has UNVERIFIED license — "
-                    "resolve before publishing (gates.license)"
+                    f"{rpath.name}: corpus '{c.id}' restricted or unread "
+                    f"license ({blocked}) — owner review required before publishing"
                 )
     return problems
