@@ -1,0 +1,10 @@
+id: urd-dia
+task: diacritization
+sources:
+  - kind: bucket
+    id: rhtse/jobs-artifacts/rababa-urdu-cc174b96
+    revision: data-diacrit
+    license: CC-BY-SA-4.0
+splits:
+  train: {path: data-diacrit/train.jsonl, rows: 1000}
+  test: {path: data-diacrit/test.jsonl, rows: 300}

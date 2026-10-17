@@ -1,0 +1,15 @@
+id: fas-diac
+task: diacritization
+corpora:
+  train: fas-dia@v1
+  test: fas-dia@v1#test
+model: byt5-small
+stages:
+  - stage: sft
+    route: legacy:interscript-train/train_fas_diac_hf.py
+    params: {epochs: 6, bs: 16, accum: 2, maxlen: 256, gate_cer: 0.0052}
+gates:
+  quality: {cer_max: 0.0052}
+  parity: {mode: single-row, agree_min: 0.98, three_way: true}
+negative_results:
+  - 3-epoch arm reached 0.65% vs docs 0.52% — epoch arm running (run-077)
