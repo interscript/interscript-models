@@ -7,7 +7,7 @@ model: byt5-base
 stages:
   - stage: sft
     route: legacy:interscript-train/train_urd_diac_base_hf.py
-    params: {epochs: 2, bs: 16, accum: 2, maxlen: 512}
+    params: {epochs: 2, bs: 16, accum: 2}
   - stage: decode_policy
     params: {rep_penalty: 1.2, no_repeat_ngram: 3}
 gates:

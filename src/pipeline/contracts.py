@@ -42,6 +42,7 @@ class CorpusSource(_Strict):
     revision: str | None = None
     sha256: str | None = None
     license: str
+    mount: str | None = None  # container mount point for legacy scripts (e.g. /data-dia)
 
 
 class SplitSpec(_Strict):
