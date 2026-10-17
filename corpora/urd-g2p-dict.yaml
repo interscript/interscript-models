@@ -1,0 +1,20 @@
+id: urd-g2p-dict
+task: g2p
+sources:
+  # Verified via HF card (2026-10-17): license_name "non-commercial",
+  # terms at github.com/humair-m/urdu-g2p (LICENSE). Owner decision:
+  # whether weights trained on it may ship under our BSD release lane.
+  - kind: hf-dataset
+    id: humair025/urdu-g2p-dictionary
+    revision: main
+    license: LicenseRef-non-commercial  # verified restricted — owner: weights-distribution decision
+  # Staged copy consumed by training (610K pairs via rababa-urdu/data);
+  # inherits upstream non-commercial terms.
+  - kind: bucket
+    id: rhtse/jobs-artifacts/rababa-urdu-cc174b96
+    revision: data
+    license: LicenseRef-non-commercial
+    mount: /data
+splits:
+  train: {path: data/train.jsonl}  # pin rows+sha256 from bucket manifest (M3)
+  test: {path: data/test.jsonl}
