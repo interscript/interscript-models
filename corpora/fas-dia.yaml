@@ -1,0 +1,10 @@
+id: fas-dia
+task: diacritization
+sources:
+  - kind: bucket
+    id: Interscript/isx-training/run-076-fas-diac-retrain
+    revision: run-076
+    license: UNVERIFIED  # recovered-corpus provenance review open — gate blocks publish until resolved
+splits:
+  train: {path: train.jsonl}  # pin rows+sha256 from bucket manifest (M2)
+  test: {path: test.jsonl}

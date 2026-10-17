@@ -54,10 +54,11 @@ dev = [
 [project.scripts]
 interscript-ml = "imf.cli:main"
 interscript-sadeed-eval = "sadeedbench.cli:main"
+isxml = "pipeline.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["framework*", "tasks*", "imf*", "sadeedbench*"]
+include = ["framework*", "tasks*", "imf*", "sadeedbench*", "pipeline*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
