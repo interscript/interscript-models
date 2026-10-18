@@ -14,6 +14,7 @@ stages:
     route: legacy:interscript-train/continue_oracle_train_hf.py
     params: {epochs: 2}
 gates:
+  convention: row-mean
   quality: {wer_max: 3.5607}  # run-047 first-alt line; stretch 2.70 (QCRI frontier parity)
   parity: {mode: single-row, agree_min: 0.98, three_way: true}
 negative_results:

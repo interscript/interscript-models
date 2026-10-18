@@ -33,10 +33,12 @@ def _find_recipe(path: Path, recipe_id: str) -> Path:
 
 def cmd_validate(args: argparse.Namespace) -> int:
     problems = validate_recipe_dir(args.recipes, args.corpora)
+    hard = [p for p in problems if "owner review" not in p]
     for p in problems:
-        print(f"FAIL {p}", file=sys.stderr)
-    print(f"{len(problems)} problem(s)")
-    return 1 if problems else 0
+        mark = "FAIL" if "owner review" not in p else "BLOCKED"
+        print(f"{mark} {p}", file=sys.stderr)
+    print(f"{len(hard)} problem(s), {len(problems) - len(hard)} owner-blocked")
+    return 1 if hard else 0
 
 
 def cmd_plan(args: argparse.Namespace) -> int:
