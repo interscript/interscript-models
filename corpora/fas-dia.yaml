@@ -15,5 +15,5 @@ sources:
     revision: run-076
     license: CC0-1.0
 splits:
-  train: {path: train.jsonl}  # pin rows+sha256 from bucket manifest (M3)
-  test: {path: test.jsonl}
+  train: {path: train.jsonl, rows: 445869, sha256: 05ea4b33aaaec7fcddabd8d6bbefa56323efd6fac30b6ae242869372026eb845}
+  test: {path: test.jsonl, rows: 9288, sha256: 67513aa16ec142abde1df2d1782d548aa84f3841c171150b53a7ba82cb60b95f}

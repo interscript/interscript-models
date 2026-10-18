@@ -16,5 +16,5 @@ sources:
     license: LicenseRef-non-commercial
     mount: /data
 splits:
-  train: {path: data/train.jsonl}  # pin rows+sha256 from bucket manifest (M3)
-  test: {path: data/test.jsonl}
+  train: {path: data/train.jsonl, rows: 609580, sha256: f718dddb0254ee5214ba7cc609c35dab928fe1289fa899a0fec181231af42693}
+  test: {path: data/test.jsonl, rows: 12699, sha256: 7f26bbd01b884e3fddef96c78f151344c0b167407e8e4bb60a6ee0d316a19b36}
