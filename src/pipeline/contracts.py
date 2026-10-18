@@ -122,6 +122,14 @@ class RecipeSpec(_Strict):
     stages: list[StageSpec] = Field(min_length=1)
     gates: GateSpec
     negative_results: list[str] = Field(default_factory=list)
+    deps: list[str] = Field(
+        default_factory=lambda: [
+            "torch==2.5.1",
+            "transformers==4.46.3",
+            "accelerate>=1.1.0",
+            "sentencepiece",
+        ]
+    )
     channel: Literal["gh-releases"] = "gh-releases"
 
     @field_validator("corpora")
