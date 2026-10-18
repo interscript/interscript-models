@@ -37,7 +37,10 @@ def check_publish_ready(
             f"version {version!r} is not an explicit semver — versions are "
             "the owner's decision and never a moving ref"
         )
-    results = evaluate(recipe, corpora_dir, metrics=metrics, parity=parity)
+    try:
+        results = evaluate(recipe, corpora_dir, metrics=metrics, parity=parity)
+    except Exception as e:  # noqa: BLE001 — restricted-corpus schema errors
+        raise PublishRefusal(f"license/registry: {e}") from e
     gate_map = {g.name: g.passed for g in results}
     license_detail = next(
         (g.detail for g in results if g.name == "license" and not g.passed), ""

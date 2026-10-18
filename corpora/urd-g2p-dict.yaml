@@ -7,13 +7,23 @@ sources:
   - kind: hf-dataset
     id: humair025/urdu-g2p-dictionary
     revision: main
-    license: LicenseRef-non-commercial  # verified restricted — owner: weights-distribution decision
+    license: LicenseRef-non-commercial  # verified restricted
+
+    license_review:
+      status: owner-approved
+      date: "2026-10-18"
+      note: ship RESEARCH-ONLY — non-commercial upstream (owner decision #1); card must state it
   # Staged copy consumed by training (610K pairs via rababa-urdu/data);
   # inherits upstream non-commercial terms.
   - kind: bucket
     id: rhtse/jobs-artifacts/rababa-urdu-cc174b96
     revision: data
-    license: LicenseRef-non-commercial
+    license: LicenseRef-non-commercial  # inherits upstream
+
+    license_review:
+      status: owner-approved
+      date: "2026-10-18"
+      note: ship RESEARCH-ONLY — non-commercial upstream (owner decision #1); card must state it
     mount: /data
 splits:
   train: {path: data/train.jsonl, rows: 609580, sha256: f718dddb0254ee5214ba7cc609c35dab928fe1289fa899a0fec181231af42693}

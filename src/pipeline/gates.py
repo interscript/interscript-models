@@ -73,12 +73,19 @@ def check_parity(recipe: RecipeSpec, parity: dict | None) -> GateResult:
 
 
 def check_license(recipe: RecipeSpec, corpora_dir: Path) -> GateResult:
-    from pipeline.contracts import _license_blocked
+    from pipeline.contracts import _license_blocked_source
 
     names = {ref.split("@", 1)[0] for ref in recipe.corpora.values()}
     for name in sorted(names):
-        corpus = load_corpus(Path(corpora_dir) / f"{name}.yaml")
-        bad = [s for s in corpus.sources if _license_blocked(s.license)]
+        try:
+            corpus = load_corpus(Path(corpora_dir) / f"{name}.yaml")
+        except Exception as e:  # noqa: BLE001 — restricted/unreadable registry entry
+            return GateResult(
+                "license",
+                False,
+                f"corpus '{name}': {e}",
+            )
+        bad = [s for s in corpus.sources if _license_blocked_source(s)]
         if bad:
             ids = ", ".join(f"{s.id}={s.license}" for s in bad)
             return GateResult(
