@@ -163,9 +163,11 @@ doesn't merge).
   release.
 - **Round 3**: (a) the shipped python runtime itself is being run
   against the conformance fixture (the client-path test the reference
-  decoder can't prove by construction); (b) contributor entry doc added
-  to README (add-a-language = two YAMLs + eval gold; the isxml verbs;
-  the laws).
+  decoder can't prove by construction) — **VERDICT: the shipped python
+  runtime reproduced all 12 vectors byte-exactly (`passed: true`, zero
+  mismatches); the client path is proven end-to-end**; (b) contributor
+  entry doc added to README (add-a-language = two YAMLs + eval gold;
+  the isxml verbs; the laws).
 - Backlog (non-blocking): housekeeper (checkpoint pruning / dead-repo
   inventory); exporter attention-mask option for batched serving
   (WO51 remedy (b)); conformance coverage grows with each shipped
