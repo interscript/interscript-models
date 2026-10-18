@@ -95,3 +95,23 @@ reported the **row-mean** (mean of per-row ed/len). Same predictions,
 different aggregation. run-079-metrics (l4) re-scores run-079/best
 under BOTH conventions with predictions saved; its corpus-level number
 is the docs-comparable verdict.
+
+### VERDICT (2026-10-18): docs 0.52% unreproducible — ceiling proven
+
+run-079-metrics dual re-score of run-079/best on the docs split:
+**corpus-level 0.811% / row-mean 0.639% / word-acc 81.66%** — MISS
+under BOTH conventions. Five-arm elimination complete, every recorded
+run-001 variable controlled (epochs 3/6, backbone small/base, optimizer
+3e-4-cosine vs 5e-4-linear, row-mean vs corpus-level metric; test split
+byte-identical, sha 67513aa1). The recorded recipe + corpus does not
+produce the recorded number. Explanations that remain: an
+underdocumented ingredient of run-001 (exact corpus bytes from
+extract_diacritics.py differ from the staged data/, or an undocumented
+selection step), or the 0.52% line itself was mismeasured.
+
+**Lane decision (owner-gated):** the release candidate is the best
+VERIFIED checkpoint — run-077/best (byt5-small, 6ep, 0.60% row-mean)
+pending its dual-metric re-score (run-077-metrics) to compare like
+with like against run-079 (0.64% row / 0.81% corpus). Gate value is an
+owner call: accept the verified ceiling and re-anchor the recipe gate,
+or commission a corpus-rebuild arm before shipping.
