@@ -90,12 +90,41 @@ def test_parity_gate_runtime_mode() -> None:
 
 
 def test_license_gate_blocks_publish(tmp_path: Path) -> None:
-    recipe = load_recipe(RECIPES / "urd-diac.yaml")  # refs shipped urd-dia: restricted
-    results = evaluate(recipe, CORPORA, metrics={"cer": 0.0352}, parity=None)
+    # the shipped urd-dia is owner-waived (2026-10-18) and must PASS now
+    waived = evaluate(recipe := load_recipe(RECIPES / "urd-diac.yaml"),
+                      CORPORA, metrics={"cer": 0.0352}, parity=None)
+    assert [g for g in waived if g.name == "license"][0].passed
+    # an UNWAIVED restricted source still blocks — synthetic registry
+    import yaml as _yaml
+
+    corpus = {
+        "id": "xx-src",
+        "task": "diacritization",
+        "sources": [{"kind": "bucket", "id": "org/data",
+                     "license": "LicenseRef-unresolved"}],
+        "splits": {
+            "train": {"path": "train.jsonl", "rows": 10},
+            "test": {"path": "test.jsonl", "rows": 5},
+        },
+    }
+    rec = {
+        "id": "xx-diac",
+        "task": "diacritization",
+        "corpora": {"train": "xx-src@v1", "test": "xx-src@v1#test"},
+        "model": "byt5-small",
+        "stages": [{"stage": "sft", "params": {"epochs": 1}}],
+        "gates": {"quality": {"cer_max": 0.1}, "convention": "row-mean",
+                  "parity": {"agree_min": 0.98}},
+    }
+    (tmp_path / "corpora").mkdir()
+    (tmp_path / "recipes").mkdir()
+    (tmp_path / "corpora" / "xx-src.yaml").write_text(_yaml.safe_dump(corpus))
+    (tmp_path / "recipes" / "xx-diac.yaml").write_text(_yaml.safe_dump(rec))
+    results = evaluate(load_recipe(tmp_path / "recipes" / "xx-diac.yaml"),
+                       tmp_path / "corpora", metrics={"cer": 0.05}, parity=None)
     lic = [g for g in results if g.name == "license"][0]
     assert not lic.passed
     assert "owner review" in lic.detail
-    assert "LicenseRef" in lic.detail
 
 
 def test_gate_results_files_end_to_end(tmp_path: Path) -> None:
@@ -119,7 +148,7 @@ def test_gate_results_files_end_to_end(tmp_path: Path) -> None:
         parity=json.loads(parity.read_text()),
     )
     by_name = {g.name: g.passed for g in results}
-    assert by_name == {"quality": True, "parity": True, "license": False}
+    assert by_name == {"quality": True, "parity": True, "license": True}
 
 
 def test_plan_wraps_legacy_deps() -> None:

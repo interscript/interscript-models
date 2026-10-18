@@ -37,6 +37,16 @@ class _Strict(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class LicenseReview(_Strict):
+    """An explicit owner decision on a restricted source. The license
+    string itself is never loosened — the waiver is a separate,
+    dated, attributed record."""
+
+    status: Literal["owner-approved"]
+    date: str
+    note: str
+
+
 class CorpusSource(_Strict):
     kind: Literal["hf-dataset", "bucket", "gh-release"]
     id: str
@@ -44,6 +54,18 @@ class CorpusSource(_Strict):
     sha256: str | None = None
     license: str
     mount: str | None = None  # container mount point for legacy scripts (e.g. /data-dia)
+    license_review: LicenseReview | None = None
+
+    @model_validator(mode="after")
+    def _restricted_needs_review(self) -> CorpusSource:
+        if _license_blocked(self.license) and self.license_review is None:
+            raise ValueError(
+                f"restricted/unread license '{self.license}' on {self.id}: "
+                "an owner review is required (license_review: "
+                "status owner-approved) — the license string itself is "
+                "never loosened"
+            )
+        return self
 
 
 class SplitSpec(_Strict):
@@ -171,6 +193,12 @@ def _license_blocked(lic: str) -> bool:
     return lic == "UNVERIFIED" or lic.startswith("LicenseRef-")
 
 
+def _license_blocked_source(s: CorpusSource) -> bool:
+    if not _license_blocked(s.license):
+        return False
+    return s.license_review is None or s.license_review.status != "owner-approved"
+
+
 def validate_recipe_dir(recipes_dir: Path, corpora_dir: Path) -> list[str]:
     problems: list[str] = []
     corpora: dict[str, CorpusSpec] = {}
@@ -204,12 +232,12 @@ def validate_recipe_dir(recipes_dir: Path, corpora_dir: Path) -> list[str]:
                     f"recipe task '{r.task}'"
                 )
             if r.gates.license and any(
-                _license_blocked(s.license) for s in c.sources
+                _license_blocked_source(s) for s in c.sources
             ):
                 blocked = ", ".join(
                     f"{s.id}={s.license}"
                     for s in c.sources
-                    if _license_blocked(s.license)
+                    if _license_blocked_source(s)
                 )
                 problems.append(
                     f"{rpath.name}: corpus '{c.id}' restricted or unread "

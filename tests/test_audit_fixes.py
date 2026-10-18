@@ -17,7 +17,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from pipeline.contracts import load_recipe
+from pipeline.contracts import CorpusSpec, _license_blocked_source, load_recipe
 from pipeline.publish import PublishRefusal, check_publish_ready
 
 REPO = Path(__file__).parent.parent
@@ -150,3 +150,34 @@ def test_publish_ready_happy_path(tmp_path: Path) -> None:
     )
     assert checks["gates"]["license"] is True
     assert checks["conformance"] is True
+
+
+def test_owner_approved_waiver_opens_the_gate(tmp_path: Path) -> None:
+    """Owner decisions 2026-10-18: restricted/unlocated sources may ship
+    with a dependency note — but only via an explicit recorded waiver,
+    never by loosening the license string itself."""
+
+    corpus = {
+        "id": "xx-src",
+        "task": "transliteration",
+        "sources": [{
+            "kind": "hf-dataset",
+            "id": "org/ds",
+            "license": "LicenseRef-unresolved",
+            "license_review": {
+                "status": "owner-approved",
+                "date": "2026-10-18",
+                "note": "ship with dependency note; research-only",
+            },
+        }],
+        "splits": {
+            "train": {"path": "train.jsonl", "rows": 10},
+            "test": {"path": "test.jsonl", "rows": 5},
+        },
+    }
+    c = CorpusSpec.model_validate(corpus)
+    assert not _license_blocked_source(c.sources[0])
+    unwaived = dict(corpus["sources"][0])
+    unwaived.pop("license_review")
+    with pytest.raises(ValueError, match="review"):
+        CorpusSpec.model_validate({**corpus, "sources": [unwaived]})
