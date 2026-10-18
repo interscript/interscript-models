@@ -9,6 +9,7 @@ stages:
     route: legacy:interscript-train/train_fas_diac_hf.py
     params: {epochs: 3, bs: 16, accum: 2, gate: 0.0052}
 gates:
+  convention: corpus-level
   quality: {cer_max: 0.0052}
   parity: {mode: single-row, agree_min: 0.98, three_way: true}
 negative_results:

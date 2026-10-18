@@ -77,6 +77,8 @@ class ParityGate(_Strict):
 
 class GateSpec(_Strict):
     quality: dict[str, float]
+    convention: Literal["row-mean", "corpus-level"]  # the fas scar: a gate
+    # number without its aggregation convention is not a gate
     parity: ParityGate
     license: bool = True
 
