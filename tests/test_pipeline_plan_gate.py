@@ -91,8 +91,8 @@ def test_parity_gate_runtime_mode() -> None:
 
 def test_license_gate_blocks_publish(tmp_path: Path) -> None:
     # the shipped urd-dia is owner-waived (2026-10-18) and must PASS now
-    waived = evaluate(recipe := load_recipe(RECIPES / "urd-diac.yaml"),
-                      CORPORA, metrics={"cer": 0.0352}, parity=None)
+    recipe = load_recipe(RECIPES / "urd-diac.yaml")
+    waived = evaluate(recipe, CORPORA, metrics={"cer": 0.0352}, parity=None)
     assert [g for g in waived if g.name == "license"][0].passed
     # an UNWAIVED restricted source still blocks — synthetic registry
     import yaml as _yaml
