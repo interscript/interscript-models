@@ -8,7 +8,12 @@ sources:
   - kind: hf-dataset
     id: Interscript/arabic-r8
     revision: main
-    license: LicenseRef-no-license-found  # Qatara repo unlicensed — owner: contact QCRI
+    license: LicenseRef-no-license-found  # Qatara repo unlicensed
+
+    license_review:
+      status: owner-approved
+      date: "2026-10-18"
+      note: ship with dependency note — weights depend on the QCRI upstream license (owner decision #2)
     mount: /train_data
 splits:
   train: {path: qcri-wiki.jsonl, rows: 32834, sha256: 34ef170845472cdf81f9e83e5ac8b9bf45d716d1bc1b3a8e009f1ed343b4d51d}  # article-per-line (~5M words)

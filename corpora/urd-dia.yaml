@@ -8,7 +8,12 @@ sources:
   - kind: bucket
     id: rhtse/jobs-artifacts/rababa-urdu-cc174b96
     revision: data-diacrit
-    license: LicenseRef-unresolved  # no license found on sources — owner: contact authors or replace corpus
+    license: LicenseRef-unresolved  # no license found on sources
+
+    license_review:
+      status: owner-approved
+      date: "2026-10-18"
+      note: ship with dependency note — weights depend on the original data license (owner decision #3)
     mount: /data-dia
 splits:
   train: {path: data-diacrit/train.jsonl, rows: 573130, sha256: 95736b0d19e57ada3ce435f28300b8a72a3fec6c761dfce34770ed9549331ee2}
