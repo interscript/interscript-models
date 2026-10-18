@@ -472,3 +472,15 @@ models:
       - {name: wer_wikinews2024_multiref, value: 8.85, protocol: "greedy decode, first-alternate protocol, WikiNews-2024 multiref (WO35)", source: interscript/interscript-models docs/RESULTS.md}
       - {name: der_total_greedy, value: 2.84, protocol: "greedy decode, first-alternate protocol, WikiNews-2024 multiref (WO35)", source: interscript/interscript-models docs/RESULTS.md}
     license: BSD-3-Clause
+  urd-diac-base-1.0:
+    task: diacritization
+    scripts: [Arab, Arab]
+    precision: fp16
+    filename: urd-diac-base-1.0-fp16.zip
+    url: https://github.com/interscript/interscript-models/releases/download/urd-diac-base-1.0/urd-diac-base-1.0-fp16.zip
+    sha256: 8058220d72df76b31260358070499c2cdb504f030fa10259b48aa05c7caf5711
+    size: 1347487633
+    metrics:
+      - {name: cer, value: 3.57, source: interscript/interscript-models docs/RESULTS.md#run-066-urd-diac-base-gate-pass-and-artifact-parity-2026-10-19}
+    parity: {samples: 500, cer_delta: 0.07}
+    license: BSD-3-Clause

@@ -2348,3 +2348,12 @@ succeeds, then the p047 remainder (~4h) + p029 + consolidation run
 death-proof. The mount (/ckpt = the bucket) may itself be durable
 for properly-closed files — untested; the explicit sync removes the
 doubt.
+
+## run-066 urd-diac-base gate pass and artifact parity (2026-10-19)
+
+Gate: full 11,940-row test split, raw char CER, row-mean — **3.57**
+(beat urd-diac-1.0 small tier 3.77), word accuracy 69.8%. Artifact
+parity under the WO51 single-row contract: ONNX fp16 CER 3.64,
+500/500 rows identical to torch, three-way bf16/fp32/ORT agreement
+1.0. Shipped runtime reproduces 12/12 frozen conformance vectors
+byte-exactly. Data: 573,130 pairs (urd-dia registry, sha256-pinned).
