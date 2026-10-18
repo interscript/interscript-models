@@ -26,8 +26,8 @@ def test_plan_sft_stage_builds_lawful_job() -> None:
     sft = recipe.stages[0]
     spec = plan_stage(recipe, sft, run="run-066-urd-diac-base")
     assert spec.name == "run-066-urd-diac-base"
-    assert spec.command[0] == "python"
-    assert spec.command[1].endswith("train_urd_diac_base_hf.py")
+    assert spec.command[0] == "bash" and spec.command[1] == "-c"
+    assert spec.command[2].endswith("train_urd_diac_base_hf.py")
     mounts = [v.mount for v in spec.volumes]
     assert "/ckpt" in mounts and "/data-dia" in mounts
     ro = {v.mount: v.mode for v in spec.volumes}
@@ -120,3 +120,15 @@ def test_gate_results_files_end_to_end(tmp_path: Path) -> None:
     )
     by_name = {g.name: g.passed for g in results}
     assert by_name == {"quality": True, "parity": True, "license": False}
+
+
+def test_plan_wraps_legacy_deps() -> None:
+    """The first dogfooded launch (stage-2, 6ad494b9) died on a bare
+    python command — the spine must install the recipe's deps."""
+    recipe = load_recipe(RECIPES / "ara-diac.yaml")
+    spec = plan_stage(recipe, recipe.stages[1], run="run-x")
+    assert spec.command[0] == "bash" and spec.command[1] == "-c"
+    cmd = spec.command[2]
+    assert cmd.startswith("pip install -q ")
+    assert "torch==" in cmd and "transformers==" in cmd
+    assert cmd.endswith("python /ckpt/run-x/continue_oracle_train_hf.py")
