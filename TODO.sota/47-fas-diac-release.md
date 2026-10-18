@@ -130,3 +130,19 @@ remains owner-gated: accept 0.603% row-mean (0.777% corpus) as the
 canonical fas-diac number and re-anchor the recipe gate, or commission
 the corpus-rebuild arm (recover the ~18% of rows the derivation dropped
 vs the raw 528,837) before shipping.
+
+## FINAL (2026-10-19): run-077/best is fas-diac-base-1.0
+
+The improvement arm (run-081-fas-stage2: RC continue-trained on the
+run-080 oracle targets) MISSED — ep0 0.649% / ep1 0.631% vs RC 0.603%
+row-mean. Root cause of non-transfer: the fas arms are too correlated
+(10.0% disagreement, p077 picks 97.3%) — the oracle targets were ~90%
+the RC's own outputs, so the +16% oracle gain had no new signal to
+distill. Contrast ara: 31.4% disagreement made its oracle worth
+training on.
+
+Five levers now tested and closed with data: epochs, backbone,
+optimizer recipe, metric convention, oracle distillation. Remaining
+untried (recorded, not scheduled): corpus rebuild to the raw 528,837
+rows. **Ship: run-077/best — 0.603% row-mean / 0.777% corpus /
+82.33% word-acc on the 9,288 docs split, CC0 data.**
