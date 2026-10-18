@@ -11,5 +11,5 @@ sources:
     license: LicenseRef-unresolved  # no license found on sources — owner: contact authors or replace corpus
     mount: /data-dia
 splits:
-  train: {path: data-diacrit/train.jsonl}  # pin rows+sha256 from bucket manifest (M3)
-  test: {path: data-diacrit/test.jsonl}
+  train: {path: data-diacrit/train.jsonl, rows: 573130, sha256: 95736b0d19e57ada3ce435f28300b8a72a3fec6c761dfce34770ed9549331ee2}
+  test: {path: data-diacrit/test.jsonl, rows: 11940, sha256: 6d822ae70a383e5547ee82e841a65e83fac81ae47ff320999b8e6b101b1790bb}
