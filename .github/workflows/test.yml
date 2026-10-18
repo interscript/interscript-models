@@ -57,6 +57,16 @@ jobs:
       - name: IMF export + parity gate fixture tests (torch vs ORT)
         run: PYTHONPATH=src python -m pytest tests/test_imf_export.py tests/test_imf_parity.py -v
 
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -e ".[dev]"
+      - name: Corpus/recipe contract validation (structure fails; license blocks report, publish-time enforced)
+        run: PYTHONPATH=src python -m pipeline.cli validate
+
   python-runtime:
     runs-on: ubuntu-latest
     steps:
