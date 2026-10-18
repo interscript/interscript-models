@@ -36,6 +36,11 @@ def plan_stage(
     prefix = stage.env_prefix
     env = {f"{prefix}_{k.upper()}": str(v) for k, v in stage.params.items()}
     env[f"{prefix}_RUN"] = run
+    # legacy scripts need their wheels; the recipe declares them and the
+    # planner installs before exec (the bare-python launch, 6ad494b9,
+    # died on `No module named torch` — this is that scar, encoded)
+    bootstrap = "pip install -q " + " ".join(recipe.deps)
+    command = ["bash", "-c", f"{bootstrap} && python {CKPT_MOUNT}/{run}/{script}"]
     volumes = [Volume(CKPT_BUCKET, CKPT_MOUNT, "rw")]
     seen: set[str] = set()
     idx = 0
@@ -58,7 +63,7 @@ def plan_stage(
             idx += 1
     return JobSpec(
         name=run,
-        command=["python", f"{CKPT_MOUNT}/{run}/{script}"],
+        command=command,
         flavor=flavor,
         timeout_h=timeout_h,
         volumes=volumes,
