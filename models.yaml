@@ -456,9 +456,9 @@ models:
     sha256: 14c2ebf81999f24b624c7f3c9d223a16c36fee465863785b6ceea88b3d1f371a
     size: 2159598592
     metrics:
-      - {name: cer, value: 15.65, protocol: "greedy decode, full 11940-row test split (WO37 protocol)", source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base-gate-pass}
-      - {name: cer_normalized, value: 10.75, protocol: "greedy decode, full 11940-row test split (WO37 protocol)", source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base-gate-pass}
-    parity: {samples: 300, cer_delta: 0.024}
+      - {name: cer, value: 15.65, protocol: "greedy decode, full 12699-row test split, row-mean", source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base-gate-pass}
+      - {name: cer_normalized, value: 10.75, protocol: "greedy decode, full 12699-row test split, row-mean", source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base-gate-pass}
+    parity: {samples: 500, cer_delta: 0.0}
     license: BSD-3-Clause
   ara-diac-news-1.1:
     task: diacritization
