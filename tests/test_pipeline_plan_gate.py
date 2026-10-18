@@ -47,6 +47,20 @@ def test_metadata_stage_yields_no_job() -> None:
     assert plan_stage(recipe, recipe.stages[1], run="r1") is None
 
 
+def test_env_prefix_and_dataset_mounts() -> None:
+    recipe = load_recipe(RECIPES / "ara-diac.yaml")
+    relabel = plan_stage(recipe, recipe.stages[0], run="run-x")
+    assert relabel is not None
+    assert relabel.env["D_SUBSET"] == "300000"
+    assert relabel.env["D_RUN"] == "run-x"
+    urls = {v.url for v in relabel.volumes}
+    assert "hf://datasets/Interscript/arabic-r8" in urls
+    mounts = {v.mount: v.mode for v in relabel.volumes}
+    assert mounts["/train_data"] == "ro" and mounts["/ckpt"] == "rw"
+    sft = plan_stage(recipe, recipe.stages[1], run="run-x")
+    assert sft.env["O_EPOCHS"] == "2" and sft.env["O_RUN"] == "run-x"
+
+
 def test_quality_gate() -> None:
     recipe = load_recipe(RECIPES / "urd-diac.yaml")
     ok = evaluate(recipe, CORPORA, metrics={"cer": 0.0352}, parity=None)
@@ -76,11 +90,12 @@ def test_parity_gate_runtime_mode() -> None:
 
 
 def test_license_gate_blocks_publish(tmp_path: Path) -> None:
-    recipe = load_recipe(RECIPES / "urd-diac.yaml")  # refs shipped urd-dia: UNVERIFIED
+    recipe = load_recipe(RECIPES / "urd-diac.yaml")  # refs shipped urd-dia: restricted
     results = evaluate(recipe, CORPORA, metrics={"cer": 0.0352}, parity=None)
     lic = [g for g in results if g.name == "license"][0]
     assert not lic.passed
-    assert "UNVERIFIED" in lic.detail
+    assert "owner review" in lic.detail
+    assert "LicenseRef" in lic.detail
 
 
 def test_gate_results_files_end_to_end(tmp_path: Path) -> None:

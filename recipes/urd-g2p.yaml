@@ -1,0 +1,15 @@
+id: urd-g2p
+task: g2p
+corpora:
+  train: urd-g2p-dict@v1
+  test: urd-g2p-dict@v1#test
+model: byt5-base
+stages:
+  - stage: sft
+    route: legacy:interscript-train/train_urd_g2p_hf.py
+gates:
+  quality: {cer_max: 0.17}  # torch greedy 0.16 (artifact ≡ torch under the WO51 single-row contract)
+  parity: {mode: single-row, agree_min: 0.98, three_way: true}
+negative_results:
+  - dynamic-int8 quantization destroys byt5 decode (0.44 vs 0.16 CER)
+  - batched-without-attention-mask parity harness measures nothing (WO51)
