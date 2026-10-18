@@ -462,10 +462,11 @@ models:
     sha256: d3e35dd435bf18fedec03d4a15bba097fca743737b729312fa08f4fdcac24282
     size: 2159598918
     metrics:
-      - {name: cer, value: 15.65, source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base-gate-pass}
-      - {name: cer_normalized, value: 10.75, source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base-gate-pass}
+      - {name: cer, value: 15.65, protocol: "greedy decode, full 12699-row test split, row-mean", source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base-gate-pass}
+      - {name: cer_normalized, value: 10.75, protocol: "greedy decode, full 12699-row test split, row-mean", source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base-gate-pass}
     parity: {samples: 500, cer_delta: 0.0}
     license: BSD-3-Clause
+    license_note: RESEARCH-ONLY — non-commercial training data (owner-approved 2026-10-18; see card)
   ara-diac-news-1.1:
     task: diacritization
     scripts: [Arab, Arab]
