@@ -61,3 +61,19 @@ silver itself.
 
 ≈ 20-28 GPU-h total (relable 10-14 + train 10-14). Under every
 prior arm's budget; no new data, no new infra.
+
+## Stage-1 COMPLETE (2026-10-18, resume9)
+
+290,575 rows consolidated in minutes once the consolidation levenshtein
+moved to the C wheel (the pure-python loop needed ~56h vs the 23h
+timeout — resume6/8 died exactly there). Stats:
+
+- arm CER vs silver: p047 0.72% · p040 0.74% · p029 0.82%
+- disagreement 31.4% — the oracle's opportunity space
+- **oracle CER 0.54%** (−25% vs best single arm); picks: p047 87%,
+  p040 11%, p029 2%
+
+**Stage-2 LAUNCHED THROUGH THE SPINE** (job 6ad494b9): the ara recipe's
+sft stage planned it (O_* envs, both mounts) and the Runner's budget
+guard cleared it — the first dogfooded launch; hand-typed job commands
+retire here. Gate: first-alt WER < 3.5607; stretch ≤ 2.70.
