@@ -491,9 +491,9 @@ models:
     precision: fp16
     filename: fas-diac-base-1.0.zip
     url: https://github.com/interscript/interscript-models/releases/download/fas-diac-base-1.0/fas-diac-base-1.0.zip
-    sha256: 0000000000000000000000000000000000000000000000000000000000000000
-    size: 0
+    sha256: 974eddac04c64230ae0669103dd053a3ded9d2bc76ec51d3b50cb2a9ac240e12
+    size: 711254175
     metrics:
       - {name: cer, value: 0.603, protocol: "greedy decode, 9288-row docs split, row-mean", source: interscript/interscript-models docs/RESULTS.md#run-077-fas-diac-base-gate-pass-and-the-five-lever-closure-2026-10-18}
-    parity: {samples: 500, cer_delta: 0.02}
+    parity: {samples: 500, cer_delta: 0.0}
     license: BSD-3-Clause
