@@ -2357,3 +2357,16 @@ parity under the WO51 single-row contract: ONNX fp16 CER 3.64,
 500/500 rows identical to torch, three-way bf16/fp32/ORT agreement
 1.0. Shipped runtime reproduces 12/12 frozen conformance vectors
 byte-exactly. Data: 573,130 pairs (urd-dia registry, sha256-pinned).
+
+## run-077 fas-diac-base gate pass and the five-lever closure (2026-10-18)
+
+Gate: full 9,288-row docs split (byte-identical to the rababa-farsi
+reference, sha256 67513aa1), raw char CER — **0.603% row-mean /
+0.777% corpus-level, word accuracy 82.33%**. The recorded 0.52% line
+is unreproducible from run-001's documented recipe (five controlled
+arms: epochs, backbone, optimizer, metric convention, oracle
+distillation — all closed with data; the docs number was corpus-level
+under a harness whose recorded recipe does not reproduce it).
+Improvement arm (run-080/081 oracle chain) MISSED: arms too correlated
+(10.0% disagreement) to teach the RC anything. Ship: run-077/best,
+CC0-derived data (HomoRich-G2P-Persian).
