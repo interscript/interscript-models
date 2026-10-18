@@ -80,6 +80,35 @@ Dependency directions, stated once:
 `runtime/` in this repo is the **frozen origin** of the Python crystal —
 kept for provenance; live code and releases are in secryst-py.
 
+## Contributing a language or a technique (the isxml framework)
+
+Training is config-driven: a language is **two YAML files plus a
+held-out eval set**, never a fork of the pipeline.
+
+- `corpora/<source>.yaml` — pinned, licensed dataset artifacts
+  (rows + sha256; see `corpora/PROVENANCE.md` for the evidence and the
+  license gate)
+- `recipes/<lang>-<task>.yaml` — the stage DAG (sft, oracle_relabel,
+  distill, decode policy), the gates (quality threshold **with its
+  metric convention**, runtime-mode parity, license), and the
+  negative-results registry so nobody re-treads a refuted technique
+
+The spine validates everything before any GPU time is spent:
+
+```sh
+isxml validate                                  # contracts (CI-enforced)
+isxml plan <recipe> --run <run-id>              # exact job argv, dry-run
+isxml gate <recipe> --metrics m.json --parity p.json
+isxml conformance --vectors conformance/… --zip model.zip
+```
+
+Standing laws are enforced by the validators, not by memory: no
+LLM-teacher stages for diacritization, corpus pins are dates or
+versions (never moving refs), held-out test splits mandatory,
+`UNVERIFIED`/`LicenseRef-*` licenses block publishing, and publication
+requires an explicit owner version, green gates, and frozen conformance
+fixtures (`conformance/CONFORMANCE.md`).
+
 ## Environment (as implemented by every crystal)
 
 `SECRYST_INDEX` (index URL or path; default: `models.yaml` on this
