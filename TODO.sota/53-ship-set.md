@@ -53,3 +53,25 @@ attention-mask option for batched serving (WO51 remedy (b)) ·
 conformance coverage grows with each shipped artifact ·
 src/gpu/modal_* deprecation (owner-flagged; nothing deleted) ·
 runtime default index URL re-point at next runtime release.
+
+## OWNER DECISIONS APPLIED (2026-10-18)
+
+1. urd-g2p → **ship RESEARCH-ONLY** (non-commercial upstream noted on
+   the card). Waiver recorded in corpora/urd-g2p-dict.yaml.
+2. ara-diac → **ship with dependency note** (weights depend on the
+   QCRI upstream license). Waiver in corpora/qcri-wiki.yaml.
+3. urd-dia → **ship with dependency note** (weights depend on the
+   original data license). Waiver in corpora/urd-dia.yaml.
+   → encoded as schema-level `license_review` records (#304): the
+   license string is never loosened; unwaived restricted sources fail
+   schema validation. Registry validates 0 problems / 0 blocked.
+4. fas-diac → **improvement arm launched**: run-080-fas-oracle (the
+   WO39 multi-arm oracle on fas — arms 076/077/079, 120K subset,
+   ~22h). If stage-2 continue-train beats 0.603% row-mean, that
+   becomes fas-diac-base-1.0; otherwise the RC ships as-is.
+5. Versions delegated ("reasonable numbers"): urd-diac-base-1.0 ·
+   urd-g2p-base-1.0 (research-only) · ara 1.1 line (dependency note)
+   · fas-diac-base-1.0 on improvement-arm verdict.
+
+Ship flow next: repack → GH Release + sha256 → models.yaml entry →
+index-vN bump → HF mirror → cards with the dependency/research notes.
