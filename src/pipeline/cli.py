@@ -80,6 +80,24 @@ def cmd_gate(args: argparse.Namespace) -> int:
     return 1 if failed else 0
 
 
+def cmd_conformance(args: argparse.Namespace) -> int:
+    from pipeline.conformance import load_vectors, ort_single_row_decoder, run_conformance
+
+    vectors = load_vectors(args.vectors)
+    res = run_conformance(vectors, ort_single_row_decoder(args.zip))
+    for m in res.mismatches[:10]:
+        print(
+            f"MISMATCH [{m['index']}] src={m['src']!r} "
+            f"expected={m['expected']!r} got={m['got']!r}",
+            file=sys.stderr,
+        )
+    print(
+        f"{'PASS' if res.passed else 'FAIL'} conformance {res.model}: "
+        f"{res.checked - len(res.mismatches)}/{res.checked} byte-exact"
+    )
+    return 0 if res.passed else 1
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="isxml")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -104,6 +122,11 @@ def main(argv: list[str] | None = None) -> int:
     g.add_argument("--recipes", type=Path, default=REPO_ROOT / "recipes")
     g.add_argument("--corpora", type=Path, default=DEFAULT_CORPORA_DIR)
     g.set_defaults(fn=cmd_gate)
+
+    c = sub.add_parser("conformance", help="run frozen vectors against an IMF zip")
+    c.add_argument("--vectors", required=True, type=Path)
+    c.add_argument("--zip", required=True, type=Path)
+    c.set_defaults(fn=cmd_conformance)
 
     args = ap.parse_args(argv)
     return args.fn(args)
