@@ -84,3 +84,14 @@ Epochs/bs/backbone all matched. **run-079-fas-diac-docslr launched**
 with the full docs optimizer recipe (trainer now has U_LR/U_WARMUP/
 U_SCHED/U_WD knobs). Matrix so far, same split/corpus:
 small-3ep 0.65 · small-6ep 0.60 · base-3ep@3e-4 0.63 · docs@5e-4 0.52?
+
+### run-079 (docs-exact optimizer): 0.64% MISS — the metric was the gap
+
+base @5e-4/linear/w500 lands 0.64% row-mean — indistinguishable from
+base @3e-4/cosine (0.63). Optimizer eliminated. Final root cause, from
+modal_app_diacrit.py evaluate() itself: **run-001's "0.52% CER" is
+CORPUS-level (total_ed / total_gold_chars)**, while every rerun gate
+reported the **row-mean** (mean of per-row ed/len). Same predictions,
+different aggregation. run-079-metrics (l4) re-scores run-079/best
+under BOTH conventions with predictions saved; its corpus-level number
+is the docs-comparable verdict.
