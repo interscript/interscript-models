@@ -149,3 +149,24 @@ doesn't merge).
   fixture-frozen conformance; our advantages kept: pinned/sha256
   corpora, numeric parity gates, models.yaml registry, negative-result
   registry. Gaps found in KLF filed as kotoshu/kotoshu#251.
+
+## Audit record
+
+- **Round 1 (2026-10-18)**: G1 CI-contracts gap, G2 metric-convention
+  gap, G3 publish-guard gap — fixed in #298 (contracts job green on
+  first live run; GateSpec.convention required; publish guard refuses
+  moving versions / blocked licenses / failing gates / missing
+  fixtures).
+- **Round 2**: stage-2 script staging verified; index-v6 verified
+  byte-identical across legacy + rebranded repos (sha 486d4bcd) —
+  runtime default URL re-point is hygiene backlog for the next runtime
+  release.
+- **Round 3**: (a) the shipped python runtime itself is being run
+  against the conformance fixture (the client-path test the reference
+  decoder can't prove by construction); (b) contributor entry doc added
+  to README (add-a-language = two YAMLs + eval gold; the isxml verbs;
+  the laws).
+- Backlog (non-blocking): housekeeper (checkpoint pruning / dead-repo
+  inventory); exporter attention-mask option for batched serving
+  (WO51 remedy (b)); conformance coverage grows with each shipped
+  artifact; src/gpu/modal_* deprecation flagged for owner.
