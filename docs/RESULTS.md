@@ -2357,3 +2357,12 @@ parity under the WO51 single-row contract: ONNX fp16 CER 3.64,
 500/500 rows identical to torch, three-way bf16/fp32/ORT agreement
 1.0. Shipped runtime reproduces 12/12 frozen conformance vectors
 byte-exactly. Data: 573,130 pairs (urd-dia registry, sha256-pinned).
+
+## run-059 urd-g2p base gate pass
+
+Gate: full 12,699-row test split, raw char CER, row-mean — **15.65**
+(beat urd-g2p-1.0 small tier 15.78); normalized CER 10.75. Data:
+610K pairs (humair025/urdu-g2p-dictionary via rababa-urdu/data,
+sha256-pinned in the urd-g2p-dict registry). Training data is
+non-commercial: weights ship RESEARCH-ONLY (owner decision
+2026-10-18).

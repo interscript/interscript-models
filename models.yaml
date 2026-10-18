@@ -451,15 +451,22 @@ models:
     task: g2p
     scripts: [Arab, IPA]
     precision: fp32
-    filename: urd-g2p-base-1.0.zip
-    url: https://github.com/interscript/interscript-models/releases/download/urd-g2p-base-1.0/urd-g2p-base-1.0.zip
-    sha256: 14c2ebf81999f24b624c7f3c9d223a16c36fee465863785b6ceea88b3d1f371a
-    size: 2159598592
+    filename: urd-g2p-base-1.0-fp32.zip
+    parts:
+      - url: https://github.com/interscript/interscript-models/releases/download/urd-g2p-base-1.0/urd-g2p-base-1.0-fp32.zip.part-00
+        sha256: e2ffe9bf8114e26b731d4469a262b2d17d0a8f6ceced611c641e7d69bca804de
+        size: 1500000000
+      - url: https://github.com/interscript/interscript-models/releases/download/urd-g2p-base-1.0/urd-g2p-base-1.0-fp32.zip.part-01
+        sha256: 72695f23f42f8eef9d81c8284d02cbf743986fd836aa1568cf11a08fc75acd36
+        size: 659598918
+    sha256: d3e35dd435bf18fedec03d4a15bba097fca743737b729312fa08f4fdcac24282
+    size: 2159598918
     metrics:
-      - {name: cer, value: 15.65, protocol: "greedy decode, full 11940-row test split (WO37 protocol)", source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base-gate-pass}
-      - {name: cer_normalized, value: 10.75, protocol: "greedy decode, full 11940-row test split (WO37 protocol)", source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base-gate-pass}
-    parity: {samples: 300, cer_delta: 0.024}
+      - {name: cer, value: 15.65, protocol: "greedy decode, full 12699-row test split, row-mean", source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base-gate-pass}
+      - {name: cer_normalized, value: 10.75, protocol: "greedy decode, full 12699-row test split, row-mean", source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base-gate-pass}
+    parity: {samples: 500, cer_delta: 0.0}
     license: BSD-3-Clause
+    license_note: RESEARCH-ONLY — non-commercial training data (owner-approved 2026-10-18; see card)
   ara-diac-news-1.1:
     task: diacritization
     scripts: [Arab, Arab]
