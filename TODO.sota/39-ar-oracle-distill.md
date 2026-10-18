@@ -77,3 +77,22 @@ timeout — resume6/8 died exactly there). Stats:
 sft stage planned it (O_* envs, both mounts) and the Runner's budget
 guard cleared it — the first dogfooded launch; hand-typed job commands
 retire here. Gate: first-alt WER < 3.5607; stretch ≤ 2.70.
+
+## FINAL (2026-10-19): stage-2 REJECTED — ara canonical unchanged
+
+oepoch-1 dual-surface eval (the training itself converged, loss 0.002;
+eval initially crashed on missing pandas — rerun eval-only):
+
+- SadeedDiac-25: Total DER **8.32** (gate: hold r7's 2.29) — identity
+  COLLAPSE
+- WikiNews-2024 multiref: RAW 9.95 WER / 9.06 DER; first-alt
+  **3.97 WER** (gate < 3.5607) — MISS
+
+The stage-1 oracle was real (0.54% relabel CER) but continue-training
+on the relabeled 290K subset regressed both surfaces — domain-narrowed
+distillation destroyed general calibration. Same family of negative as
+fas stage-2. **ara canonical: ara-diac-2.0 (shipped, DER 2.29); the
+oracle-distillation lever is now data-closed for BOTH ara and fas.**
+
+Ops scars recorded: spine deps gap (fixed, #303), eval-only rerun
+pattern (eval_oepoch1.py), eval extras belong in recipe deps.
