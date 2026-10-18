@@ -115,3 +115,18 @@ pending its dual-metric re-score (run-077-metrics) to compare like
 with like against run-079 (0.64% row / 0.81% corpus). Gate value is an
 owner call: accept the verified ceiling and re-anchor the recipe gate,
 or commission a corpus-rebuild arm before shipping.
+
+### Release candidate selected (2026-10-18): run-077/best
+
+Like-with-like dual re-scores on the docs split (9,288):
+
+| checkpoint | corpus CER | row-mean CER | word acc | size class |
+|---|---|---|---|---|
+| **run-077/best** (byt5-small, 6ep) | **0.777%** | **0.603%** | **82.33%** | small |
+| run-079/best (byt5-base, 3ep) | 0.811% | 0.639% | 81.66% | base |
+
+The small model wins both metrics — base adds nothing here. Gate call
+remains owner-gated: accept 0.603% row-mean (0.777% corpus) as the
+canonical fas-diac number and re-anchor the recipe gate, or commission
+the corpus-rebuild arm (recover the ~18% of rows the derivation dropped
+vs the raw 528,837) before shipping.
