@@ -73,17 +73,19 @@ def check_parity(recipe: RecipeSpec, parity: dict | None) -> GateResult:
 
 
 def check_license(recipe: RecipeSpec, corpora_dir: Path) -> GateResult:
+    from pipeline.contracts import _license_blocked
+
     names = {ref.split("@", 1)[0] for ref in recipe.corpora.values()}
     for name in sorted(names):
         corpus = load_corpus(Path(corpora_dir) / f"{name}.yaml")
-        bad = [s for s in corpus.sources if s.license == "UNVERIFIED"]
+        bad = [s for s in corpus.sources if _license_blocked(s.license)]
         if bad:
-            ids = ", ".join(s.id for s in bad)
+            ids = ", ".join(f"{s.id}={s.license}" for s in bad)
             return GateResult(
                 "license",
                 False,
-                f"corpus '{name}': UNVERIFIED license ({ids}) — "
-                "resolve provenance before publishing",
+                f"corpus '{name}': restricted or unread license ({ids}) — "
+                "owner review required before publishing",
             )
     return GateResult("license", True, f"corpora {sorted(names)} licensed")
 

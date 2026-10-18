@@ -59,3 +59,28 @@ VERIFIED number in hand. Next-session options: (a) one more epoch
 arm (the original recipe likely trained longer — check configs/),
 (b) ship 0.65% as the verified artifact with the docs discrepancy
 noted. Both are cheap; (a) first.
+
+## 2026-10-18: the gap is the backbone, not epochs
+
+- run-076 (small, 3ep): 0.65% · run-077 (small, 6ep): **0.60%** — both
+  MISS vs docs 0.52%; epochs saturating.
+- Gate split verified byte-identical to the docs split (data/test.jsonl
+  9,288 rows; sha256 67513aa16ec142ab matches the staged bucket copy) —
+  the comparison was always apples-to-apples.
+- rababa-farsi/docs/RESULTS.md records the docs recipe explicitly:
+  **ByT5-base, 3 epochs**, 464K derived pairs. Our arms ran byt5-small
+  — wrong backbone. Corpus count (445,869 after in-training filters of
+  the 464K usable) is not the variable.
+- **run-078-fas-diac-base launched** (byt5-base, 3ep, same corpus and
+  gate). recipes/fas-diac.yaml corrected to byt5-base. Expect ~27h;
+  epoch-resume relaunch if the 23h timeout lands first.
+
+### run-078 (byt5-base, our trainer): 0.63% MISS — and the LR was found
+
+Base beat small on neither surface (0.63 vs 0.60). Root cause found in
+modal_app_diacrit.py: run-001 trained at **lr 5e-4, warmup 500, HF
+linear decay, wd 0**; our trainer used 3e-4/cosine/warmup-200/wd-0.01.
+Epochs/bs/backbone all matched. **run-079-fas-diac-docslr launched**
+with the full docs optimizer recipe (trainer now has U_LR/U_WARMUP/
+U_SCHED/U_WD knobs). Matrix so far, same split/corpus:
+small-3ep 0.65 · small-6ep 0.60 · base-3ep@3e-4 0.63 · docs@5e-4 0.52?

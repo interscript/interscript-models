@@ -1,6 +1,12 @@
 # WO52 — The unified Interscript ML framework (recipes + spine + registry)
 
-Status: PROPOSAL (owner review before implementation)
+Status: **IN IMPLEMENTATION** — owner-approved 2026-10-17
+Progress: M0 contracts + M1 runner + M2 gates/planner merged (#294);
+M4 recipes landed (ara-diac, urd-g2p + corpora registry + license
+provenance — `corpora/PROVENANCE.md`). Remaining: M3 (pins: rows +
+sha256 manifests; probe/zipcheck absorbed as gate inputs), M5
+(models.yaml resolver in clients, conformance fixtures, exporter
+attention-mask option, deprecate src/gpu/modal_*).
 Priority: strategic — makes every future language/technique a config PR
 
 ## Diagnosis (honest)

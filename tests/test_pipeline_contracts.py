@@ -148,11 +148,52 @@ def test_unverified_license_is_blocking(tmp_path: Path) -> None:
 
 def test_shipped_contracts_validate() -> None:
     problems = validate_recipe_dir(RECIPES, CORPORA)
-    unverified = [p for p in problems if "UNVERIFIED" in p]
-    unexpected = [p for p in problems if "UNVERIFIED" not in p]
+    blocked = [p for p in problems if "owner review" in p]
+    unexpected = [p for p in problems if "owner review" not in p]
     assert unexpected == [], f"contract drift: {unexpected}"
-    for p in unverified:
-        assert "urd-dia" in p or "fas-dia" in p, p
+    open_corpora = {"urd-dia", "qcri-wiki", "urd-g2p-dict"}
+    for p in blocked:
+        assert any(c in p for c in open_corpora), p
+    assert not any("fas-dia" in p for p in blocked), (
+        "fas CC0 verification must keep the fas lane clear"
+    )
+
+
+def test_restricted_but_read_license_blocks(tmp_path: Path) -> None:
+    from pipeline.contracts import _license_blocked  # noqa: PLC0415
+
+    assert _license_blocked("LicenseRef-non-commercial")
+    assert _license_blocked("LicenseRef-no-license-found")
+    assert not _license_blocked("CC0-1.0")
+    assert not _license_blocked("GPLv2")
+
+    import yaml  # noqa: PLC0415
+
+    corpus = {
+        "id": "xx-src",
+        "task": "transliteration",
+        "sources": [
+            {"kind": "hf-dataset", "id": "org/ds", "license": "LicenseRef-non-commercial"}
+        ],
+        "splits": {
+            "train": {"path": "train.jsonl", "rows": 10},
+            "test": {"path": "test.jsonl", "rows": 5},
+        },
+    }
+    recipe = {
+        "id": "xx-test",
+        "task": "transliteration",
+        "corpora": {"train": "xx-src@v1", "test": "xx-src@v1#test"},
+        "model": "byt5-small",
+        "stages": [{"stage": "sft", "params": {"epochs": 1}}],
+        "gates": {"quality": {"cer_max": 0.1}, "parity": {"agree_min": 0.98}},
+    }
+    (tmp_path / "corpora").mkdir()
+    (tmp_path / "recipes").mkdir()
+    (tmp_path / "corpora" / "xx-src.yaml").write_text(yaml.safe_dump(corpus))
+    (tmp_path / "recipes" / "xx-test.yaml").write_text(yaml.safe_dump(recipe))
+    problems = validate_recipe_dir(tmp_path / "recipes", tmp_path / "corpora")
+    assert any("LicenseRef-non-commercial" in p and "owner review" in p for p in problems)
 
 
 def test_load_corpus_roundtrip() -> None:

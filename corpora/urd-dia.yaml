@@ -1,11 +1,15 @@
 id: urd-dia
 task: diacritization
 sources:
+  # Upstream: mixture of the mahwizzzz and humairmunirawn Urdu corpora
+  # (per rababa-urdu/docs/paper-urdu/main.pdf; uploaded from
+  # /opt/urdu/data in rababa-urdu/modal_app_diacrit.py). No license
+  # found on either source (HF/GitHub search 2026-10-17).
   - kind: bucket
     id: rhtse/jobs-artifacts/rababa-urdu-cc174b96
     revision: data-diacrit
-    license: UNVERIFIED  # provenance review open — gate blocks publish until resolved
+    license: LicenseRef-unresolved  # no license found on sources — owner: contact authors or replace corpus
     mount: /data-dia
 splits:
-  train: {path: data-diacrit/train.jsonl}  # pin rows+sha256 from bucket manifest (M2)
+  train: {path: data-diacrit/train.jsonl}  # pin rows+sha256 from bucket manifest (M3)
   test: {path: data-diacrit/test.jsonl}

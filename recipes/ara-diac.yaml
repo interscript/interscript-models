@@ -1,0 +1,22 @@
+id: ara-diac
+task: diacritization
+corpora:
+  train: qcri-wiki@2024-04-20
+  test: qcri-wiki@2024-04-20#test
+model: byt5-base
+stages:
+  - stage: oracle_relabel
+    env_prefix: D
+    route: legacy:interscript-train/distill_oracle_hf.py
+    params: {subset: 300000}
+  - stage: sft
+    env_prefix: O
+    route: legacy:interscript-train/continue_oracle_train_hf.py
+    params: {epochs: 2}
+gates:
+  quality: {wer_max: 3.5607}  # run-047 first-alt line; stretch 2.70 (QCRI frontier parity)
+  parity: {mode: single-row, agree_min: 0.98, three_way: true}
+negative_results:
+  - r9-yallamorph convention-density drift — r7 stays canonical
+  - RIDE residual-displacement arm negative
+  - LLM teachers hallucinate haraqat — banned for diacritization labels
