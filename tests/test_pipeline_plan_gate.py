@@ -148,7 +148,15 @@ def test_gate_results_files_end_to_end(tmp_path: Path) -> None:
         parity=json.loads(parity.read_text()),
     )
     by_name = {g.name: g.passed for g in results}
-    assert by_name == {"quality": True, "parity": True, "license": True}
+    # the registry runs every registered gate; the conformance gate
+    # fails loudly on missing input and regression is flag-only
+    assert by_name == {
+        "quality": True,
+        "parity": True,
+        "license": True,
+        "conformance": False,
+        "regression": True,
+    }
 
 
 def test_plan_wraps_legacy_deps() -> None:
