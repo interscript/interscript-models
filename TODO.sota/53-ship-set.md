@@ -75,3 +75,16 @@ runtime default index URL re-point at next runtime release.
 
 Ship flow next: repack → GH Release + sha256 → models.yaml entry →
 index-vN bump → HF mirror → cards with the dependency/research notes.
+
+## SHIPPED — COMPLETE (2026-10-19)
+
+| lane | release | asset sha (verified on the release) | index |
+|---|---|---|---|
+| urd-diac-base-1.0 | urd-diac-base-1.0-fp16.zip (1.35GB) | 8058220d… (500/500 parity, runtime 12/12) | index-v11 |
+| urd-g2p-base-1.0 | 2 parts, assembly-verified (2.16GB) | d3e35dd4… (500/500 parity delta 0.0) | index-v12 |
+| fas-diac-base-1.0 | fas-diac-base-1.0-fp16.zip (711MB) | 974eddac… (500-sample parity, agree 0.996) | index-v12 |
+
+All three: GH Releases (sha-verified downloads) + models.yaml entries
+(owners' license notes embedded) + HF mirrors (Interscript/*-1.0) +
+index-v11/v12 published. ara: canonical unchanged (stage-2 negative
+recorded). he: the one owner-gated item remaining (data-supply asks).
