@@ -16,9 +16,17 @@ transformers 5.14.1 (the version all working ByT5 exports used):
 
 from __future__ import annotations
 
+import warnings
 from pathlib import Path
 
 import modal
+
+warnings.warn(
+    'Modal is retired; this entrypoint is frozen for '
+    'provenance — launch via the pipeline runner (HF Jobs)',
+    DeprecationWarning,
+    stacklevel=2,
+)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 
