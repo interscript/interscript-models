@@ -88,3 +88,21 @@ numerically faithful, `parity.mode: batched-mask` in the schema since
 M0). The exporter grows the option behind an env; batched artifacts
 must pass a batched parity probe (`probe_batched_mask.py`) before
 release. The WO51 saga is fully closed: both remedies proven.
+
+## Batched-mask per-model findings (2026-10-19, polish round)
+
+Masked exports produced for all three shipped models; batched parity
+probes (64 rows, padded+mask) against torch batched-with-mask:
+
+| model | PAD_GAPS | torch CER | ORT-batched CER | agreement | disposition |
+|---|---|---|---|---|---|
+| urd-diac-base (fp16) | ~1e-4 | 2.94% | 2.36% | 0.953 | batched OK |
+| fas-diac-base (fp16) | ~1e-4 | 0.86% | 1.64% | 0.922 | batched degrades ~2x — usable, gate before serving |
+| urd-g2p-base (fp16) | ~1e-4 | 15.88% | 22.19% | **0.688** | batched NOT shippable — IPA outputs amplify fp16 divergence |
+
+The attention-mask mechanism is correct everywhere (gaps ~1e-4);
+batched decode QUALITY is model-dependent. Consequence: batched-mask
+artifacts ship per model only behind a passing `parity.mode:
+batched-mask` probe at the recipe's agree_min — urd-g2p stays
+single-row-only. Masked zips remain on the bucket as verified
+experiments, not release assets.
