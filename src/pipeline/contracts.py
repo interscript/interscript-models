@@ -20,9 +20,21 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 TaskKind = Literal["diacritization", "g2p", "transliteration"]
 METRIC_KEYS = ("cer_max", "wer_max", "per_max")
-KNOWN_STAGES = frozenset(
-    {"sft", "oracle_relabel", "distill", "decode_policy", "plane", "lexicon_fusion"}
-)
+
+# Stage types are a REGISTRY (WO55): new techniques register themselves,
+# contracts.py never edits. Seeded with the proven set.
+_STAGE_TYPES: set[str] = set()
+
+
+def register_stage_type(name: str) -> None:
+    _STAGE_TYPES.add(name)
+
+
+for _s in ("sft", "oracle_relabel", "distill", "decode_policy", "plane",
+           "lexicon_fusion"):
+    register_stage_type(_s)
+
+KNOWN_STAGES = _STAGE_TYPES  # backwards-compatible alias (live set)
 LANG_RE = re.compile(r"^[a-z]{2,3}-[a-z0-9-]+$")  # recipes: <lang>-<task>
 CORPUS_ID_RE = re.compile(r"^[a-z][a-z0-9-]*$")  # corpora: source names
 CORPUS_REF_RE = re.compile(
@@ -48,7 +60,10 @@ class LicenseReview(_Strict):
 
 
 class CorpusSource(_Strict):
-    kind: Literal["hf-dataset", "bucket", "gh-release"]
+    # kind is free-form schema data; the planner's volume-provider
+    # registry decides what is mountable (typos fail at plan time with
+    # the registered kinds in the error)
+    kind: str
     id: str
     revision: str | None = None
     sha256: str | None = None
@@ -193,10 +208,27 @@ def _license_blocked(lic: str) -> bool:
     return lic == "UNVERIFIED" or lic.startswith("LicenseRef-")
 
 
+class LicensePolicy:
+    """The license gate's policy, encapsulated: varying it (stricter or
+    looser) is constructing a policy object, never editing the schema."""
+
+    def __init__(self, allow_waivers: bool = True) -> None:
+        self.allow_waivers = allow_waivers
+
+    def blocked(self, source: CorpusSource) -> bool:
+        if not _license_blocked(source.license):
+            return False
+        if not self.allow_waivers:
+            return True  # strict policy: restricted stays blocked regardless
+        review = source.license_review
+        return review is None or review.status != "owner-approved"
+
+
+DEFAULT_LICENSE_POLICY = LicensePolicy()
+
+
 def _license_blocked_source(s: CorpusSource) -> bool:
-    if not _license_blocked(s.license):
-        return False
-    return s.license_review is None or s.license_review.status != "owner-approved"
+    return DEFAULT_LICENSE_POLICY.blocked(s)
 
 
 def validate_recipe_dir(recipes_dir: Path, corpora_dir: Path) -> list[str]:

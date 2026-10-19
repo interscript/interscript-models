@@ -10,6 +10,7 @@ artifact, not as a job.
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 from pipeline.contracts import RecipeSpec, StageSpec, load_corpus
 from pipeline.runner import JobSpec, Volume
@@ -18,6 +19,32 @@ CKPT_BUCKET = "hf://buckets/Interscript/isx-training"
 CKPT_MOUNT = "/ckpt"
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CORPORA_DIR = REPO_ROOT / "corpora"
+
+# Volume providers are a REGISTRY (WO55): a new corpus source kind is a
+# registered mount strategy, never an edit to plan_stage. A provider
+# returns a Volume or None (skip).
+_VOLUME_PROVIDERS: dict[str, Any] = {}
+
+
+def register_volume_provider(kind: str, provider) -> None:
+    _VOLUME_PROVIDERS[kind] = provider
+
+
+def _bucket_volume(src, idx: int):
+    return Volume(f"hf://buckets/{src.id}", src.mount or f"/data/{idx}", "ro")
+
+
+def _dataset_volume(src, idx: int):
+    return Volume(f"hf://datasets/{src.id}", src.mount or f"/data/{idx}", "ro")
+
+
+def _skip_volume(src, idx: int):
+    return None  # release assets are fetched at runtime, not mounted
+
+
+register_volume_provider("bucket", _bucket_volume)
+register_volume_provider("hf-dataset", _dataset_volume)
+register_volume_provider("gh-release", _skip_volume)
 
 
 def plan_stage(
@@ -51,16 +78,18 @@ def plan_stage(
         seen.add(name)
         corpus = load_corpus(corpora_dir / f"{name}.yaml")
         for src in corpus.sources:
-            if src.kind == "gh-release":
-                continue  # release assets are fetched at runtime, not mounted
-            url = (
-                f"hf://buckets/{src.id}"
-                if src.kind == "bucket"
-                else f"hf://datasets/{src.id}"
-            )
-            mount = src.mount or f"/data/{idx}"
-            volumes.append(Volume(url, mount, "ro"))
-            idx += 1
+            provider = _VOLUME_PROVIDERS.get(src.kind)
+            if provider is None:
+                raise ValueError(
+                    f"corpus '{corpus.id}': no volume provider for source "
+                    f"kind '{src.kind}' (registered: "
+                    f"{sorted(_VOLUME_PROVIDERS)}) — register one via "
+                    "register_volume_provider"
+                )
+            vol = provider(src, idx)
+            if vol is not None:
+                volumes.append(vol)
+                idx += 1
     return JobSpec(
         name=run,
         command=command,

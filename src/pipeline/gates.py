@@ -1,16 +1,23 @@
-"""WO52 M2 — machine-checkable gates.
+"""WO52 M2 gates — hardened by WO51, registried by WO55.
 
-Gates evaluate in the runtime's actual decode mode (WO51): the parity
-gate reads single-row ORT results, never a batched harness. A missing
-result fails the gate — silence is never success.
+Gates are REGISTERED objects: `evaluate()` runs every registered gate
+and adding a gate (conformance, regression, a future claims gate) is a
+registration, never an edit to this module. Each gate receives a
+GateContext; missing inputs fail the gate loudly — silence is never
+success.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any, ClassVar
 
-from pipeline.contracts import RecipeSpec, load_corpus
+from pipeline.contracts import (
+    RecipeSpec,
+    _license_blocked_source,
+    load_corpus,
+)
 
 
 @dataclass
@@ -18,6 +25,37 @@ class GateResult:
     name: str
     passed: bool
     detail: str
+
+
+@dataclass
+class GateContext:
+    metrics: dict | None = None
+    parity: dict | None = None
+    corpora_dir: Path | None = None
+    conformance_path: Path | None = None
+    registry: dict | None = None
+    extra: dict[str, Any] = field(default_factory=dict)
+
+
+class BaseGate:
+    name: ClassVar[str] = "gate"
+
+    def check(self, recipe: RecipeSpec, ctx: GateContext) -> GateResult:
+        raise NotImplementedError
+
+
+_REGISTRY: dict[str, BaseGate] = {}
+
+
+def register_gate(gate: BaseGate) -> None:
+    _REGISTRY[gate.name] = gate
+
+
+def registered_gates() -> list[str]:
+    return sorted(_REGISTRY)
+
+
+# ---- the three proven gates -------------------------------------------------
 
 
 def check_quality(recipe: RecipeSpec, metrics: dict | None) -> GateResult:
@@ -73,18 +111,12 @@ def check_parity(recipe: RecipeSpec, parity: dict | None) -> GateResult:
 
 
 def check_license(recipe: RecipeSpec, corpora_dir: Path) -> GateResult:
-    from pipeline.contracts import _license_blocked_source
-
     names = {ref.split("@", 1)[0] for ref in recipe.corpora.values()}
     for name in sorted(names):
         try:
             corpus = load_corpus(Path(corpora_dir) / f"{name}.yaml")
         except Exception as e:  # noqa: BLE001 — restricted/unreadable registry entry
-            return GateResult(
-                "license",
-                False,
-                f"corpus '{name}': {e}",
-            )
+            return GateResult("license", False, f"corpus '{name}': {e}")
         bad = [s for s in corpus.sources if _license_blocked_source(s)]
         if bad:
             ids = ", ".join(f"{s.id}={s.license}" for s in bad)
@@ -97,14 +129,122 @@ def check_license(recipe: RecipeSpec, corpora_dir: Path) -> GateResult:
     return GateResult("license", True, f"corpora {sorted(names)} licensed")
 
 
+# ---- gate adapters (registry form of the functions above) -------------------
+
+
+class QualityGate(BaseGate):
+    name = "quality"
+
+    def check(self, recipe: RecipeSpec, ctx: GateContext) -> GateResult:
+        return check_quality(recipe, ctx.metrics)
+
+
+class ParityGate(BaseGate):
+    name = "parity"
+
+    def check(self, recipe: RecipeSpec, ctx: GateContext) -> GateResult:
+        return check_parity(recipe, ctx.parity)
+
+
+class LicenseGate(BaseGate):
+    name = "license"
+
+    def check(self, recipe: RecipeSpec, ctx: GateContext) -> GateResult:
+        return check_license(recipe, ctx.corpora_dir)
+
+
+# ---- WO55 gates (exist because the registry makes them cheap) ---------------
+
+
+class ConformanceGate(BaseGate):
+    """The frozen-fixture gate: a model ships conformance vectors or it
+    does not pass. Validated against the vectors schema; byte-exact
+    execution stays with `isxml conformance` (needs the artifact)."""
+
+    name = "conformance"
+
+    def check(self, recipe: RecipeSpec, ctx: GateContext) -> GateResult:
+        from pipeline.conformance import validate_vectors
+
+        if ctx.conformance_path is None:
+            return GateResult(
+                "conformance",
+                False,
+                "no conformance vectors file — a model ships frozen "
+                "fixtures or not at all",
+            )
+        path = Path(ctx.conformance_path)
+        if not path.is_file():
+            return GateResult("conformance", False,
+                              f"vectors file missing: {path}")
+        import json
+
+        vectors = json.loads(path.read_text(encoding="utf-8"))
+        problems = validate_vectors(vectors)
+        if problems:
+            return GateResult("conformance", False, "; ".join(problems))
+        return GateResult(
+            "conformance",
+            True,
+            f"{len(vectors['vectors'])} vectors, "
+            f"{vectors['decode']['mode']}",
+        )
+
+
+class RegressionGate(BaseGate):
+    """Flag-only comparison against the registry's best-known numbers:
+    a candidate worse than the shipped line never blocks silently — it
+    flags for the owner to waive (spec L2)."""
+
+    name = "regression"
+
+    def check(self, recipe: RecipeSpec, ctx: GateContext) -> GateResult:
+        if not ctx.registry or recipe.id not in ctx.registry:
+            return GateResult("regression", True,
+                              "no registry baseline for this recipe")
+        entry = ctx.registry[recipe.id]
+        best = (entry.get("best") or {}) if isinstance(entry, dict) else {}
+        flags: list[str] = []
+        improves: list[str] = []
+        for key in recipe.gates.quality:
+            metric = key.removesuffix("_max")
+            known = (best.get(metric))
+            value = (ctx.metrics or {}).get(metric)
+            if known is None or value is None:
+                continue
+            if value > known:
+                flags.append(f"{metric} {value} > best-known {known}")
+            elif value < known:
+                improves.append(f"{metric} {value} < best-known {known}")
+        if flags:
+            return GateResult("regression", True,
+                              "FLAG (owner waives): " + "; ".join(flags))
+        if improves:
+            return GateResult("regression", True, "improves: "
+                              + "; ".join(improves))
+        return GateResult("regression", True, "at parity with registry")
+
+
+register_gate(QualityGate())
+register_gate(ParityGate())
+register_gate(LicenseGate())
+register_gate(ConformanceGate())
+register_gate(RegressionGate())
+
+
 def evaluate(
     recipe: RecipeSpec,
     corpora_dir: Path,
     metrics: dict | None = None,
     parity: dict | None = None,
+    conformance_path: Path | None = None,
+    registry: dict | None = None,
 ) -> list[GateResult]:
-    return [
-        check_quality(recipe, metrics),
-        check_parity(recipe, parity),
-        check_license(recipe, corpora_dir),
-    ]
+    ctx = GateContext(
+        metrics=metrics,
+        parity=parity,
+        corpora_dir=corpora_dir,
+        conformance_path=conformance_path,
+        registry=registry,
+    )
+    return [gate.check(recipe, ctx) for gate in _REGISTRY.values()]
