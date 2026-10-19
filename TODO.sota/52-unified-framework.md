@@ -172,3 +172,17 @@ doesn't merge).
   inventory); exporter attention-mask option for batched serving
   (WO51 remedy (b)); conformance coverage grows with each shipped
   artifact; src/gpu/modal_* deprecation flagged for owner.
+
+## WO55 — the OCP round (2026-10-19, merged #312)
+
+All four extension points are now registries — the modules are closed
+for modification, open for extension:
+- gates: BaseGate + register_gate + GateContext; evaluate() runs every
+  registered gate. New: ConformanceGate (frozen fixtures or no pass)
+  and RegressionGate (flag-only vs registry best-known).
+- stage types: register_stage_type() (KNOWN_STAGES is a live alias).
+- corpus source kinds: schema data + planner volume-provider registry.
+- license policy: LicensePolicy objects (allow_waivers), never edits.
+7 tests written first; 249 green. Deliberately rejected: CLI verb
+registry (argparse idiom is correct), GateResult abstraction ceremony,
+old src/framework/ module adoption (pattern adopted, module superseded).
