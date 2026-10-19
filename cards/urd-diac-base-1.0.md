@@ -1,3 +1,17 @@
+---
+license: other
+license_name: bsd-3-clause-with-data-dependency
+license_link: https://github.com/interscript/interscript-models/blob/main/cards/urd-diac-base-1.0.md
+language:
+  - ur
+tags:
+  - diacritization
+  - byt5
+  - imf
+  - urdu
+metrics:
+  - cer
+---
 # urd-diac-base-1.0
 
 Urdu diacritization, base tier (run-066): byt5-base seq2seq on the
