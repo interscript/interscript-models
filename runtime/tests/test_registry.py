@@ -174,7 +174,7 @@ def test_default_index_url_pins_current_release() -> None:
     from interscript_ml.registry import DEFAULT_INDEX_URL
 
     assert DEFAULT_INDEX_URL == (
-        "https://github.com/interscript/interscript-ml"
-        "/releases/download/index-v6/models-index.yaml"
+        "https://github.com/interscript/interscript-models"
+        "/releases/download/index-v12/models-index.yaml"
     )
     assert "raw.githubusercontent" not in DEFAULT_INDEX_URL
