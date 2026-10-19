@@ -60,25 +60,79 @@ Dependency directions, stated once:
   with `pip install secryst` and nothing else.
 - **Engines depend on crystals only optionally.** An engine without a
   crystal simply cannot execute maps that declare a vocalization step.
-- **Training is owned by secryst.** Teachers live in
-  [secryst/secryst-train](https://github.com/secryst/secryst-train) —
-  the crystal family's own product. This repo publishes their distilled
-  students through the export gate; it does not train anything.
+- **Training is config-driven and lives here.** Recipes + corpora + the
+  `isxml` spine (below) train and gate every model in this repo;
+  teachers live in the train monorepos. This repo publishes the
+  distilled students through the export gate.
+
+## Models ready to use (index-v12)
+
+Every entry below is a shipped, sha256-verified IMF v1 artifact on this
+repo's GitHub Releases, listed in `models.yaml` and the published
+`index-v12`, mirrored to Hugging Face (`Interscript/<id>`), and gated by
+torch↔artifact parity in the runtime's decode mode. Metrics are quoted
+from `models.yaml` (protocol + anchor recorded per metric; row-mean
+CER unless stated).
+
+| model | task | size | headline metric |
+|---|---|---|---|
+| `ara-diac-2.0` | Arabic diacritization | 2.78 GB fp32 | SadeedDiac-25 DER **2.29%** (beats GLM-5.2 2.69); WikiNews-2024 17.38 WER |
+| `ara-diac-news-1.1` | Arabic news register | 2.16 GB fp32 | WikiNews multiref 8.85 WER |
+| `ara-diac-small-2.1` | Arabic, fast tier | 1.42 GB fp32 | fullset DER 4.57 (teacher 2.29) |
+| `ara-diac-plane-large-1.0` | Arabic, int8 fast tier | 0.87 GB int8 | DER 2.74 / WER 8.61 |
+| `urd-diac-base-1.0` | Urdu diacritization | 1.35 GB fp16 | CER **3.57%** |
+| `urd-diac-1.0` | Urdu, small tier | 1.42 GB fp32 | CER 3.74% |
+| `urd-g2p-base-1.0` | Urdu G2P | 2.16 GB fp32 | CER 15.65% — **RESEARCH-ONLY** (non-commercial data) |
+| `fas-diac-base-1.0` | Persian diacritization | 0.71 GB fp16 | CER **0.603%** row-mean / 0.777% corpus, 82.3% word-acc (CC0 data) |
+| `fas-g2p-1.0` | Persian G2P | 2.78 GB fp32 | CER 1.6% |
+| `tha-g2p-base-1.0` | Thai G2P | 2.78 GB fp32 | teacher PER 1.25% |
+| `tha-g2p-small-1.0` | Thai G2P, int8 | 0.26 GB int8 | PER 2.85% (beam-4 12.06%) |
+| `khm-latn-1.0` | Khmer → Latin | 1.42 GB fp32 | CER 27.42% / EM 59.66% |
+| `heb-diac-plane-2.0` | Hebrew nikud, int8 | 0.42 GB int8 | DER 8.18% |
+| `heb-diac-1.1` | Hebrew nikud, fp32 | 2.78 GB fp32 | DER 16.44% |
+
+Quantized variants (int8/int4/fp16) ship as assets of their base
+model's release. Hebrew remains data-supply-limited: newer lanes are
+blocked upstream, not on models.
+
+### Using a model today
+
+Artifacts are plain public downloads; any IMF v1 runtime works
+(single-row greedy decode: ids = byte + 3 with trailing EOS —
+`conformance/CONFORMANCE.md`). The reference python loader is
+`runtime/src/interscript_ml` (conformance-proven).
+
+Point a crystal's index at the current release and resolve by id:
+
+```sh
+export SECRYST_INDEX="https://github.com/interscript/interscript-models/releases/download/index-v12/models-index.yaml"   # python crystal
+export INTERSCRIPT_ML_INDEX="$SECRYST_INDEX"   # ruby gem (archived: override is required)
+```
+
+```python
+from interscript_ml import Model           # reference runtime (this repo)
+m = Model.load("urd-diac-base-1.0")        # resolves via the index, verifies sha256
+print(m.translate("کلیدهای پرکینزمانند"))
+```
+
+Release pins move per index tag (v11: urd-diac-base; v12: urd-g2p-base,
+fas-diac-base). Crystal releases re-pin on their own cadence — until
+then the env override above is the supported path.
 
 ## Repositories
 
 | repo | role |
 |---|---|
-| [interscript/interscript-models](https://github.com/interscript/interscript-models) | this — contract + zoo |
-| [secryst/secryst](https://github.com/secryst/secryst) | Ruby crystal (the original, est. 2020) |
-| [secryst/secryst-py](https://github.com/secryst/secryst-py) | Python crystal — reference, owns golden generation |
-| [secryst/secryst-ts](https://github.com/secryst/secryst-ts) | TypeScript crystal (npm `secryst`) |
-| [secryst/secryst.github.io](https://www.secryst.org) | the crystals' documentation site |
-| [secryst/secryst-train](https://github.com/secryst/secryst-train) | training monorepo — **secryst-owned teachers** |
+| [interscript/interscript-models](https://github.com/interscript/interscript-models) | this — contract + zoo + isxml framework |
+| [interscript/interscript](https://github.com/interscript/interscript) | ISC map DSL (the transliteration contract) |
+| [interscript/interscript-ruby](https://github.com/interscript/interscript-ruby) | Ruby ISC gem (maps; the ML-model crystal is archived, see below) |
+| [interscript/interscript-py](https://github.com/interscript/interscript-py) | Python crystal — live |
+| [secryst/secryst](https://github.com/secryst/secryst) · [secryst/secryst-py](https://github.com/secryst/secryst-py) · [secryst/secryst-ts](https://github.com/secryst/secryst-ts) | **archived** original crystals (est. 2020; the ML ruby gem's default index URL is dead — override `INTERSCRIPT_ML_INDEX`) |
 | [interscript/interscript-train](https://github.com/interscript/interscript-train) · [rababa-farsi](https://github.com/interscript/rababa-farsi) · [rababa-urdu](https://github.com/interscript/rababa-urdu) | archived origins of the train monorepo (full history merged there) |
 
-`runtime/` in this repo is the **frozen origin** of the Python crystal —
-kept for provenance; live code and releases are in secryst-py.
+`runtime/` in this repo is the conformance-proven **reference IMF
+runtime** — the executable definition of the artifact contract, and the
+source of the frozen conformance fixtures.
 
 ## Contributing a language or a technique (the isxml framework)
 
