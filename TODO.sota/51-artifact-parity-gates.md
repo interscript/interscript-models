@@ -70,3 +70,21 @@ single-row). urd-g2p-base and ara int8 cleared by the same contract
 waits for the complete ship set (WO52 M2 proof lane + fas run-077
 verdict + relabel stage-2) per the owner's only-ship-when-complete
 order — nothing ships half-fixed.
+
+## Remedy (b) PROVEN (2026-10-19): batched-mask export
+
+`EXPORT_ATTENTION_MASK=1` exports the encoder with an attention_mask
+input (smoke test made mask-aware). Verified on run-066 urd-diac fp16:
+
+- encoder inputs: [attention_mask, input_ids]
+- PAD_GAPS: [0.0, ~0.0001 ×6, 0.0] — the maskless artifact's 0.13 is
+  gone (residual = fp16 rounding)
+- batched padded decode: torch-fp32 0.0294 / ORT-fp16 0.0236 CER,
+  agreement 0.9531 (residual = engine precision, not the mask)
+
+**Both decode modes are now supported per lane**: `single-row` (the
+shipped contract — byte-exact) and `batched-mask` (serving mode —
+numerically faithful, `parity.mode: batched-mask` in the schema since
+M0). The exporter grows the option behind an env; batched artifacts
+must pass a batched parity probe (`probe_batched_mask.py`) before
+release. The WO51 saga is fully closed: both remedies proven.
