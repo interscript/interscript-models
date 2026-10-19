@@ -100,6 +100,36 @@ def cmd_conformance(args: argparse.Namespace) -> int:
     return 0 if res.passed else 1
 
 
+def cmd_housekeeper(args: argparse.Namespace) -> int:
+    """Live bucket inventory + prune plan. Classify-only: this verb
+    cannot delete anything (WO56 law) — the plan it prints is the
+    input to a separate, owner-authorized execution step."""
+    import os
+
+    from huggingface_hub import HfFileSystem
+
+    from pipeline.housekeeper import inventory, prune_plan
+
+    fs = HfFileSystem(token=os.environ.get("HF_TOKEN"))
+    runs = {}
+    for f in fs.ls(args.bucket):
+        name = f["name"].rsplit("/", 1)[-1]
+        if name.startswith(args.prefix):
+            runs[name] = fs.ls(f["name"])
+    inv = inventory(runs)
+    for r in inv:
+        status = "complete" if r.complete else "IN-FLIGHT"
+        notes = ("; ".join(r.notes)) if r.notes else ""
+        print(f"{r.name:40s} {status:10s} {r.files:4d} files "
+              f"{r.bytes / 1e9:6.2f} GB  {notes}")
+    plan = prune_plan(inv)
+    print(f"\nprune plan: {len(plan)} candidate(s) "
+          "(DRY-RUN — execution is owner-authorized, this verb cannot delete):")
+    for p in plan:
+        print(" ", p)
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="isxml")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -129,6 +159,12 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--vectors", required=True, type=Path)
     c.add_argument("--zip", required=True, type=Path)
     c.set_defaults(fn=cmd_conformance)
+
+    h = sub.add_parser("housekeeper",
+                       help="bucket inventory + prune plan (dry-run only)")
+    h.add_argument("--bucket", default="buckets/Interscript/isx-training")
+    h.add_argument("--prefix", default="run-")
+    h.set_defaults(fn=cmd_housekeeper)
 
     args = ap.parse_args(argv)
     return args.fn(args)

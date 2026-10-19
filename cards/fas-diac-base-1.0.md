@@ -1,3 +1,15 @@
+---
+license: bsd-3-clause
+language:
+  - fa
+tags:
+  - diacritization
+  - byt5
+  - imf
+  - persian
+metrics:
+  - cer
+---
 # fas-diac-base-1.0
 
 Persian diacritization, base tier (run-077): byt5-small seq2seq on

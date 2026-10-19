@@ -60,9 +60,9 @@ jobs:
         run: |
           mkdir -p models/$TASK
           if [ "$VARIANT" = "fp32" ]; then
-            python -m src.cli export --task $TASK --data-root data --out-root models/$TASK
+            PYTHONPATH=attic python -m cli export --task $TASK --data-root data --out-root models/$TASK
           else
-            python -m src.cli export --task $TASK --variant $VARIANT --data-root data --out-root models/$TASK
+            PYTHONPATH=attic python -m cli export --task $TASK --variant $VARIANT --data-root data --out-root models/$TASK
           fi
       - name: Compute SHA256
         env:
@@ -94,7 +94,7 @@ jobs:
         env:
           TASK: ${{ needs.parse-tag.outputs.task }}
         run: |
-          python -m src.cli evaluate --task $TASK --data-root data --out-root models \
+          PYTHONPATH=attic python -m cli evaluate --task $TASK --data-root data --out-root models \
             > $TASK-benchmarks.json
       - uses: actions/upload-artifact@v4
         with:

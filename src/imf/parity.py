@@ -19,7 +19,6 @@ import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 
-from framework.evaluator import char_error_rate
 from imf.export import (
     BYTE_OFFSET,
     EOS_ID,
@@ -29,6 +28,7 @@ from imf.export import (
     onnx_greedy_kv,
 )
 from imf.schema import ModelMetadata, Parity
+from imf.text_metrics import char_error_rate
 
 
 @dataclass(frozen=True)

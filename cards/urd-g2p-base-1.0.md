@@ -1,3 +1,18 @@
+---
+license: other
+license_name: research-only-non-commercial-data
+license_link: https://github.com/interscript/interscript-models/blob/main/cards/urd-g2p-base-1.0.md
+language:
+  - ur
+tags:
+  - g2p
+  - byt5
+  - imf
+  - urdu
+  - research-only
+metrics:
+  - cer
+---
 # urd-g2p-base-1.0
 
 Urdu grapheme-to-phoneme, base tier (run-059): byt5-base seq2seq on

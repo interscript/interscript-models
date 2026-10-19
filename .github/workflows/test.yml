@@ -39,10 +39,10 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install -e ".[dev,export]"
-      - name: CLI smoke test
+      - name: CLI smoke test (isxml)
         run: |
-          PYTHONPATH=src python -m src.cli list
-          test "$(PYTHONPATH=src python -m src.cli list | jq 'length')" -ge 3
+          PYTHONPATH=src isxml --help
+          PYTHONPATH=src isxml validate --help
 
   export-fixture:
     runs-on: ubuntu-latest
