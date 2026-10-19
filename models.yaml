@@ -1,390 +1,574 @@
-# interscript-models model index — the contract every runtime resolves model
-# ids against (Ruby / TypeScript / Python implement the same algorithm).
-#
-# DISTRIBUTION: this file is published as a GitHub Release asset, never
-# via raw.githubusercontent.com. Tag shape: index-vN. Assets per release:
-#   models-index.yaml
-#   models-index.yaml.sha256
-# URL shape runtimes pin:
-#   https://github.com/interscript/interscript-models/releases/download/index-vN/models-index.yaml
-# Cut a new index-vN tag (or dispatch release-index.yml) whenever the
-# index content changes in a way production consumers must see.
-#
-# Resolution algorithm (identical in all runtimes):
-#   1. fetch the pinned index URL + its .sha256 sidecar; verify the body
-#   2. resolve `id` in models.models
-#   3. prefer an installed cache copy at <cache_dir>/<id>/<filename>
-#      whose whole-file sha256 matches `sha256`
-#   4. else download `url` (or assemble `parts`) to a temp file,
-#      verify sha256, atomically rename into place
-#   5. load the zip (IMF v1: member sha256 verification on load)
-#
-# Overrides: SECRYST_INDEX (URL or path to an index like this one —
-# HTTP sources must ship a sibling .sha256), SECRYST_CACHE (cache
-# directory; default ~/.cache/secryst or ~/.cache/interscript).
-#
-# Adding a model: it must have passed the WO03 gate (strict validation,
-# parity written into the zip) before an entry ships here. Then cut a
-# new index-vN so runtimes pick it up on their next pin bump.
 version: 1
 models:
   khm-latn-1.0:
     task: translit
-    scripts: [Khmr, Latn]
+    scripts:
+    - Khmr
+    - Latn
     precision: fp32
     filename: khm-latn-1.0-fp32.zip
     url: https://github.com/interscript/interscript-models/releases/download/khm-latn-1.0/khm-latn-1.0-fp32.zip
     sha256: 55993d473a2ed9489058779cad7e115db05e4020085b71616468cfae4f2f65cb
     size: 1418009977
     metrics:
-      - {name: cer, value: 27.42, source: secryst/docs/RESULTS.md#khmer-transliteration-2026-08-14}
-      - {name: em, value: 59.66, source: secryst/docs/RESULTS.md#khmer-transliteration-2026-08-14}
-    parity: {samples: 895, cer_delta: 0.0}
+    - name: cer
+      value: 27.42
+      source: secryst/docs/RESULTS.md#khmer-transliteration-2026-08-14
+    - name: em
+      value: 59.66
+      source: secryst/docs/RESULTS.md#khmer-transliteration-2026-08-14
+    parity:
+      samples: 895
+      cer_delta: 0.0
     license: BSD-3-Clause
   urd-g2p-1.0:
     task: g2p
-    scripts: [Arab, IPA]
+    scripts:
+    - Arab
+    - IPA
     precision: fp32
     filename: urd-g2p-1.0-fp32.zip
     url: https://github.com/interscript/interscript-models/releases/download/urd-g2p-1.0/urd-g2p-1.0-fp32.zip
     sha256: 9f0a248c7116aa7f6b9ac125fb9684a3556f3b8ce8b64567c05a5e7e7a018ebf
     size: 1418039605
     metrics:
-      - {name: cer, value: 14.77, source: rababa-urdu/docs/RESULTS.md#g2p-urdu-text--ipa}
-      - {name: em, value: 33.6, source: rababa-urdu/docs/RESULTS.md#g2p-urdu-text--ipa}
-    parity: {samples: 12699, cer_delta: 0.0}
+    - name: cer
+      value: 14.77
+      source: rababa-urdu/docs/RESULTS.md#g2p-urdu-text--ipa
+    - name: em
+      value: 33.6
+      source: rababa-urdu/docs/RESULTS.md#g2p-urdu-text--ipa
+    parity:
+      samples: 12699
+      cer_delta: 0.0
     license: BSD-3-Clause
   urd-diac-1.0:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     precision: fp32
     filename: urd-diac-1.0-fp32.zip
     url: https://github.com/interscript/interscript-models/releases/download/urd-diac-1.0/urd-diac-1.0-fp32.zip
     sha256: c299ea44a4da4851a52283f8e42d2fb6f8c7a9c443ba7eb0270f97372e10b8ea
     size: 1417851421
     metrics:
-      - {name: cer, value: 3.74, source: rababa-urdu/docs/RESULTS.md#diacritization-urdu-text--text--haraqat}
-    parity: {samples: 11940, cer_delta: 0.0}
+    - name: cer
+      value: 3.74
+      source: rababa-urdu/docs/RESULTS.md#diacritization-urdu-text--text--haraqat
+    parity:
+      samples: 11940
+      cer_delta: 0.0
     license: BSD-3-Clause
   heb-diac-1.0:
     task: diacritization
-    scripts: [Hebr, Hebr]
+    scripts:
+    - Hebr
+    - Hebr
     precision: fp32
     filename: heb-diac-1.0-fp32.zip
     parts:
-      - url: https://github.com/interscript/interscript-models/releases/download/heb-diac-1.0/heb-diac-1.0-fp32.zip.part-00
-        sha256: 5497f70cc3c96829e65f1eb0cc401c2d1ffeb4fa909acd4def824c2e019cbc37
-        size: 1500000000
-      - url: https://github.com/interscript/interscript-models/releases/download/heb-diac-1.0/heb-diac-1.0-fp32.zip.part-01
-        sha256: a7d2011ab4f9326a86e234cc49cb50daf82949e51efbf03a21d5796c46465e9d
-        size: 1281139753
+    - url: https://github.com/interscript/interscript-models/releases/download/heb-diac-1.0/heb-diac-1.0-fp32.zip.part-00
+      sha256: 5497f70cc3c96829e65f1eb0cc401c2d1ffeb4fa909acd4def824c2e019cbc37
+      size: 1500000000
+    - url: https://github.com/interscript/interscript-models/releases/download/heb-diac-1.0/heb-diac-1.0-fp32.zip.part-01
+      sha256: a7d2011ab4f9326a86e234cc49cb50daf82949e51efbf03a21d5796c46465e9d
+      size: 1281139753
     sha256: b32fa239e0c56708b6004942de4b9e6e9f265e7cc3828f41d560e96386e20dd8
     size: 2781139753
     metrics:
-      - {name: der_greedy, value: 29.0, source: rababa/docs/RESULTS.md#hebrew-diacritization}
-      - {name: der_beam4, value: 17.46, source: rababa/docs/RESULTS.md#hebrew-diacritization}
-    parity: {samples: 600, cer_delta: 0.0}
+    - name: der_greedy
+      value: 29.0
+      source: rababa/docs/RESULTS.md#hebrew-diacritization
+    - name: der_beam4
+      value: 17.46
+      source: rababa/docs/RESULTS.md#hebrew-diacritization
+    parity:
+      samples: 600
+      cer_delta: 0.0
     license: BSD-3-Clause
   tha-g2p-base-1.0:
     task: g2p
-    scripts: [Thai, IPA]
+    scripts:
+    - Thai
+    - IPA
     precision: fp32
     filename: tha-g2p-base-1.0-fp32.zip
     parts:
-      - url: https://github.com/interscript/interscript-models/releases/download/tha-g2p-base-1.0/tha-g2p-base-1.0-fp32.zip.part-00
-        sha256: c4525414e5dec91a54d055ca9f1acd51c198f81fbfc55977aa82c1fb038d58d7
-        size: 1500000000
-      - url: https://github.com/interscript/interscript-models/releases/download/tha-g2p-base-1.0/tha-g2p-base-1.0-fp32.zip.part-01
-        sha256: f5d11fbd75f92e8b5471add867418e2dd4f49a5e258b9ded2f3b5ffa630abe24
-        size: 1281174343
+    - url: https://github.com/interscript/interscript-models/releases/download/tha-g2p-base-1.0/tha-g2p-base-1.0-fp32.zip.part-00
+      sha256: c4525414e5dec91a54d055ca9f1acd51c198f81fbfc55977aa82c1fb038d58d7
+      size: 1500000000
+    - url: https://github.com/interscript/interscript-models/releases/download/tha-g2p-base-1.0/tha-g2p-base-1.0-fp32.zip.part-01
+      sha256: f5d11fbd75f92e8b5471add867418e2dd4f49a5e258b9ded2f3b5ffa630abe24
+      size: 1281174343
     sha256: f341a5868867a9847d3f897d1fcc4d1d63b9a59b8913871bcf4ecab48f4fa895
     size: 2781174343
     metrics:
-      - {name: per_teacher, value: 1.25, source: interscript/interscript-models docs/RESULTS.md#tha-g2p-base-1.0}
-      - {name: per_student, value: 3.53, source: interscript/interscript-models docs/RESULTS.md#tha-g2p-base-1.0}
-    parity: {samples: 1219, cer_delta: 0.0}
+    - name: per_teacher
+      value: 1.25
+      source: interscript/interscript-models docs/RESULTS.md#tha-g2p-base-1.0
+    - name: per_student
+      value: 3.53
+      source: interscript/interscript-models docs/RESULTS.md#tha-g2p-base-1.0
+    parity:
+      samples: 1219
+      cer_delta: 0.0
     license: BSD-3-Clause
   tha-g2p-small-1.0:
     task: g2p
-    scripts: [Thai, IPA]
+    scripts:
+    - Thai
+    - IPA
     precision: int8
     filename: tha-g2p-small-1.0-int8.zip
     url: https://github.com/interscript/interscript-models/releases/download/tha-g2p-small-1.0/tha-g2p-small-1.0-int8.zip
     sha256: f2cfa93a42d98aabf08fdc82dfc6bd1574e21993f36558aa581fbe29e0588a94
     size: 257468517
     metrics:
-      - {name: per_teacher, value: 4.43, source: interscript/interscript-models docs/RESULTS.md#tha-g2p-small-1.0}
-      - {name: per_student_beam4, value: 12.06, source: interscript/interscript-models docs/RESULTS.md#tha-g2p-small-1.0}
-      - {name: per_student, value: 2.85, source: interscript/interscript-models docs/RESULTS.md#tha-g2p-small-1.0}
-    parity: {samples: 1219, cer_delta: 0.0803}
+    - name: per_teacher
+      value: 4.43
+      source: interscript/interscript-models docs/RESULTS.md#tha-g2p-small-1.0
+    - name: per_student_beam4
+      value: 12.06
+      source: interscript/interscript-models docs/RESULTS.md#tha-g2p-small-1.0
+    - name: per_student
+      value: 2.85
+      source: interscript/interscript-models docs/RESULTS.md#tha-g2p-small-1.0
+    parity:
+      samples: 1219
+      cer_delta: 0.0803
   tha-g2p-small-1.0-int4:
     task: g2p
-    scripts: [Thai, IPA]
+    scripts:
+    - Thai
+    - IPA
     precision: int4
     filename: tha-g2p-small-1.0-int4.zip
     url: https://github.com/interscript/interscript-models/releases/download/tha-g2p-small-1.0/tha-g2p-small-1.0-int4.zip
     sha256: e5d12a3d65c6ac39fa08f52c975c99ff7a51c3e7b7aca7fbb461d2de2345e4cb
     size: 201958073
     metrics:
-      - {name: per_teacher, value: 4.43, source: interscript/interscript-models docs/RESULTS.md#tha-g2p-small-1.0}
-      - {name: per_student_beam4, value: 12.06, source: interscript/interscript-models docs/RESULTS.md#tha-g2p-small-1.0}
-      - {name: per_student, value: 2.85, source: interscript/interscript-models docs/RESULTS.md#tha-g2p-small-1.0}
-    parity: {samples: 600, cer_delta: 0.0734}
+    - name: per_teacher
+      value: 4.43
+      source: interscript/interscript-models docs/RESULTS.md#tha-g2p-small-1.0
+    - name: per_student_beam4
+      value: 12.06
+      source: interscript/interscript-models docs/RESULTS.md#tha-g2p-small-1.0
+    - name: per_student
+      value: 2.85
+      source: interscript/interscript-models docs/RESULTS.md#tha-g2p-small-1.0
+    parity:
+      samples: 600
+      cer_delta: 0.0734
     license: BSD-3-Clause
   heb-diac-small-1.0:
     task: diacritization
-    scripts: [Hebr, Hebr]
+    scripts:
+    - Hebr
+    - Hebr
     precision: fp32
     filename: heb-diac-small-1.0-fp32.zip
     url: https://github.com/interscript/interscript-models/releases/download/heb-diac-small-1.0/heb-diac-small-1.0-fp32.zip
     sha256: 905c53873d5a62bbe6252c6ec0ecef5f37e96e78cb01e8cd99b6b24c4d4d74ad
     size: 1418663344
     metrics:
-      - {name: der_teacher_greedy, value: 24.79, source: interscript/interscript-models docs/RESULTS.md#heb-diac-small-1.0}
-      - {name: der_student_greedy, value: 30.37, source: interscript/interscript-models docs/RESULTS.md#heb-diac-small-1.0}
-    parity: {samples: 1864, cer_delta: 0.0}
+    - name: der_teacher_greedy
+      value: 24.79
+      source: interscript/interscript-models docs/RESULTS.md#heb-diac-small-1.0
+    - name: der_student_greedy
+      value: 30.37
+      source: interscript/interscript-models docs/RESULTS.md#heb-diac-small-1.0
+    parity:
+      samples: 1864
+      cer_delta: 0.0
   fas-g2p-1.0:
     task: g2p
-    scripts: [Arab, Latn]
+    scripts:
+    - Arab
+    - Latn
     precision: fp32
     filename: fas-g2p-1.0-fp32.zip
     parts:
-      - url: https://github.com/interscript/interscript-models/releases/download/fas-g2p-1.0/fas-g2p-1.0-fp32.zip.part-00
-        sha256: 6c475e53f3c7ef3edcef5a24d2d81f51d13ddf4c417de98440943c9a32b03e55
-        size: 1500000000
-      - url: https://github.com/interscript/interscript-models/releases/download/fas-g2p-1.0/fas-g2p-1.0-fp32.zip.part-01
-        sha256: c5656c649412f41e201c567e002514d31390b636d4650d9dcb6dfed1973fb3d5
-        size: 1280254270
+    - url: https://github.com/interscript/interscript-models/releases/download/fas-g2p-1.0/fas-g2p-1.0-fp32.zip.part-00
+      sha256: 6c475e53f3c7ef3edcef5a24d2d81f51d13ddf4c417de98440943c9a32b03e55
+      size: 1500000000
+    - url: https://github.com/interscript/interscript-models/releases/download/fas-g2p-1.0/fas-g2p-1.0-fp32.zip.part-01
+      sha256: c5656c649412f41e201c567e002514d31390b636d4650d9dcb6dfed1973fb3d5
+      size: 1280254270
     sha256: b53fd69196127efcc596935d24e135b3c897006872c1646c674e70f3c0d9a0e3
     size: 2780254270
     metrics:
-      - {name: cer, value: 1.6, source: interscript/interscript-models docs/RESULTS.md#fas-g2p-1.0}
-      - {name: sb_homograph_ezafe_norm, value: 77.34, source: interscript/interscript-models docs/RESULTS.md#fas-g2p-1.0}
-    parity: {samples: 1000, cer_delta: 0.0}
+    - name: cer
+      value: 1.6
+      source: interscript/interscript-models docs/RESULTS.md#fas-g2p-1.0
+    - name: sb_homograph_ezafe_norm
+      value: 77.34
+      source: interscript/interscript-models docs/RESULTS.md#fas-g2p-1.0
+    parity:
+      samples: 1000
+      cer_delta: 0.0
     license: BSD-3-Clause
   ara-diac-small-1.0:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     precision: fp32
     filename: ara-diac-small-1.0-fp32.zip
     url: https://github.com/interscript/interscript-models/releases/download/ara-diac-small-1.0/ara-diac-small-1.0-fp32.zip
     sha256: 8b149beb04294a2e482af876a34ae0fca3e87412606116fae1a376845fd4111a
     size: 1418126835
     metrics:
-      - {name: der_teacher_greedy, value: 1.3205, source: interscript/interscript-models docs/RESULTS.md#ara-diac-small-1.0}
-      - {name: der_student_greedy, value: 3.658, source: interscript/interscript-models docs/RESULTS.md#ara-diac-small-1.0}
-      - {name: der_teacher_fullset, value: 2.5815, source: interscript/interscript-models docs/RESULTS.md#ara-diac-small-1.0}
-      - {name: der_student_fullset, value: 8.259, source: interscript/interscript-models docs/RESULTS.md#ara-diac-small-1.0}
-    parity: {samples: 800, cer_delta: 0.0}
+    - name: der_teacher_greedy
+      value: 1.3205
+      source: interscript/interscript-models docs/RESULTS.md#ara-diac-small-1.0
+    - name: der_student_greedy
+      value: 3.658
+      source: interscript/interscript-models docs/RESULTS.md#ara-diac-small-1.0
+    - name: der_teacher_fullset
+      value: 2.5815
+      source: interscript/interscript-models docs/RESULTS.md#ara-diac-small-1.0
+    - name: der_student_fullset
+      value: 8.259
+      source: interscript/interscript-models docs/RESULTS.md#ara-diac-small-1.0
+    parity:
+      samples: 800
+      cer_delta: 0.0
     license: BSD-3-Clause
   heb-diac-1.1:
     task: diacritization
-    scripts: [Hebr, Hebr]
+    scripts:
+    - Hebr
+    - Hebr
     precision: fp32
     filename: heb.zip
     parts:
-      - url: https://github.com/interscript/interscript-models/releases/download/heb-diac-1.1/heb.zip.part-00
-        sha256: 8dac0d62e9b0ac4b137412eaf3a542953f11575f12f66f76cb93d3f5d788fc1b
-        size: 1500000000
-      - url: https://github.com/interscript/interscript-models/releases/download/heb-diac-1.1/heb.zip.part-01
-        sha256: 230c5ab731ea5f001f802d60b9e9a328c10b43bc311a19ef1974f114384313ed
-        size: 1280987905
+    - url: https://github.com/interscript/interscript-models/releases/download/heb-diac-1.1/heb.zip.part-00
+      sha256: 8dac0d62e9b0ac4b137412eaf3a542953f11575f12f66f76cb93d3f5d788fc1b
+      size: 1500000000
+    - url: https://github.com/interscript/interscript-models/releases/download/heb-diac-1.1/heb.zip.part-01
+      sha256: 230c5ab731ea5f001f802d60b9e9a328c10b43bc311a19ef1974f114384313ed
+      size: 1280987905
     sha256: f0022dde8d06e46e8f08cf0b2f7bbb887a05ed686b90f1d5aa82ca3ef690a0b0
     size: 2780987905
     metrics:
-      - {name: der_greedy, value: 16.44, source: rababa/docs/RESULTS.md#hebrew-diacritization}
-      - {name: der_beam4, value: 16.43, source: rababa/docs/RESULTS.md#hebrew-diacritization}
-    parity: {samples: 500, cer_delta: 0.0}
+    - name: der_greedy
+      value: 16.44
+      source: rababa/docs/RESULTS.md#hebrew-diacritization
+    - name: der_beam4
+      value: 16.43
+      source: rababa/docs/RESULTS.md#hebrew-diacritization
+    parity:
+      samples: 500
+      cer_delta: 0.0
     license: BSD-3-Clause
   ara-diac-1.0:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     precision: fp32
     filename: ara-diac-1.0-fp32.zip
     parts:
-      - url: https://github.com/interscript/interscript-models/releases/download/ara-diac-1.0/ara-diac-1.0-fp32.zip.part-00
-        sha256: 6282a9291fb45ac7fcc3abe79d33b5913e91f87dcff8b305bf1d57ed98a3ed0b
-        size: 1500000000
-      - url: https://github.com/interscript/interscript-models/releases/download/ara-diac-1.0/ara-diac-1.0-fp32.zip.part-01
-        sha256: 7e7254a89ec75493871f6f61a993315097dad1bb0ba63c4584453c309e8cb906
-        size: 1280311342
+    - url: https://github.com/interscript/interscript-models/releases/download/ara-diac-1.0/ara-diac-1.0-fp32.zip.part-00
+      sha256: 6282a9291fb45ac7fcc3abe79d33b5913e91f87dcff8b305bf1d57ed98a3ed0b
+      size: 1500000000
+    - url: https://github.com/interscript/interscript-models/releases/download/ara-diac-1.0/ara-diac-1.0-fp32.zip.part-01
+      sha256: 7e7254a89ec75493871f6f61a993315097dad1bb0ba63c4584453c309e8cb906
+      size: 1280311342
     sha256: 9e6d9777fe2474b150450774aaa1c9e8a9051b502b184fde298b91636dcfdac6
     size: 2780311342
     metrics:
-      - {name: der_total_greedy, value: 2.5793, source: rababa/docs/RESULTS.md#r6-verdict-table-sadeeddiac-25-2026-08-21}
-      - {name: der_morph_greedy, value: 1.5317, source: rababa/docs/RESULTS.md#r6-verdict-table-sadeeddiac-25-2026-08-21}
-    parity: {samples: 500, cer_delta: 0.0}
+    - name: der_total_greedy
+      value: 2.5793
+      source: rababa/docs/RESULTS.md#r6-verdict-table-sadeeddiac-25-2026-08-21
+    - name: der_morph_greedy
+      value: 1.5317
+      source: rababa/docs/RESULTS.md#r6-verdict-table-sadeeddiac-25-2026-08-21
+    parity:
+      samples: 500
+      cer_delta: 0.0
     license: BSD-3-Clause
   ara-diac-small-1.0-int8:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     precision: int8
     filename: ara-diac-small-1.0-int8.zip
     url: https://github.com/interscript/interscript-models/releases/download/ara-diac-small-1.0/ara-diac-small-1.0-int8.zip
     sha256: af247d837bee7e755b5287102cfb715c48dc90c2cf41ec1c41e7238e1a72b678
     size: 256959713
     metrics:
-      - {name: der_teacher_greedy, value: 1.3205, source: interscript/interscript-models docs/RESULTS.md#ara-diac-small-1.0}
-      - {name: der_student_greedy, value: 3.658, source: interscript/interscript-models docs/RESULTS.md#ara-diac-small-1.0}
-      - {name: der_teacher_fullset, value: 2.5815, source: interscript/interscript-models docs/RESULTS.md#ara-diac-small-1.0}
-      - {name: der_student_fullset, value: 8.259, source: interscript/interscript-models docs/RESULTS.md#ara-diac-small-1.0}
-    parity: {samples: 800, cer_delta: 0.0}
+    - name: der_teacher_greedy
+      value: 1.3205
+      source: interscript/interscript-models docs/RESULTS.md#ara-diac-small-1.0
+    - name: der_student_greedy
+      value: 3.658
+      source: interscript/interscript-models docs/RESULTS.md#ara-diac-small-1.0
+    - name: der_teacher_fullset
+      value: 2.5815
+      source: interscript/interscript-models docs/RESULTS.md#ara-diac-small-1.0
+    - name: der_student_fullset
+      value: 8.259
+      source: interscript/interscript-models docs/RESULTS.md#ara-diac-small-1.0
+    parity:
+      samples: 800
+      cer_delta: 0.0
     license: BSD-3-Clause
   ara-diac-small-2.0:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     precision: fp32
     filename: ara-diac-small-2.0-fp32.zip
     url: https://github.com/interscript/interscript-models/releases/download/ara-diac-small-2.0/ara-diac-small-2.0-fp32.zip
     sha256: d9aa95d0e8fd0d7da80fd2f7dabedf0ac65f55ba984de565d252f5e14906d98c
     size: 1418516306
     metrics:
-      - {name: der_teacher_fullset, value: 2.289, source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon}
-      - {name: der_student_fullset, value: 5.0821, source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon}
-    parity: {samples: 600, cer_delta: 0.1187}
+    - name: der_teacher_fullset
+      value: 2.289
+      source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon
+    - name: der_student_fullset
+      value: 5.0821
+      source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon
+    parity:
+      samples: 600
+      cer_delta: 0.1187
     license: BSD-3-Clause
   ara-diac-small-2.0-int8:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     precision: int8
     filename: ara-diac-small-2.0-int8.zip
     url: https://github.com/interscript/interscript-models/releases/download/ara-diac-small-2.0/ara-diac-small-2.0-int8.zip
     sha256: f4d07acdaf9c18cded97e15e0c5636e6cee90de2fa32c5a373a44c0cc912bf50
     size: 264043016
     metrics:
-      - {name: der_teacher_fullset, value: 2.289, source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon}
-      - {name: der_student_fullset, value: 4.8218, source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon}
-    parity: {samples: 600, cer_delta: 0.1393}
+    - name: der_teacher_fullset
+      value: 2.289
+      source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon
+    - name: der_student_fullset
+      value: 4.8218
+      source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon
+    parity:
+      samples: 600
+      cer_delta: 0.1393
     license: BSD-3-Clause
   ara-diac-2.0:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     precision: fp32
     filename: ara-diac-2.0-fp32.zip
     parts:
-      - url: https://github.com/interscript/interscript-models/releases/download/ara-diac-2.0/ara-diac-2.0-fp32.zip.part-00
-        sha256: 28c272b5ce58031c356e75823eb581f12351a1675a52d8e4000f851c80d5e14d
-        size: 1500000000
-      - url: https://github.com/interscript/interscript-models/releases/download/ara-diac-2.0/ara-diac-2.0-fp32.zip.part-01
-        sha256: 86016da35e14a8fc05d4fbf3b1ad9ef24c29f9f7893f1716e40bef4b491effa2
-        size: 1280299051
+    - url: https://github.com/interscript/interscript-models/releases/download/ara-diac-2.0/ara-diac-2.0-fp32.zip.part-00
+      sha256: 28c272b5ce58031c356e75823eb581f12351a1675a52d8e4000f851c80d5e14d
+      size: 1500000000
+    - url: https://github.com/interscript/interscript-models/releases/download/ara-diac-2.0/ara-diac-2.0-fp32.zip.part-01
+      sha256: 86016da35e14a8fc05d4fbf3b1ad9ef24c29f9f7893f1716e40bef4b491effa2
+      size: 1280299051
     sha256: 872c655ec6750bf44e5986f958de26767eafa13f8e0a7c64340bc35fd8a4550e
     size: 2780299051
     metrics:
-      - {name: der_total_greedy, value: 2.2864, source: rababa/docs/RESULTS.md#r7-verdict-table-sadeeddiac-25-2026-08-28}
-      - {name: der_morph_greedy, value: 1.3343, source: rababa/docs/RESULTS.md#r7-verdict-table-sadeeddiac-25-2026-08-28}
-      - {name: wer_wikinews_multiref, value: 17.3794, source: rababa/docs/RESULTS.md#r7-ood-verdict-table-wikinews-2024-multiref-2026-08-28}
-      - {name: der_wikinews_multiref, value: 11.8273, source: rababa/docs/RESULTS.md#r7-ood-verdict-table-wikinews-2024-multiref-2026-08-28}
-    parity: {samples: 600, cer_delta: 0.0903}
+    - name: der_total_greedy
+      value: 2.2864
+      source: rababa/docs/RESULTS.md#r7-verdict-table-sadeeddiac-25-2026-08-28
+    - name: der_morph_greedy
+      value: 1.3343
+      source: rababa/docs/RESULTS.md#r7-verdict-table-sadeeddiac-25-2026-08-28
+    - name: wer_wikinews_multiref
+      value: 17.3794
+      source: rababa/docs/RESULTS.md#r7-ood-verdict-table-wikinews-2024-multiref-2026-08-28
+    - name: der_wikinews_multiref
+      value: 11.8273
+      source: rababa/docs/RESULTS.md#r7-ood-verdict-table-wikinews-2024-multiref-2026-08-28
+    parity:
+      samples: 600
+      cer_delta: 0.0903
     license: BSD-3-Clause
   ara-diac-2.0-int8:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     precision: int8
     filename: ara-diac-2.0-int8.zip
     url: https://github.com/interscript/interscript-models/releases/download/ara-diac-2.0/ara-diac-2.0-int8.zip
     sha256: 7f1d55d43f97564ad62fc14a7e0cabe52c01d8298b747677a75900de748bb6c6
     size: 519207340
     metrics:
-      - {name: der_total_greedy, value: 2.2864, source: rababa/docs/RESULTS.md#r7-verdict-table-sadeeddiac-25-2026-08-28}
-      - {name: der_morph_greedy, value: 1.3343, source: rababa/docs/RESULTS.md#r7-verdict-table-sadeeddiac-25-2026-08-28}
-      - {name: wer_wikinews_multiref, value: 17.3794, source: rababa/docs/RESULTS.md#r7-ood-verdict-table-wikinews-2024-multiref-2026-08-28}
-      - {name: der_wikinews_multiref, value: 11.8273, source: rababa/docs/RESULTS.md#r7-ood-verdict-table-wikinews-2024-multiref-2026-08-28}
-    parity: {samples: 600, cer_delta: 0.0947}
+    - name: der_total_greedy
+      value: 2.2864
+      source: rababa/docs/RESULTS.md#r7-verdict-table-sadeeddiac-25-2026-08-28
+    - name: der_morph_greedy
+      value: 1.3343
+      source: rababa/docs/RESULTS.md#r7-verdict-table-sadeeddiac-25-2026-08-28
+    - name: wer_wikinews_multiref
+      value: 17.3794
+      source: rababa/docs/RESULTS.md#r7-ood-verdict-table-wikinews-2024-multiref-2026-08-28
+    - name: der_wikinews_multiref
+      value: 11.8273
+      source: rababa/docs/RESULTS.md#r7-ood-verdict-table-wikinews-2024-multiref-2026-08-28
+    parity:
+      samples: 600
+      cer_delta: 0.0947
     license: BSD-3-Clause
   ara-diac-small-2.1:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     precision: fp32
     filename: ara-diac-small-2.1-fp32.zip
     url: https://github.com/interscript/interscript-models/releases/download/ara-diac-small-2.1/ara-diac-small-2.1-fp32.zip
     sha256: a69918de9f87664fd97cdab3bf68b655966f608211dbeadd7b6fb3f7b03e5ffb
     size: 1419756840
     metrics:
-      - {name: der_teacher_fullset, value: 2.289, source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon}
-      - {name: der_student_fullset, value: 4.5701, source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon}
-    parity: {samples: 2480, cer_delta: 0.0714}
+    - name: der_teacher_fullset
+      value: 2.289
+      source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon
+    - name: der_student_fullset
+      value: 4.5701
+      source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon
+    parity:
+      samples: 2480
+      cer_delta: 0.0714
   ara-diac-small-2.1-int8:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     precision: int8
     filename: ara-diac-small-2.1-int8.zip
     url: https://github.com/interscript/interscript-models/releases/download/ara-diac-small-2.1/ara-diac-small-2.1-int8.zip
     sha256: 9b4e4aad2ab53a8cfbec432a78e27b409376627243aec3fd043f06574552a32b
     size: 267965657
     metrics:
-      - {name: der_teacher_fullset, value: 2.289, source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon}
-      - {name: der_student_fullset, value: 4.5701, source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon}
-    parity: {samples: 2480, cer_delta: 0.0857}
+    - name: der_teacher_fullset
+      value: 2.289
+      source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon
+    - name: der_student_fullset
+      value: 4.5701
+      source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon
+    parity:
+      samples: 2480
+      cer_delta: 0.0857
     license: BSD-3-Clause
   ara-diac-layerdrop-1.0:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     precision: fp32
     filename: ara-diac-layerdrop-1.0-fp32.zip
     url: https://github.com/interscript/interscript-models/releases/download/ara-diac-layerdrop-1.0/ara-diac-layerdrop-1.0-fp32.zip
     sha256: 8f297bdc0e7eba5160c6ed8a2a437abbd399687fd14f2f2b640a4b4c639a3d16
     size: 1015218371
     metrics:
-      - {name: der_teacher_fullset, value: 2.2921, source: interscript/interscript-models docs/RESULTS.md#layerdrop-6ep}
-      - {name: der_student_fullset, value: 5.784, source: interscript/interscript-models docs/RESULTS.md#layerdrop-6ep}
-    parity: {samples: 2480, cer_delta: 0.0632}
+    - name: der_teacher_fullset
+      value: 2.2921
+      source: interscript/interscript-models docs/RESULTS.md#layerdrop-6ep
+    - name: der_student_fullset
+      value: 5.784
+      source: interscript/interscript-models docs/RESULTS.md#layerdrop-6ep
+    parity:
+      samples: 2480
+      cer_delta: 0.0632
     license: BSD-3-Clause
   ara-diac-layerdrop-1.0-int8:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     precision: int8
     filename: ara-diac-layerdrop-1.0-int8.zip
     url: https://github.com/interscript/interscript-models/releases/download/ara-diac-layerdrop-1.0/ara-diac-layerdrop-1.0-int8.zip
     sha256: 68dcc06cd8861e017c4d4912ce3e1fe057d78b79b0a7b6246ae8603c99930963
     size: 191603048
     metrics:
-      - {name: der_teacher_fullset, value: 2.2921, source: interscript/interscript-models docs/RESULTS.md#layerdrop-6ep}
-      - {name: der_student_fullset, value: 5.784, source: interscript/interscript-models docs/RESULTS.md#layerdrop-6ep}
-    parity: {samples: 2480, cer_delta: 0.0538}
+    - name: der_teacher_fullset
+      value: 2.2921
+      source: interscript/interscript-models docs/RESULTS.md#layerdrop-6ep
+    - name: der_student_fullset
+      value: 5.784
+      source: interscript/interscript-models docs/RESULTS.md#layerdrop-6ep
+    parity:
+      samples: 2480
+      cer_delta: 0.0538
     license: BSD-3-Clause
   ara-diac-layerdrop-1.0-int4:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     precision: int4
     filename: ara-diac-layerdrop-1.0-int4.zip
     url: https://github.com/interscript/interscript-models/releases/download/ara-diac-layerdrop-1.0/ara-diac-layerdrop-1.0-int4.zip
     sha256: 352e02105645a6e283e2c3602505bea0e90085b741666fd863e478e4835e7bc9
     size: 145195702
     metrics:
-      - {name: der_teacher_fullset, value: 2.2921, source: interscript/interscript-models docs/RESULTS.md#layerdrop-6ep}
-      - {name: der_student_fullset, value: 5.784, source: interscript/interscript-models docs/RESULTS.md#layerdrop-6ep}
-    parity: {samples: 2480, cer_delta: 0.0589}
+    - name: der_teacher_fullset
+      value: 2.2921
+      source: interscript/interscript-models docs/RESULTS.md#layerdrop-6ep
+    - name: der_student_fullset
+      value: 5.784
+      source: interscript/interscript-models docs/RESULTS.md#layerdrop-6ep
+    parity:
+      samples: 2480
+      cer_delta: 0.0589
     license: BSD-3-Clause
   ara-diac-small-2.1-fp16:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     precision: fp16
     filename: ara-diac-small-2.1-fp16.zip
     url: https://github.com/interscript/interscript-models/releases/download/ara-diac-small-2.1/ara-diac-small-2.1-fp16.zip
     sha256: 395ee72137d1cdfa9cd53bf167ad0d2f5fe5cbf9a5b62f118e0c9e0fa63c972d
     size: 706351903
     metrics:
-      - {name: der_teacher_fullset, value: 2.289, source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon}
-      - {name: der_student_fullset, value: 4.5701, source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon}
-    parity: {samples: 2480, cer_delta: 0.0714}
+    - name: der_teacher_fullset
+      value: 2.289
+      source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon
+    - name: der_student_fullset
+      value: 4.5701
+      source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon
+    parity:
+      samples: 2480
+      cer_delta: 0.0714
     license: BSD-3-Clause
   ara-diac-small-int8static-2.1:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     precision: int8
     filename: ara-diac-small-int8static-2.1-int8.zip
     url: https://github.com/interscript/interscript-models/releases/download/ara-diac-small-int8static-2.1/ara-diac-small-int8static-2.1-int8.zip
     sha256: 7836bfd5582ad054ee419bfbd45a2b4a87fe8dc91e1f849898428faefd0c95da
     size: 515362212
     metrics:
-      - {name: der_teacher_fullset, value: 2.289, source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon}
-      - {name: der_student_fullset, value: 4.5701, source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon}
-    parity: {samples: 2480, cer_delta: 0.1038}
+    - name: der_teacher_fullset
+      value: 2.289
+      source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon
+    - name: der_student_fullset
+      value: 4.5701
+      source: interscript/interscript-models docs/RESULTS.md#run-006-r7-muon
+    parity:
+      samples: 2480
+      cer_delta: 0.1038
     license: BSD-3-Clause
   ara-diac-plane-1.0:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     kind: plane
     precision: int8
     filename: ara-diac-plane-1.0.zip
@@ -392,12 +576,18 @@ models:
     sha256: 1310204e36acc4fcbb988e9f9c46cf6422e7ea3860bd467fb469ea0ad4d39ef3
     size: 219076965
     metrics:
-      - {name: der_total_greedy, value: 3.5905, source: interscript/interscript-models docs/RESULTS.md#run-018-plane-v2}
-      - {name: der_morph_greedy, value: 2.2149, source: interscript/interscript-models docs/RESULTS.md#run-018-plane-v2}
+    - name: der_total_greedy
+      value: 3.5905
+      source: interscript/interscript-models docs/RESULTS.md#run-018-plane-v2
+    - name: der_morph_greedy
+      value: 2.2149
+      source: interscript/interscript-models docs/RESULTS.md#run-018-plane-v2
     license: BSD-3-Clause
   ara-diac-plane-large-1.0:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     kind: plane
     precision: int8
     filename: ara-diac-plane-large-1.0.zip
@@ -405,13 +595,21 @@ models:
     sha256: a66df2e12ddc935e8ab59836fd45486f17ac40b764c1619c03b2b0e191608a52
     size: 866052488
     metrics:
-      - {name: der_total_greedy, value: 2.7397, source: interscript/interscript-models docs/RESULTS.md#run-019-epoch-2--27397-second-epoch-closes-a-third-of-the-gap-sota-gate-still-open-2026-10-05}
-      - {name: der_morph_greedy, value: 1.6717, source: interscript/interscript-models docs/RESULTS.md#run-019-epoch-2--27397-second-epoch-closes-a-third-of-the-gap-sota-gate-still-open-2026-10-05}
-      - {name: wer_total_greedy, value: 8.6083, source: interscript/interscript-models docs/RESULTS.md#run-019-epoch-2--27397-second-epoch-closes-a-third-of-the-gap-sota-gate-still-open-2026-10-05}
+    - name: der_total_greedy
+      value: 2.7397
+      source: interscript/interscript-models docs/RESULTS.md#run-019-epoch-2--27397-second-epoch-closes-a-third-of-the-gap-sota-gate-still-open-2026-10-05
+    - name: der_morph_greedy
+      value: 1.6717
+      source: interscript/interscript-models docs/RESULTS.md#run-019-epoch-2--27397-second-epoch-closes-a-third-of-the-gap-sota-gate-still-open-2026-10-05
+    - name: wer_total_greedy
+      value: 8.6083
+      source: interscript/interscript-models docs/RESULTS.md#run-019-epoch-2--27397-second-epoch-closes-a-third-of-the-gap-sota-gate-still-open-2026-10-05
     license: BSD-3-Clause
   ara-diac-news-1.0:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     kind: imf-v1
     precision: int8
     filename: ara-diac-news-1.0.zip
@@ -419,13 +617,21 @@ models:
     sha256: e5a52b1530dfa6d6c7ef8970443206ce33af865d0337a58d145945adab33484e
     size: 399018923
     metrics:
-      - {name: wer_wikinews2024_multiref, value: 4.0976, source: interscript/interscript-models docs/RESULTS.md#wo35--the-alternate-format-scoring-artifact-ood-corrects-1003--410156-2026-10-10}
-      - {name: der_wikinews2024_multiref, value: 1.5606, source: interscript/interscript-models docs/RESULTS.md#wo35--the-alternate-format-scoring-artifact-ood-corrects-1003--410156-2026-10-10}
-      - {name: der_total_greedy, value: 5.4814, source: interscript/interscript-models docs/RESULTS.md#wo35--the-alternate-format-scoring-artifact-ood-corrects-1003--410156-2026-10-10}
+    - name: wer_wikinews2024_multiref
+      value: 4.0976
+      source: interscript/interscript-models docs/RESULTS.md#wo35--the-alternate-format-scoring-artifact-ood-corrects-1003--410156-2026-10-10
+    - name: der_wikinews2024_multiref
+      value: 1.5606
+      source: interscript/interscript-models docs/RESULTS.md#wo35--the-alternate-format-scoring-artifact-ood-corrects-1003--410156-2026-10-10
+    - name: der_total_greedy
+      value: 5.4814
+      source: interscript/interscript-models docs/RESULTS.md#wo35--the-alternate-format-scoring-artifact-ood-corrects-1003--410156-2026-10-10
     license: BSD-3-Clause
   heb-diac-plane-1.0:
     task: diacritization
-    scripts: [Hebr, Hebr]
+    scripts:
+    - Hebr
+    - Hebr
     kind: plane
     precision: int8
     filename: heb-diac-plane-1.0.zip
@@ -433,11 +639,15 @@ models:
     sha256: dd9ae811c60c38f28ead57bdefa022b281867401ee13e38563b990eaf7f81f95
     size: 219322007
     metrics:
-      - {name: der_total_greedy, value: 12.48, source: interscript/interscript-models docs/RESULTS.md#run-021-heb-plane--1248-nakdimon-der-the-plane-family-generalizes-seq2seq-student-beaten-at-396pp-2026-10-07}
+    - name: der_total_greedy
+      value: 12.48
+      source: interscript/interscript-models docs/RESULTS.md#run-021-heb-plane--1248-nakdimon-der-the-plane-family-generalizes-seq2seq-student-beaten-at-396pp-2026-10-07
     license: BSD-3-Clause
   heb-diac-plane-2.0:
     task: diacritization
-    scripts: [Hebr, Hebr]
+    scripts:
+    - Hebr
+    - Hebr
     kind: plane
     precision: int8
     filename: heb-diac-plane-2.0.zip
@@ -445,49 +655,95 @@ models:
     sha256: 9c8f0432294ebae6abc847ddb79572c1ab979f4851f03d44a9bb6495ba767a9e
     size: 415901226
     metrics:
-      - {name: der_total_greedy, value: 8.18, source: interscript/interscript-models docs/RESULTS.md#run-022-heb-plane-base--818-der-at-the-artifact-level-gate-cleared-hebrew--430pp-2026-10-07}
+    - name: der_total_greedy
+      value: 8.18
+      source: interscript/interscript-models docs/RESULTS.md#run-022-heb-plane-base--818-der-at-the-artifact-level-gate-cleared-hebrew--430pp-2026-10-07
     license: BSD-3-Clause
   urd-g2p-base-1.0:
     task: g2p
-    scripts: [Arab, IPA]
+    scripts:
+    - Arab
+    - IPA
     precision: fp32
     filename: urd-g2p-base-1.0-fp32.zip
     parts:
-      - url: https://github.com/interscript/interscript-models/releases/download/urd-g2p-base-1.0/urd-g2p-base-1.0-fp32.zip.part-00
-        sha256: e2ffe9bf8114e26b731d4469a262b2d17d0a8f6ceced611c641e7d69bca804de
-        size: 1500000000
-      - url: https://github.com/interscript/interscript-models/releases/download/urd-g2p-base-1.0/urd-g2p-base-1.0-fp32.zip.part-01
-        sha256: 72695f23f42f8eef9d81c8284d02cbf743986fd836aa1568cf11a08fc75acd36
-        size: 659598918
+    - url: https://github.com/interscript/interscript-models/releases/download/urd-g2p-base-1.0/urd-g2p-base-1.0-fp32.zip.part-00
+      sha256: e2ffe9bf8114e26b731d4469a262b2d17d0a8f6ceced611c641e7d69bca804de
+      size: 1500000000
+    - url: https://github.com/interscript/interscript-models/releases/download/urd-g2p-base-1.0/urd-g2p-base-1.0-fp32.zip.part-01
+      sha256: 72695f23f42f8eef9d81c8284d02cbf743986fd836aa1568cf11a08fc75acd36
+      size: 659598918
     sha256: d3e35dd435bf18fedec03d4a15bba097fca743737b729312fa08f4fdcac24282
     size: 2159598918
     metrics:
-      - {name: cer, value: 15.65, protocol: "greedy decode, full 12699-row test split, row-mean", source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base-gate-pass}
-      - {name: cer_normalized, value: 10.75, protocol: "greedy decode, full 12699-row test split, row-mean", source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base-gate-pass}
-    parity: {samples: 500, cer_delta: 0.0}
+    - name: cer
+      value: 15.65
+      protocol: greedy decode, full 12699-row test split, row-mean
+      source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base-gate-pass
+    - name: cer_normalized
+      value: 10.75
+      protocol: greedy decode, full 12699-row test split, row-mean
+      source: interscript/interscript-models docs/RESULTS.md#run-059-urd-g2p-base-gate-pass
+    parity:
+      samples: 500
+      cer_delta: 0.0
     license: BSD-3-Clause
-    license_note: RESEARCH-ONLY — non-commercial training data (owner-approved 2026-10-18; see card)
+    license_note: RESEARCH-ONLY — non-commercial training data (owner-approved 2026-10-18;
+      see card)
   ara-diac-news-1.1:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     precision: fp32
     filename: ara-diac-news-1.1.zip
     url: https://github.com/interscript/interscript-models/releases/download/ara-diac-news-1.1/ara-diac-news-1.1.zip
     sha256: 2f55e2a3c9e97da3666ef236e8ba31a24399257c9cc448363cc19f96541eb3ba
     size: 2160091218
     metrics:
-      - {name: wer_wikinews2024_multiref, value: 8.85, protocol: "greedy decode, first-alternate protocol, WikiNews-2024 multiref (WO35)", source: interscript/interscript-models docs/RESULTS.md}
-      - {name: der_total_greedy, value: 2.84, protocol: "greedy decode, first-alternate protocol, WikiNews-2024 multiref (WO35)", source: interscript/interscript-models docs/RESULTS.md}
+    - name: wer_wikinews2024_multiref
+      value: 8.85
+      protocol: greedy decode, first-alternate protocol, WikiNews-2024 multiref (WO35)
+      source: interscript/interscript-models docs/RESULTS.md
+    - name: der_total_greedy
+      value: 2.84
+      protocol: greedy decode, first-alternate protocol, WikiNews-2024 multiref (WO35)
+      source: interscript/interscript-models docs/RESULTS.md
     license: BSD-3-Clause
   urd-diac-base-1.0:
     task: diacritization
-    scripts: [Arab, Arab]
+    scripts:
+    - Arab
+    - Arab
     precision: fp16
     filename: urd-diac-base-1.0-fp16.zip
     url: https://github.com/interscript/interscript-models/releases/download/urd-diac-base-1.0/urd-diac-base-1.0-fp16.zip
     sha256: 8058220d72df76b31260358070499c2cdb504f030fa10259b48aa05c7caf5711
     size: 1347487633
     metrics:
-      - {name: cer, value: 3.57, source: interscript/interscript-models docs/RESULTS.md#run-066-urd-diac-base-gate-pass-and-artifact-parity-2026-10-19}
-    parity: {samples: 500, cer_delta: 0.07}
+    - name: cer
+      value: 3.57
+      source: interscript/interscript-models docs/RESULTS.md#run-066-urd-diac-base-gate-pass-and-artifact-parity-2026-10-19
+    parity:
+      samples: 500
+      cer_delta: 0.07
+    license: BSD-3-Clause
+  fas-diac-base-1.0:
+    task: diac
+    scripts:
+    - Arab
+    - Arab
+    precision: fp16
+    filename: fas-diac-base-1.0.zip
+    url: https://github.com/interscript/interscript-models/releases/download/fas-diac-base-1.0/fas-diac-base-1.0.zip
+    sha256: 974eddac04c64230ae0669103dd053a3ded9d2bc76ec51d3b50cb2a9ac240e12
+    size: 711254175
+    metrics:
+    - name: cer
+      value: 0.603
+      protocol: greedy decode, 9288-row docs split, row-mean
+      source: interscript/interscript-models docs/RESULTS.md#run-077-fas-diac-base-gate-pass-and-the-five-lever-closure-2026-10-18
+    parity:
+      samples: 500
+      cer_delta: 0.0
     license: BSD-3-Clause
