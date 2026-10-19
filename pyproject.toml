@@ -58,7 +58,7 @@ isxml = "pipeline.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["framework*", "tasks*", "imf*", "sadeedbench*", "pipeline*"]
+include = ["imf*", "sadeedbench*", "pipeline*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
