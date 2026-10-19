@@ -20,7 +20,15 @@ so framework edits are picked up without rebuilding the image.
 from __future__ import annotations
 
 import sys
+import warnings
 from pathlib import Path
+
+warnings.warn(
+    'Modal is retired; this entrypoint is frozen for '
+    'provenance — launch via the pipeline runner (HF Jobs)',
+    DeprecationWarning,
+    stacklevel=2,
+)
 
 try:
     import modal  # type: ignore

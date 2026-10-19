@@ -1,0 +1,58 @@
+{
+ "model": "urd-g2p-base-1.0",
+ "index_version": 12,
+ "decode": {
+  "mode": "single-row-greedy"
+ },
+ "source": "first 12 rows of urd-g2p-dict",
+ "vectors": [
+  {
+   "src": "چَشمگاہ",
+   "out": "t͡ʃəʃmˈɡaːh"
+  },
+  {
+   "src": "سرد کرنے",
+   "out": "sərd̪.kərˈneː"
+  },
+  {
+   "src": "المعدہ",
+   "out": "alˈmaːd̪a"
+  },
+  {
+   "src": "غَیر فنکارہ",
+   "out": "ɣɛːr.fənˈkaːraː"
+  },
+  {
+   "src": "دَندانوں کا سَیٹ",
+   "out": "d̪ənˈdaːnoːn.kaː.sɛːʈ"
+  },
+  {
+   "src": "ہَستِیْاں",
+   "out": "həs.t̪iː.jãː"
+  },
+  {
+   "src": "کفشوں",
+   "out": "kəfˈʃoː̃"
+  },
+  {
+   "src": "پَہُنچنے والی",
+   "out": "pəˈɦʊnt͡ʃneː ʋaːˈliː"
+  },
+  {
+   "src": "دَیر سے",
+   "out": "d̪ɛːr.seː"
+  },
+  {
+   "src": "جشنِیَہ",
+   "out": "d͡ʒaʃ.niː.jaː"
+  },
+  {
+   "src": "سنارنیں",
+   "out": "sɪˈnaːrnĩː"
+  },
+  {
+   "src": "بلند ترين",
+   "out": "bʊˈlənd̪ t̪əˈriːn"
+  }
+ ]
+}
