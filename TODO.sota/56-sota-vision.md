@@ -50,7 +50,32 @@ is plane B's row set.
 
 ## Plane B — Learned (the underdetermined residue)
 
-Technique doctrine first (banked verdicts): CTC cannot model
+### The two phenomena that define this plane
+
+**Vocalization is composition, not a sibling task.** Undiacritized text
+is an *underspecified input*: the skeleton is a relation over readings,
+and romanizing it by convention (what bibliographic systems do) is a
+different product from predicting the hidden layer. Vocalization
+upgrades the relation into a function; the map then fires — ISC's
+`funcall` is this composition, declared, not hidden. Decode policy
+(first-alternates) is the principled selection layer over licensed
+readings. Evaluation consequence: single-gold DER systematically
+undercounts legitimate ambiguity — track **valid-reading-rate** (any
+dictionary-licensed reading scores) alongside DER/WER; this is the
+principled answer to the multiref problem (WO01's scar).
+
+**Abugidas (Thai, Khmer) presuppose a reading.** The script is a
+positional syllabary: vowel signs attach around clusters, inherent
+vowels are inferred, tone is computed from consonant class × syllable
+type — and RTGS then drops tone while TTS needs it. The convention is
+deterministic *over an inferred layer*. Architecture doctrine:
+**lexicon-first** (dictionary hit-rate is the first-class metric),
+model fallback for novel tokens (names), rule composite for the
+convention. Track three target layers separately: RTGS (toneless), IPA
+(toneless), IPA+tone (TTS). CTC cannot carry this (WO-banked); ByT5
+is the fallback learner.
+
+Technique doctrine (banked verdicts): CTC cannot model
 phonotactics; RL is knowledge-limited at SFT convergence; LLM teachers
 hallucinate haraqat (never); oracle relabel pays when teacher arms
 disagree; distillation needs decorrelated teachers; greedy beats beam
@@ -58,13 +83,13 @@ on byte students; ByT5 is the byte-level backbone.
 
 | id | task | target |
 |----|------|--------|
-| B1 | Encode the dispatch doctrine: (script class, ambiguity type, data regime) → recipe, as registry defaults | new language gets a recommended recipe automatically |
+| B1 | Encode the dispatch doctrine: (script class, ambiguity type, data regime) → recipe, as registry defaults; include the two structural rules (vocalization-as-composition; abugida lexicon-first) and the relation→function decode policy | new language gets a recommended recipe automatically |
 | B2 | Hebrew: close the data-supply asks (owner), plane large arm, learned-IPA v0 | ReNikud-protocol DER < 5 (int8 < 6) — beats published SOTA |
-| B3 | Arabic: r8 noisy-student chain, r6-morph feature injection, register closure | SadeedDiac DER < 2.0; WikiNews WER < 8 |
+| B3 | Arabic: r8 noisy-student chain, r6-morph feature injection, register closure; valid-reading-rate alongside DER (the ambiguity-aware metric) | SadeedDiac DER < 2.0; WikiNews WER < 8; VRR reported |
 | B4 | Urdu: commercial-license G2P data path (owner decision); diacritization push | diac CER < 3; G2P license cleared |
 | B5 | Persian: register expansion (poetry, colloquial), Arabic-loan vocalization probe | hold CER < 0.7 across registers |
-| B6 | Thai: hybrid latency tier, lexicon release, tiny contract | published PER < 2 |
-| B7 | Khmer: Chuon Nath lexicon-conditioned learner (khmer-dict-spice) | CER < 15 (from 27.4) |
+| B6 | Thai: lexicon-first (Royal Institute dictionary hit-rate as first-class metric), model fallback for novel tokens, RTGS rule composite; three layers tracked (RTGS / IPA / IPA+tone) | published PER < 2; lexicon hit-rate reported; tone accuracy for the TTS layer |
+| B7 | Khmer: Chuon Nath lexicon-conditioned learner (khmer-dict-spice) — the abugida lexicon-first doctrine | CER < 15 (from 27.4); hit-rate reported |
 | B8 | Contribution proof: first 3 community languages through the 2-YAML path | framework story validated by outsiders |
 | B9 | External-benchmark certification: every headline claim reconciled to an external leaderboard protocol package | no self-graded SOTA claims |
 
