@@ -4,6 +4,17 @@ The **contract** for Interscript's phonological layer — the normative
 definition of what a "hidden reading" model is, and the zoo that
 publishes models conforming to it.
 
+Interscript turns the world's transliteration standards from paper
+tables into executable, verifiable software. Authority schemes
+(BGN/PCGN, ISO, UN/UNGEGN, ALA-LC, ICAO, ODNI, ...) are encoded once in
+the ISC language; every runtime produces provably identical output; and
+languages that rules cannot fully carry — Arabic, Urdu, Persian, Hebrew
+diacritization; grapheme-to-phoneme — are served by neural models
+published under the same proof regime: pinned artifacts, sha256
+verification, frozen conformance vectors, byte-exact runtimes. Users
+are libraries (MARC), media (subtitles), gazetteers (GeoNames), and
+name pipelines that must romanize reproducibly under a named authority.
+
 This repo owns three things and nothing else:
 
 1. **The `models.yaml` index** — the stable URL every runtime resolves
@@ -162,6 +173,27 @@ versions (never moving refs), held-out test splits mandatory,
 `UNVERIFIED`/`LicenseRef-*` licenses block publishing, and publication
 requires an explicit owner version, green gates, and frozen conformance
 fixtures (`conformance/CONFORMANCE.md`).
+
+
+## Direction (audit 2026-10)
+
+1. **SOTA everywhere, per-language technique dispatch.** The isxml
+   spine makes a language two YAML files and a technique a registered
+   stage; per-language rows (Hebrew plane/IPA, Arabic noisy-student
+   chains, Thai hybrid tiers, Urdu/Persian base models) land as config
+   PRs gated by machine-checkable thresholds. Refuted techniques (RL
+   for diacritization, LLM teachers, CTC for Thai phonotactics,
+   stage-2 distillation on correlated arms) stay in the registry as
+   negatives so nobody re-treads them.
+2. **Contract-first distribution.** Every model ships only with
+   provenance-encoded corpora, resolved licenses, >=500-sample runtime
+   parity, and frozen conformance fixtures in every client runtime.
+3. **The spec as the standard.** IMF v1 + the index + conformance
+   vectors are the implementable contract; third-party runtimes adopt
+   the contract, not our code.
+4. **Ecosystem surfaces.** api.interscript.org (edge),
+   interscript.org (front door), MARC / subtitles / GeoNames as demand
+   channels.
 
 ## Environment (as implemented by every crystal)
 
