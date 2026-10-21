@@ -157,6 +157,7 @@ def test_gate_results_files_end_to_end(tmp_path: Path) -> None:
         "license": True,
         "conformance": False,
         "regression": True,
+        "budgets": True,
     }
 
 
