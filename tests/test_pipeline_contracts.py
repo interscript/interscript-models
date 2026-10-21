@@ -45,6 +45,7 @@ def test_stage_needs_route_or_params() -> None:
         "model": "byt5-small",
         "stages": [{"stage": "sft"}],
         "gates": {"quality": {"cer_max": 0.1}, "convention": "row-mean",
+                   "anchor": "run-047",
                    "parity": {"agree_min": 0.98}},
     }
     with pytest.raises(ValueError, match="route"):
@@ -59,6 +60,7 @@ def test_no_llm_teachers_for_diacritization() -> None:
         "model": "byt5-small",
         "stages": [{"stage": "distill", "route": "legacy:llm_teacher.py"}],
         "gates": {"quality": {"cer_max": 0.1}, "convention": "row-mean",
+                   "anchor": "run-047",
                    "parity": {"agree_min": 0.98}},
     }
     with pytest.raises(ValueError, match="llm"):
@@ -73,6 +75,7 @@ def test_corpus_ref_pin_format() -> None:
         "model": "byt5-small",
         "stages": [{"stage": "sft", "params": {"epochs": 1}}],
         "gates": {"quality": {"cer_max": 0.1}, "convention": "row-mean",
+                   "anchor": "run-047",
                    "parity": {"agree_min": 0.98}},
     }
     with pytest.raises(ValueError, match="pin"):
@@ -113,6 +116,7 @@ def test_recipe_refs_resolve_into_registry(tmp_path: Path) -> None:
         "model": "byt5-small",
         "stages": [{"stage": "sft", "params": {"epochs": 1}}],
         "gates": {"quality": {"cer_max": 0.1}, "convention": "row-mean",
+                   "anchor": "run-047",
                    "parity": {"agree_min": 0.98}},
     }
     import yaml  # noqa: PLC0415
@@ -139,6 +143,7 @@ def test_unverified_license_is_blocking(tmp_path: Path) -> None:
         "model": "byt5-small",
         "stages": [{"stage": "sft", "params": {"epochs": 1}}],
         "gates": {"quality": {"cer_max": 0.1}, "convention": "row-mean",
+                   "anchor": "run-047",
                    "parity": {"agree_min": 0.98}},
     }
     import yaml  # noqa: PLC0415
@@ -192,6 +197,7 @@ def test_restricted_but_read_license_blocks(tmp_path: Path) -> None:
         "model": "byt5-small",
         "stages": [{"stage": "sft", "params": {"epochs": 1}}],
         "gates": {"quality": {"cer_max": 0.1}, "convention": "row-mean",
+                   "anchor": "run-047",
                    "parity": {"agree_min": 0.98}},
     }
     (tmp_path / "corpora").mkdir()
@@ -206,3 +212,28 @@ def test_load_corpus_roundtrip() -> None:
     c = load_corpus(FIXTURES / "corpora" / "urd-dia.yaml")
     assert c.id == "urd-dia"
     assert "train" in c.splits and "test" in c.splits
+
+
+def test_gate_block_requires_anchor_and_convention() -> None:
+    base = {
+        "id": "xx-anchor",
+        "task": "transliteration",
+        "corpora": {"train": "xx-src@v1", "test": "xx-src@v1#test"},
+        "model": "byt5-small",
+        "stages": [{"stage": "sft", "params": {"epochs": 1}}],
+    }
+    no_anchor = {
+        **base,
+        "gates": {"quality": {"cer_max": 0.1}, "convention": "row-mean",
+                   "parity": {"agree_min": 0.98}},
+    }
+    with pytest.raises(ValueError, match="anchor"):
+        RecipeSpec.model_validate(no_anchor)
+
+    no_convention = {
+        **base,
+        "gates": {"quality": {"cer_max": 0.1}, "anchor": "run-047",
+                   "parity": {"agree_min": 0.98}},
+    }
+    with pytest.raises(ValueError, match="convention"):
+        RecipeSpec.model_validate(no_convention)
