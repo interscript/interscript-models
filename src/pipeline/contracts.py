@@ -116,8 +116,17 @@ class GateSpec(_Strict):
     quality: dict[str, float]
     convention: Literal["row-mean", "corpus-level"]  # the fas scar: a gate
     # number without its aggregation convention is not a gate
+    anchor: str  # the protocol/ledger section this gate line is anchored to
     parity: ParityGate
     license: bool = True
+
+    @field_validator("anchor")
+    @classmethod
+    def _anchor_nonempty(cls, v: str) -> str:
+        if not v.strip():
+            raise ValueError("gates: anchor must name the protocol/ledger "
+                             "section the gate line is anchored to")
+        return v
 
     @field_validator("quality")
     @classmethod

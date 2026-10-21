@@ -8,6 +8,7 @@ stages:
   - stage: sft
     route: legacy:interscript-train/train_urd_g2p_hf.py
 gates:
+  anchor: run-059  # urd-g2p-base gate pass
   convention: row-mean
   quality: {cer_max: 0.17}  # torch greedy 0.16 (artifact ≡ torch under the WO51 single-row contract)
   parity: {mode: single-row, agree_min: 0.98, three_way: true}
