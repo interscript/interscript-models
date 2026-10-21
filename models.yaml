@@ -734,7 +734,7 @@ models:
     - Arab
     - Arab
     precision: fp16
-    filename: fas-diac-base-1.0.zip
+    filename: fas-diac-base-1.0-fp16.zip
     url: https://github.com/interscript/interscript-models/releases/download/fas-diac-base-1.0/fas-diac-base-1.0-fp16.zip
     sha256: 974eddac04c64230ae0669103dd053a3ded9d2bc76ec51d3b50cb2a9ac240e12
     size: 711254175
