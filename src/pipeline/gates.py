@@ -225,11 +225,44 @@ class RegressionGate(BaseGate):
         return GateResult("regression", True, "at parity with registry")
 
 
+
+
+class BudgetGate(BaseGate):
+    """C3: declared performance budgets vs actual index values.
+
+    The index entry may declare perf budgets (size_mb today; latency
+    budgets ride the fixture decode in CI). A declared budget that the
+    actual artifact violates blocks the gate — regressions are release
+    failures, not notes."""
+
+    name = "budgets"
+
+    def check(self, recipe: RecipeSpec, ctx: GateContext) -> GateResult:
+        entry = (ctx.extra or {}).get("index_entry") or {}
+        perf = entry.get("perf") or {}
+        size_mb = perf.get("size_mb")
+        if size_mb is None:
+            return GateResult(self.name, True, "no perf budgets declared")
+        size = entry.get("size")
+        if size is None:
+            return GateResult(self.name, False,
+                              "perf.size_mb declared but index has no size")
+        actual_mb = size / 1_000_000
+        if actual_mb > float(size_mb):
+            return GateResult(self.name, False,
+                              f"artifact {actual_mb:.1f} MB exceeds the "
+                              f"declared {float(size_mb):.1f} MB budget")
+        return GateResult(self.name, True,
+                          f"{actual_mb:.1f} MB within the "
+                          f"{float(size_mb):.1f} MB budget")
+
+
 register_gate(QualityGate())
 register_gate(ParityGate())
 register_gate(LicenseGate())
 register_gate(ConformanceGate())
 register_gate(RegressionGate())
+register_gate(BudgetGate())
 
 
 def evaluate(
