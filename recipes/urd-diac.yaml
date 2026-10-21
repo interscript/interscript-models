@@ -11,6 +11,7 @@ stages:
   - stage: decode_policy
     params: {rep_penalty: 1.2, no_repeat_ngram: 3}
 gates:
+  anchor: run-066  # urd-diac-base gate pass
   convention: row-mean
   quality: {cer_max: 0.045}
   parity: {mode: single-row, agree_min: 0.98, three_way: true}

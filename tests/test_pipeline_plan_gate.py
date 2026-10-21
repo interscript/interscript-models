@@ -114,6 +114,7 @@ def test_license_gate_blocks_publish(tmp_path: Path) -> None:
         "model": "byt5-small",
         "stages": [{"stage": "sft", "params": {"epochs": 1}}],
         "gates": {"quality": {"cer_max": 0.1}, "convention": "row-mean",
+                   "anchor": "run-047",
                   "parity": {"agree_min": 0.98}},
     }
     (tmp_path / "corpora").mkdir()

@@ -33,6 +33,7 @@ def _recipe_body() -> dict:
         "gates": {
             "quality": {"cer_max": 0.1},
             "convention": "row-mean",
+            "anchor": "run-047",
             "parity": {"agree_min": 0.98},
         },
     }

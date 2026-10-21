@@ -63,7 +63,7 @@ def _tmp_registry(tmp_path: Path, license_value: str) -> Path:
         "gates": {
             "quality": {"cer_max": 0.1},
             "parity": {"agree_min": 0.98},
-            "convention": "row-mean",
+            "convention": "row-mean", "anchor": "run-047",
         },
     }
     (tmp_path / "corpora").mkdir()
