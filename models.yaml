@@ -718,8 +718,8 @@ models:
     precision: fp16
     filename: urd-diac-base-1.0-fp16.zip
     url: https://github.com/interscript/interscript-models/releases/download/urd-diac-base-1.0/urd-diac-base-1.0-fp16.zip
-    sha256: 8058220d72df76b31260358070499c2cdb504f030fa10259b48aa05c7caf5711
-    size: 1347487633
+    sha256: 6818469cbeeb58b822279c06e921669e4e79dc174d0b54c37a1be34687068252
+    size: 1347488093
     metrics:
     - name: cer
       value: 3.57
@@ -736,8 +736,8 @@ models:
     precision: fp16
     filename: fas-diac-base-1.0-fp16.zip
     url: https://github.com/interscript/interscript-models/releases/download/fas-diac-base-1.0/fas-diac-base-1.0-fp16.zip
-    sha256: 974eddac04c64230ae0669103dd053a3ded9d2bc76ec51d3b50cb2a9ac240e12
-    size: 711254175
+    sha256: 620b31ab96e6d7588d583fa5119406ea7c08506d483cc8ee253b3c479c6d87f0
+    size: 711254463
     metrics:
     - name: cer
       value: 0.603
