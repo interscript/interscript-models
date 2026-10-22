@@ -1,0 +1,21 @@
+id: tha-phonemic-v3
+task: g2p
+sources:
+  # v3 = v2 (three Apache-2.0 pythainlp lexicons x royin 5.3.5) + the
+  # wiki self-expansion tier: 120k Thai Wikipedia articles (CC-BY-SA),
+  # frequency-filtered vocabulary, readings cross-validated by TWO
+  # independent deterministic engines (pythainlp royin + tltk th2ipa);
+  # only dual-engine-agreement rows ship. On the 40,624 shared words
+  # the engines agree 100.0% — the pipeline is validated by engine
+  # independence. Only novel types join train (20,937); v2's dev/test
+  # splits are byte-identical, so v2-arm vs v3-arm numbers are directly
+  # comparable. No LLM teacher anywhere.
+  - kind: bucket
+    id: Interscript/isx-training/run-080-thai-lexicon-v3
+    revision: run-080-thai-lexicon-v3
+    license: Apache-2.0
+    mount: /data-tha
+splits:
+  train: {path: tha-phonemic-v3-train.jsonl, rows: 130906, sha256: ac0cbea1506550a9596f01720f970f3442d53689870ce8c1f73d1a67f38d0ccb}
+  dev: {path: tha-phonemic-v3-dev.jsonl, rows: 1223, sha256: ed3e193ee0a99df255f588e46e735a8a45f42bb9829f29f2bf7734752d155106}
+  test: {path: tha-phonemic-v3-test.jsonl, rows: 11119, sha256: e0e58034365324ba2585024ad3a7737f3380a8974d06d30aae9d489e5ca342da}
