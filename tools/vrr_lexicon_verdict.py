@@ -13,13 +13,13 @@ Usage (cpu-basic, isx-training mounted rw at /ckpt):
 from __future__ import annotations
 
 import json
-import os
 import time
 import urllib.request
 from collections import defaultdict
 from pathlib import Path
 
-from huggingface_hub import HfApi, hf_hub_download
+from huggingface_hub import hf_hub_download
+
 from sadeedbench.vrr import score_text_vrr, strip_harakat
 
 OUT = Path("/ckpt") / "run-081-vrr"
@@ -61,8 +61,6 @@ def fetch_preds(name: str) -> list[dict]:
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     lex = build_lexicon()
-    api = HfApi(token=os.environ.get("HF_TOKEN"))
-
     verdict = {
         "lexicon": {
             "source": "Interscript/arabic-r8@main tashkeela-full/train-001..003",
