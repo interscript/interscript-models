@@ -111,14 +111,20 @@ blocked upstream, not on models.
 Artifacts are plain public downloads; any IMF v1 runtime works
 (single-row greedy decode: ids = byte + 3 with trailing EOS —
 `conformance/CONFORMANCE.md`). The reference python loader is
-`runtime/src/interscript_ml` (conformance-proven).
+`runtime/src/interscript_ml` (conformance-proven, source of the frozen
+fixtures).
 
-Point a crystal's index at the current release and resolve by id:
+Runtime status:
 
-```sh
-export SECRYST_INDEX="https://github.com/interscript/interscript-models/releases/download/index-v12/models-index.yaml"   # python crystal
-export INTERSCRIPT_ML_INDEX="$SECRYST_INDEX"   # ruby gem (archived: override is required)
-```
+| runtime | release | state |
+|---|---|---|
+| Python | reference loader in this repo (`runtime/src/interscript_ml`) | current; PyPI distribution pending publisher registration |
+| TypeScript | `interscript` npm **5.9.0** | current — behaviorally identical to main, conformance matrix green; pins `index-v12` (no env override) |
+| Ruby | `interscript` gem **3.2.0** | decode caveat — predates the 512-step cap and the UTF-8 scrub: outputs truncate at ~100 tokens and invalid UTF-8 raises instead of U+FFFD. Fine for short strings; for long documents use the reference loader or npm until a patch release |
+
+All three pin `index-v12` by default — no override needed for the
+models above. Python (`SECRYST_INDEX`) and ruby
+(`INTERSCRIPT_ML_INDEX`) accept an override to track a newer index.
 
 ```python
 from interscript_ml import Model           # reference runtime (this repo)
@@ -126,9 +132,24 @@ m = Model.load("urd-diac-base-1.0")        # resolves via the index, verifies sh
 print(m.translate("کلیدهای پرکینزمانند"))
 ```
 
-Release pins move per index tag (v11: urd-diac-base; v12: urd-g2p-base,
-fas-diac-base). Crystal releases re-pin on their own cadence — until
-then the env override above is the supported path.
+Artifact notice (2026-10-21): `urd-diac-base-1.0` and
+`fas-diac-base-1.0` were re-published with exporter-side fp16→fp32
+graph-IO normalization — same weights, portable graph boundary (node
+ONNX Runtime no longer corrupts fp16 bytes; the ruby loader, which
+lacks Float16 materialization, decodes them). The re-published digests
+are in `index-v12`; an index fetched before that date fails loudly on
+sha256 verification and must be re-fetched.
+
+## Not yet ready
+
+In training, not shipped: the Arabic r8 noisy-student chain (stage 2),
+the Khmer lexicon-conditioned arm, and the Thai lexicon-first arm —
+each ships only after its stage-3 external-benchmark verdict clears
+the gates. `urd-g2p-base-1.0` ships but is **research-only**
+(non-commercial training data). `models.yaml` also carries
+legacy/superseded generations (e.g. `ara-diac-1.0`, `layerdrop`,
+`ara-diac-small-1.0/2.0`) that resolve via the index but are not
+recommended for new use; the table above is the recommended set.
 
 ## Repositories
 
