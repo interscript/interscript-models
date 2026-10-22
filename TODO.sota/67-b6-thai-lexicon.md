@@ -1,6 +1,15 @@
 # WO67 — B6: Thai — lexicon-first, three layers (PER < 2)
 
-Status: IN_PROGRESS (RTGS encodings landed maps#204; lexicon corpus staged; training arm + IPA layers = WO82 pending)
+Status: IN_PROGRESS — v1 arm NEGATIVE (2026-10-22): ByT5-small on the
+31,869-pair v1 corpus converged to dev PER 22.56% (33,429 tokens,
+string CER 19.70%, 3,225 held-out rows) — plateau by epoch 3, not a
+viable novel-token fallback. Diagnosis: DATA, not architecture (the
+32k ceiling was an extraction artifact — 6,291 ORST rows were dropped
+by an old engine defect, and thai_words/volubilis were never tapped).
+Fix in flight: tha-phonemic-v2 (122,311 pairs, corpora/tha-phonemic-v2.yaml,
+models#343) training as run-080-thai-lex-v2; wiki-vocabulary
+self-expansion (two-engine cross-check) building as run-080-thai-wiki-4.
+RTGS encodings landed maps#204; IPA layers = WO82.
 Lexicon phase DONE: corpora/tha-phonemic.yaml -- 28,644 train / 3,225
 test (word -> phonemic-with-tones pairs, ORST vocabulary x pythainlp
 royin engine); 6,291 engine-corrupt rows filtered and documented;
