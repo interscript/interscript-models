@@ -252,9 +252,27 @@ class BudgetGate(BaseGate):
             return GateResult(self.name, False,
                               f"artifact {actual_mb:.1f} MB exceeds the "
                               f"declared {float(size_mb):.1f} MB budget")
-        return GateResult(self.name, True,
-                          f"{actual_mb:.1f} MB within the "
-                          f"{float(size_mb):.1f} MB budget")
+        detail = (f"{actual_mb:.1f} MB within the "
+                  f"{float(size_mb):.1f} MB budget")
+
+        budget_ms = perf.get("decode_ms_per_row")
+        if budget_ms is not None:
+            measured = (ctx.extra or {}).get("measured") or {}
+            ms = measured.get("decode_ms_per_row")
+            if ms is None:
+                return GateResult(
+                    self.name, False,
+                    "perf.decode_ms_per_row declared but never assumed: "
+                    "no measurement supplied — run tools/bench_decode.py "
+                    "or the CI decode bench")
+            if float(ms) > float(budget_ms):
+                return GateResult(
+                    self.name, False,
+                    f"decode {float(ms):.1f} ms/row exceeds the declared "
+                    f"{float(budget_ms):.1f} ms/row budget")
+            detail += (f"; decode {float(ms):.1f} ms/row within the "
+                       f"{float(budget_ms):.1f} ms/row budget")
+        return GateResult(self.name, True, detail)
 
 
 register_gate(QualityGate())
