@@ -1,6 +1,17 @@
 # WO68 — B7: Khmer — Chuon Nath lexicon conditioning (CER < 15)
 
-Status: IN_PROGRESS (phase 1 landed 2026-10-21; phase 2 = training arm launch)
+Status: IN_PROGRESS — Chuon Nath reading arm TRAINED (2026-10-22,
+run-080-khm-lex-2): ByT5-small on 2,935 gold pairs -> dev CER 15.02%
+(326 held-out dictionary rows, 8 epochs, descending to the end).
+Caveats: dictionary-internal dev (memorization scale), NOT novel-word
+performance; SBBIC's 72,048 staged rows are word-only (ipa: null) —
+**the open Khmer phoneme supply is exhausted at ~3.3k gold pairs**
+(ipa_dic.txt 3,286 lines = the whole local source). The CER < 15
+khm-latn target therefore runs through (a) the khm-latn lineage
+recovery (Khmer->Latin pairs, different and larger supply) or (b)
+owner-gated licensing (SEAlang / full Chuon Nath IPA). GPU finding:
+ByT5-small + 2.9k pairs trains to sub-16% in ~7 min — the learner is
+never the bottleneck here.
 Phase 1 DONE: khm-dict corpus built + pinned (corpora/khm-dict.yaml) —
 3,261 gold Chuon-Nath (word→IPA) pairs, 326-row holdout, 72,048 SBBIC
 vocab rows; staged at bucket Interscript/isx-training/run-080-khm-lexicon
