@@ -291,7 +291,7 @@ class GraphIoGate(BaseGate):
                     for t in infos:
                         tt = t.type.tensor_type
                         if tt.elem_type == TensorProto.FLOAT16:
-                            offenders.append(f"{member}:{t.name}")
+                            offenders.append(f"{member} {kind} {t.name}")
         if offenders:
             return GateResult(
                 self.name, False,
