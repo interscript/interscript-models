@@ -10,7 +10,6 @@ never instead of it.
 from __future__ import annotations
 
 import re
-import unicodedata
 
 # Arabic diacritics: tanwin + harakat + shadda/sukun marks (0610-061A),
 # honorific/annotation marks (064B-065F), superscript alef (0670).
@@ -53,7 +52,7 @@ def score_predictions_vrr(preds: list[str],
         raise ValueError(
             f"preds and licensed lengths differ: {len(preds)} vs "
             f"{len(licensed)}")
-    valid = sum(1 for p, ls in zip(preds, licensed) if p in ls)
+    valid = sum(1 for p, ls in zip(preds, licensed, strict=False) if p in ls)
     return {
         "vrr": valid / len(preds) if preds else 0.0,
         "valid": valid,
@@ -79,7 +78,7 @@ def score_text_vrr(src: str, pred: str, lexicon: dict[str, set[str]]) -> tuple[i
     if not src_words:
         return 0, 0
     valid = 0
-    for sw, pw in zip(src_words, pred_words):
+    for sw, pw in zip(src_words, pred_words, strict=False):
         if pw in lexicon.get(strip_harakat(sw), ()):  # exact licensed reading
             valid += 1
     return valid, len(src_words)
