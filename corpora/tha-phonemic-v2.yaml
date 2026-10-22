@@ -1,0 +1,19 @@
+id: tha-phonemic-v2
+task: g2p
+sources:
+  # v2 expansion of tha-phonemic (owner-directed 2026-10-22 after the
+  # epoch-2 plateau): union of three Apache-2.0 pythainlp-packaged
+  # lexicons — ORST 38,160, thai_words 62,101, volubilis 107,852 —
+  # transliterated by pythainlp royin 5.3.5, the SAME deterministic
+  # engine as v1 but at a version where the cluster/syllable-repeat
+  # defect class is fixed: rejections fell 6,291 (17%) -> 1,167 (0.95%).
+  # v1 stays pinned as the record of what trained run-080-thai-lex.
+  - kind: bucket
+    id: Interscript/isx-training/run-080-thai-lexicon-v2
+    revision: run-080-thai-lexicon-v2
+    license: Apache-2.0
+    mount: /data-tha
+splits:
+  train: {path: tha-phonemic-v2-train.jsonl, rows: 109969, sha256: 0032d7816b1ab17074f7f0cc179fe799d5274eaa2dcc921a93dd935ac3e01ef8}
+  dev: {path: tha-phonemic-v2-dev.jsonl, rows: 1223, sha256: ed3e193ee0a99df255f588e46e735a8a45f42bb9829f29f2bf7734752d155106}
+  test: {path: tha-phonemic-v2-test.jsonl, rows: 11119, sha256: e0e58034365324ba2585024ad3a7737f3380a8974d06d30aae9d489e5ca342da}
