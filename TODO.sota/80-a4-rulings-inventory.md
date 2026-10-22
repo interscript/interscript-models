@@ -1,7 +1,11 @@
 # WO80 — A4 stage 1: the ISC semantic rulings inventory
 
-Status: **IN PROGRESS** (inventory seeded 2026-10-21; each point needs
-its empirical ruling + test vector)
+Status: **IN PROGRESS** — 14 of 10 points empirically ruled
+(batches 1-4, ruby#818/#820/#821/#822; 18 vectors). Remaining open:
+point 4's ML-adapter contract (secryst/rababa provisioning semantics),
+point 8's local alias blocks, and the stray-identifier hazard
+(ruby#822 pins it; stricter parse gated on a clean 293-map x
+3-compiler parse).
 The IS-1 spec document (A4's vehicle, WO74 dependency) is authored from
 this inventory: every point gets (a) the grammar anchor, (b) the ruby
 interpreter's actual behavior verified by a test, (c) a normative
