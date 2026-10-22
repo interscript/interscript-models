@@ -1,6 +1,6 @@
 # WO64 — B3: Arabic to external SOTA (DER < 2.0, WikiNews < 8)
 
-Status: PLANNED · launchable now
+Status: IN_PROGRESS (r8 stage 2 training 2026-10-22, stage-3 SadeedDiac eval auto-chained; VRR closure = WO81)
 Goal: SadeedDiac DER < 2.0 (canonical 2.29), WikiNews multiref WER < 8
 (news specialist 8.85). VRR reported.
 Method: r8 noisy-student chain — synthesize with the canonical r7

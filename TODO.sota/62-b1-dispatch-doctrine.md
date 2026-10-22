@@ -1,6 +1,6 @@
 # WO62 — B1: the dispatch doctrine as registry defaults
 
-Status: PLANNED · Plane B
+Status: IN_PROGRESS (doctrine written: WO56 structural rules + E2 paper; registry-as-config pending)
 Goal: encode the technique-dispatch table — (script class, ambiguity
 type, data regime) → recipe — as registry defaults so a new language
 gets a recommended recipe automatically.

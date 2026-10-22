@@ -1,6 +1,6 @@
 # WO68 — B7: Khmer — Chuon Nath lexicon conditioning (CER < 15)
 
-Status: IN_PROGRESS (phase 1 landed 2026-10-21; phase 2 = training arm)
+Status: IN_PROGRESS (phase 1 landed 2026-10-21; phase 2 = training arm launch)
 Phase 1 DONE: khm-dict corpus built + pinned (corpora/khm-dict.yaml) —
 3,261 gold Chuon-Nath (word→IPA) pairs, 326-row holdout, 72,048 SBBIC
 vocab rows; staged at bucket Interscript/isx-training/run-080-khm-lexicon
