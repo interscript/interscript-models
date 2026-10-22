@@ -1,6 +1,6 @@
 # WO78 — E3: frozen benchmarks as citable artifacts
 
-Status: PLANNED
+Status: IN_PROGRESS (frontier-predictions-v1 shipped; conformance-suite bundle pending)
 Goal: eval protocols + conformance suites published as citable,
 versioned artifacts.
 Method: protocol packages (WO70) + conformance vectors bundled as

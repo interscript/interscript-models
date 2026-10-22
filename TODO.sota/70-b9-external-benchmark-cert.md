@@ -1,6 +1,6 @@
 # WO70 — B9: external-benchmark certification
 
-Status: PLANNED
+Status: IN_PROGRESS (SadeedDiac protocol shipped as interscript-ml-tools; protocol-package consolidation pending)
 Goal: no self-graded SOTA claims — every headline reconciles to an
 external leaderboard/protocol package.
 Method: per language, pin the external protocol (Arabic: SadeedDiac +

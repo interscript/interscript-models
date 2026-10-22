@@ -1,6 +1,6 @@
 # WO57 — A1: authority-completeness audit
 
-Status: PLANNED · Plane A
+Status: IN_PROGRESS (phase 1 DONE 2026-10-21: docs/coverage ledger + three authority diffs — alalc 30/47, iso, bgnpcgn 17 gaps; phase 2 = encode the gaps)
 Goal: enumerate the UNIVERSE of authority romanization/transliteration
 systems and diff it against the 293 encoded in `maps/`. Every gap is
 either encoded or cited out-of-scope with an authority reference.

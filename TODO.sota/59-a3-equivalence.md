@@ -1,6 +1,6 @@
 # WO59 — A3: system-equivalence checker + distinguishing corpora
 
-Status: PLANNED · Plane A
+Status: MOSTLY DONE (ruby shipped #816 + self-testing CI #819; ts/py port pending)
 Goal: mechanically decide/estimate whether two systems coincide, and
 produce the minimal test corpus that distinguishes them.
 Method:
