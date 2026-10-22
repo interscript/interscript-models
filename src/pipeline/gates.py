@@ -257,12 +257,56 @@ class BudgetGate(BaseGate):
                           f"{float(size_mb):.1f} MB budget")
 
 
+class GraphIoGate(BaseGate):
+    """WO83: no artifact ships fp16 at the graph boundary. Weights may
+    stay fp16 (WO79 owner decision); every graph input and output must
+    be fp32 (or non-float). Enforced here so the exporter default can
+    never silently regress."""
+
+    name = "graph_io"
+
+    def check(self, recipe: RecipeSpec, ctx: GateContext) -> GateResult:
+        art = (ctx.extra or {}).get("artifact_path")
+        if not art:
+            return GateResult(self.name, True,
+                              "artifact not provided — IO guard not "
+                              "evaluated (enforced at export/publish)")
+        path = Path(art)
+        if not path.is_file():
+            return GateResult(self.name, False,
+                              f"artifact missing: {path}")
+        import zipfile
+
+        import onnx
+        from onnx import TensorProto
+
+        offenders = []
+        with zipfile.ZipFile(path) as z:
+            for member in z.namelist():
+                if not member.endswith(".onnx"):
+                    continue
+                m = onnx.load_from_string(z.read(member))
+                for kind, infos in (("input", m.graph.input),
+                                    ("output", m.graph.output)):
+                    for t in infos:
+                        tt = t.type.tensor_type
+                        if tt.elem_type == TensorProto.FLOAT16:
+                            offenders.append(f"{member}:{t.name}")
+        if offenders:
+            return GateResult(
+                self.name, False,
+                "fp16 at the graph boundary (WO79): "
+                + ", ".join(offenders))
+        return GateResult(self.name, True, "graph boundary fp32-clean")
+
+
 register_gate(QualityGate())
 register_gate(ParityGate())
 register_gate(LicenseGate())
 register_gate(ConformanceGate())
 register_gate(RegressionGate())
 register_gate(BudgetGate())
+register_gate(GraphIoGate())
 
 
 def evaluate(
