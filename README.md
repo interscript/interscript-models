@@ -21,8 +21,8 @@ This repo owns three things and nothing else:
    model ids against (with per-artifact sha256s and split-part support).
 2. **The IMF v1 model-zip format** — the artifact contract:
    `metadata.yaml` + ONNX graphs + member sha256 manifest. The normative
-   text is [SPEC.md](SPEC.md); the reference loader now lives in the
-   [Python crystal](https://github.com/secryst/secryst-py).
+   text is [SPEC.md](SPEC.md); the reference loader is [`runtime/` in this
+   repo](https://github.com/interscript/interscript-models/tree/main/runtime).
 3. **The model zoo + publish pipeline** — teachers from
    [secryst-train](https://github.com/secryst/secryst-train)
    are distilled, gated (parity written into the artifact), and released
@@ -34,10 +34,10 @@ This repo owns three things and nothing else:
 |---|---|
 | Benchmark | [Misraj/SadeedDiac-25](https://huggingface.co/datasets/Misraj/SadeedDiac-25) (auto-fetched) |
 | Protocol CLI | `pip install interscript-ml-tools[sadeed]` ([PyPI](https://pypi.org/project/interscript-ml-tools/)) |
-| Python runtime | `pip install secryst` ([PyPI](https://pypi.org/project/secryst/)) |
+| Python runtime | [`runtime/`](runtime/) in this repo — the reference loader (PyPI distribution pending publisher registration) |
 | Raw predictions, every frontier run | Release [`frontier-predictions-v1`](https://github.com/interscript/interscript-models/releases/tag/frontier-predictions-v1) |
 | Teachers + provenance labels | Release [`teachers-arabic-v1`](https://github.com/interscript/interscript-models/releases/tag/teachers-arabic-v1) |
-| Student artifacts | `models.yaml` (index-v5) — sha256-verified in every runtime |
+| Student artifacts | `models.yaml` (index-v12) — sha256-verified in every runtime |
 
     interscript-sadeed-eval score --preds <file> --data Misraj/SadeedDiac-25
 
@@ -157,7 +157,7 @@ recommended for new use; the table above is the recommended set.
 |---|---|
 | [interscript/interscript-models](https://github.com/interscript/interscript-models) | this — contract + zoo + isxml framework |
 | [interscript/interscript](https://github.com/interscript/interscript) | ISC map DSL (the transliteration contract) |
-| [interscript/interscript-ruby](https://github.com/interscript/interscript-ruby) | Ruby ISC gem (maps; the ML-model crystal is archived, see below) |
+| [interscript/interscript-ruby](https://github.com/interscript/interscript-ruby) | Ruby ISC gem — maps + `Interscript::ML` model runtime |
 | [interscript/interscript-py](https://github.com/interscript/interscript-py) | Python crystal — live |
 | [secryst/secryst](https://github.com/secryst/secryst) · [secryst/secryst-py](https://github.com/secryst/secryst-py) · [secryst/secryst-ts](https://github.com/secryst/secryst-ts) | **archived** original crystals (est. 2020; the ML ruby gem's default index URL is dead — override `INTERSCRIPT_ML_INDEX`) |
 | [interscript/interscript-train](https://github.com/interscript/interscript-train) · [rababa-farsi](https://github.com/interscript/rababa-farsi) · [rababa-urdu](https://github.com/interscript/rababa-urdu) | archived origins of the train monorepo (full history merged there) |
