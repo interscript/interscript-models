@@ -1,6 +1,6 @@
 # WO60 — A4: IS-1 v2 — denotational semantics
 
-Status: PLANNED · Plane A
+Status: IN_PROGRESS (9 rulings frozen #818/#820/#821; remaining: metadata/tests, item algebra, charset, funcall — see WO80 inventory)
 Goal: complete the ISC specification with a semantics section so every
 runtime behavior is derivable from the document; zero open rulings.
 Method:

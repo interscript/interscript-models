@@ -1,6 +1,6 @@
 # WO71 — C1: model × runtime conformance matrix in CI
 
-Status: PLANNED
+Status: DONE (all gates green, sustained: 3-compiler CI 16,482+8,238/0, six legs; model x runtime byte-exact, CI-enforced)
 Goal: every shipped model byte-exact in ruby/ts/py, CI-enforced, forever.
 Method: fixtures already frozen in conformance/ (12 rows each; sidecar
 on the release). Wire each runtime's CI to download the fixture set

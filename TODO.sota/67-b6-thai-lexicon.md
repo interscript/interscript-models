@@ -1,6 +1,6 @@
 # WO67 — B6: Thai — lexicon-first, three layers (PER < 2)
 
-Status: IN_PROGRESS (lexicon phase landed 2026-10-21)
+Status: IN_PROGRESS (RTGS encodings landed maps#204; lexicon corpus staged; training arm + IPA layers = WO82 pending)
 Lexicon phase DONE: corpora/tha-phonemic.yaml -- 28,644 train / 3,225
 test (word -> phonemic-with-tones pairs, ORST vocabulary x pythainlp
 royin engine); 6,291 engine-corrupt rows filtered and documented;

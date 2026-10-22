@@ -1,6 +1,6 @@
 # WO65 — B4: Urdu — diac CER < 3; G2P license path
 
-Status: PLANNED · G2P half BLOCKED-OWNER (commercial-license data)
+Status: IN_PROGRESS · G2P half BLOCKED-OWNER (commercial-license data); diac push 3.57 → < 3 pending
 Goal: urd-diac 3.57 → CER < 3; urd-g2p research-only → commercial-
 usable data lineage.
 Method: diac — oracle relabel arms only if teachers decorrelate (banked

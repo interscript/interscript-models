@@ -1,6 +1,6 @@
 # WO69 — B8: prove the contribution story (3 community languages)
 
-Status: PLANNED
+Status: PLANNED (intake doc = WO86)
 Goal: three external-contributor languages go end-to-end through the
 2-YAML path (corpora + recipe), landing as shipped models without
 framework forks.
