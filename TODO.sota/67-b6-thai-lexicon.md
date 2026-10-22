@@ -9,6 +9,15 @@ by an old engine defect, and thai_words/volubilis were never tapped).
 Fix in flight: tha-phonemic-v2 (122,311 pairs, corpora/tha-phonemic-v2.yaml,
 models#343) training as run-080-thai-lex-v2; wiki-vocabulary
 self-expansion (two-engine cross-check) building as run-080-thai-wiki-4.
+
+**Controlled-eval matrix (2026-10-23, v1 test split = 3,225 ORST rows,
+PER over phoneme tokens):** v1 22.56 | v2 (110k pairs, 3ep BS32)
+**39.1** | v3 (131k incl. wiki tier, same schedule) **39.5**. More
+data at a 5x-smaller update budget is WORSE like-for-like; both
+big-data arms degrade identically -> the schedule is the confound,
+not the corpora. run-080-thai-lex-v4 (v3 data, BS4 x 2ep ~= 65k
+updates, matching v1's budget) is the control; wiki tier's own value
+shows only after the schedule is fixed.
 RTGS encodings landed maps#204; IPA layers = WO82.
 Lexicon phase DONE: corpora/tha-phonemic.yaml -- 28,644 train / 3,225
 test (word -> phonemic-with-tones pairs, ORST vocabulary x pythainlp
