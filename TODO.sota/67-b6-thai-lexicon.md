@@ -25,6 +25,18 @@ the clean eval changes no conclusions and removes the 15-row noise
 from every published number. v1-lineage + v6a numbers are now the
 only quotable Thai PERs.
 
+**v6b curriculum verdict (2026-10-24): NEGATIVE — and causally
+decisive.** Two curriculum epochs on the full mix took the SAME model
+from 19.29 to **PER 34.66%** (clean split): compound-heavy exposure
+re-infects the length prior regardless of initialization. The
+mechanism is exposure balance, not init.
+**SHIP DECISION: v6a (run-080-thai-lex-v6a, oepoch-3, PER 19.29%) is
+the Thai fallback-learner release candidate.** Curriculum redesign
+(filtered-data fine-tune at low LR, or compound-token downweighting
+rather than whole rows) is the recorded follow-up if long-word
+coverage is ever re-attempted. Export/parity/fixtures next; artifact
+id + version = owner call at publish.
+
 **Diagnostic chain (2026-10-23, five verified findings):**
 1. Engine drift = 0.0000 PER — royin 5.3.5 output is byte-identical to
    the stored v1 targets on clean rows; convention is NOT the issue.
