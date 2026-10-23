@@ -18,6 +18,26 @@ big-data arms degrade identically -> the schedule is the confound,
 not the corpora. run-080-thai-lex-v4 (v3 data, BS4 x 2ep ~= 65k
 updates, matching v1's budget) is the control; wiki tier's own value
 shows only after the schedule is fixed.
+
+**Diagnostic chain (2026-10-23, five verified findings):**
+1. Engine drift = 0.0000 PER — royin 5.3.5 output is byte-identical to
+   the stored v1 targets on clean rows; convention is NOT the issue.
+2. v1-test carries 15 unfiltered old-engine defect rows (1.5% of gold
+   tokens; e.g. 'd u ŋ' x8) — small, but the eval set needs a clean
+   rebuild.
+3. v1's split was clean (0 overlap) — its 22.56 is honest
+   in-distribution generalization on orst-only.
+4. v2/v3/v4 TRAIN on 790 of the v1-test words (24.5%) and still lose —
+   unseen-word PER is worse still (~50% est.).
+5. Mechanism: the expanded corpora shifted the output-LENGTH prior
+   (volubilis avg 25.6 phoneme tokens vs test 10.4) — long-compound
+   dominance wrecks short-word generation. v4-ep0 at 41.8 PER also
+   rules out update-budget alone.
+**v5 (run-080-thai-lex-v5)** = the corrective: 92,669 rows filtered to
+<=20 phoneme tokens (deployment-length distribution), BS4 x 2ep.
+Decision rule: v5 ~<= 22.56 => recipe found (then scale epochs, re-add
+filtered compounds for coverage); v5 still ~39 => the mechanism is
+wrong and the next suspect is per-source training curricula.
 RTGS encodings landed maps#204; IPA layers = WO82.
 Lexicon phase DONE: corpora/tha-phonemic.yaml -- 28,644 train / 3,225
 test (word -> phonemic-with-tones pairs, ORST vocabulary x pythainlp
