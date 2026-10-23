@@ -36,8 +36,14 @@ def main() -> None:
     ap.add_argument("--vectors", type=Path, default=None)
     args = ap.parse_args()
 
-    vectors_path = args.vectors or (
-        REPO / "conformance" / f"{args.model_id}-vectors.json")
+    vectors_path = args.vectors
+    if vectors_path is None:
+        # vector files predate full version suffixes
+        # (urd-diac-base-vectors.json for urd-diac-base-1.0)
+        matches = sorted((REPO / "conformance").glob(
+            f"{args.model_id.split('-')[0]}*{args.model_id.split('-')[1]}*-vectors.json"))
+        vectors_path = matches[0] if matches else (
+            REPO / "conformance" / f"{args.model_id}-vectors.json")
     vectors = json.loads(vectors_path.read_text(encoding="utf-8"))
     rows = vectors["vectors"]
     if not rows:
