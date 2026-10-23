@@ -35,9 +35,17 @@ shows only after the schedule is fixed.
    rules out update-budget alone.
 **v5 (run-080-thai-lex-v5)** = the corrective: 92,669 rows filtered to
 <=20 phoneme tokens (deployment-length distribution), BS4 x 2ep.
-Decision rule: v5 ~<= 22.56 => recipe found (then scale epochs, re-add
-filtered compounds for coverage); v5 still ~39 => the mechanism is
-wrong and the next suspect is per-source training curricula.
+**V5 VERDICT (2026-10-23): POSITIVE — recipe found.** v5 (92,669
+length-filtered rows, BS4 x 2ep) scores **PER 20.25%** on the v1
+split — BEATS the v1 reference (22.56) with 4.1x more training types
+and honest generalization, while v4-final (37.4, unfiltered, same
+schedule) proves the schedule alone never fixed it. The
+length-prior mechanism is confirmed end to end. NEXT: (a) rebuild the
+eval set without its 15 defect rows and re-score everything; (b)
+convergence arm — v5 recipe, 4-6 epochs, optionally re-add filtered
+compounds in a final curriculum phase for long-word coverage; (c) the
+converged model becomes the fallback-learner release candidate
+(fixtures + gates).
 RTGS encodings landed maps#204; IPA layers = WO82.
 Lexicon phase DONE: corpora/tha-phonemic.yaml -- 28,644 train / 3,225
 test (word -> phonemic-with-tones pairs, ORST vocabulary x pythainlp
