@@ -19,6 +19,12 @@ not the corpora. run-080-thai-lex-v4 (v3 data, BS4 x 2ep ~= 65k
 updates, matching v1's budget) is the control; wiki tier's own value
 shows only after the schedule is fixed.
 
+**Clean-split matrix FINAL (2026-10-23, defect-free eval = 3,210
+rows):** v1 **21.77** | v2 38.64 | v3 39.05 | v6a phase-1 **19.29** —
+the clean eval changes no conclusions and removes the 15-row noise
+from every published number. v1-lineage + v6a numbers are now the
+only quotable Thai PERs.
+
 **Diagnostic chain (2026-10-23, five verified findings):**
 1. Engine drift = 0.0000 PER — royin 5.3.5 output is byte-identical to
    the stored v1 targets on clean rows; convention is NOT the issue.
