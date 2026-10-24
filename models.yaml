@@ -204,8 +204,8 @@ models:
     - Thai
     - IPA
     precision: int4
-    filename: tha-g2p-small-1.0-int4.zip
-    url: https://github.com/interscript/interscript-models/releases/download/tha-g2p-small-1.0/tha-g2p-small-1.0-int4.zip
+    filename: tha-phonemic-small-1.0-int4.zip
+    url: https://github.com/interscript/interscript-models/releases/download/tha-g2p-small-1.0/tha-phonemic-small-1.0-int4.zip
     sha256: e5d12a3d65c6ac39fa08f52c975c99ff7a51c3e7b7aca7fbb461d2de2345e4cb
     size: 201958073
     metrics:
@@ -356,8 +356,8 @@ models:
     - Arab
     - Arab
     precision: int8
-    filename: ara-diac-small-1.0-int8.zip
-    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-small-1.0/ara-diac-small-1.0-int8.zip
+    filename: ara-vocalized-small-1.0-int8.zip
+    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-small-1.0/ara-vocalized-small-1.0-int8.zip
     sha256: af247d837bee7e755b5287102cfb715c48dc90c2cf41ec1c41e7238e1a72b678
     size: 256959713
     metrics:
@@ -404,8 +404,8 @@ models:
     - Arab
     - Arab
     precision: int8
-    filename: ara-diac-small-2.0-int8.zip
-    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-small-2.0/ara-diac-small-2.0-int8.zip
+    filename: ara-vocalized-small-2.0-int8.zip
+    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-small-2.0/ara-vocalized-small-2.0-int8.zip
     sha256: f4d07acdaf9c18cded97e15e0c5636e6cee90de2fa32c5a373a44c0cc912bf50
     size: 264043016
     metrics:
@@ -458,8 +458,8 @@ models:
     - Arab
     - Arab
     precision: int8
-    filename: ara-diac-2.0-int8.zip
-    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-2.0/ara-diac-2.0-int8.zip
+    filename: ara-vocalized-2.0-int8.zip
+    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-2.0/ara-vocalized-2.0-int8.zip
     sha256: 7f1d55d43f97564ad62fc14a7e0cabe52c01d8298b747677a75900de748bb6c6
     size: 519207340
     metrics:
@@ -505,8 +505,8 @@ models:
     - Arab
     - Arab
     precision: int8
-    filename: ara-diac-small-2.1-int8.zip
-    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-small-2.1/ara-diac-small-2.1-int8.zip
+    filename: ara-vocalized-small-2.1-int8.zip
+    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-small-2.1/ara-vocalized-small-2.1-int8.zip
     sha256: 9b4e4aad2ab53a8cfbec432a78e27b409376627243aec3fd043f06574552a32b
     size: 267965657
     metrics:
@@ -547,8 +547,8 @@ models:
     - Arab
     - Arab
     precision: int8
-    filename: ara-diac-layerdrop-1.0-int8.zip
-    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-layerdrop-1.0/ara-diac-layerdrop-1.0-int8.zip
+    filename: ara-vocalized-layerdrop-1.0-int8.zip
+    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-layerdrop-1.0/ara-vocalized-layerdrop-1.0-int8.zip
     sha256: 68dcc06cd8861e017c4d4912ce3e1fe057d78b79b0a7b6246ae8603c99930963
     size: 191603048
     metrics:
@@ -568,8 +568,8 @@ models:
     - Arab
     - Arab
     precision: int4
-    filename: ara-diac-layerdrop-1.0-int4.zip
-    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-layerdrop-1.0/ara-diac-layerdrop-1.0-int4.zip
+    filename: ara-vocalized-layerdrop-1.0-int4.zip
+    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-layerdrop-1.0/ara-vocalized-layerdrop-1.0-int4.zip
     sha256: 352e02105645a6e283e2c3602505bea0e90085b741666fd863e478e4835e7bc9
     size: 145195702
     metrics:
@@ -589,8 +589,8 @@ models:
     - Arab
     - Arab
     precision: fp16
-    filename: ara-diac-small-2.1-fp16.zip
-    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-small-2.1/ara-diac-small-2.1-fp16.zip
+    filename: ara-vocalized-small-2.1-fp16.zip
+    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-small-2.1/ara-vocalized-small-2.1-fp16.zip
     sha256: 395ee72137d1cdfa9cd53bf167ad0d2f5fe5cbf9a5b62f118e0c9e0fa63c972d
     size: 706351903
     metrics:
@@ -632,8 +632,8 @@ models:
     - Arab
     kind: plane
     precision: int8
-    filename: ara-diac-plane-1.0.zip
-    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-plane-1.0/ara-diac-plane-1.0.zip
+    filename: ara-vocalized-plane-1.0.zip
+    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-plane-1.0/ara-vocalized-plane-1.0.zip
     sha256: 1310204e36acc4fcbb988e9f9c46cf6422e7ea3860bd467fb469ea0ad4d39ef3
     size: 219076965
     metrics:
@@ -651,8 +651,8 @@ models:
     - Arab
     kind: plane
     precision: int8
-    filename: ara-diac-plane-large-1.0.zip
-    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-plane-large-1.0/ara-diac-plane-large-1.0.zip
+    filename: ara-vocalized-plane-large-1.0.zip
+    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-plane-large-1.0/ara-vocalized-plane-large-1.0.zip
     sha256: a66df2e12ddc935e8ab59836fd45486f17ac40b764c1619c03b2b0e191608a52
     size: 866052488
     metrics:
@@ -673,8 +673,8 @@ models:
     - Arab
     kind: imf-v1
     precision: int8
-    filename: ara-diac-news-1.0.zip
-    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-news-1.0/ara-diac-news-1.0.zip
+    filename: ara-vocalized-news-1.0.zip
+    url: https://github.com/interscript/interscript-models/releases/download/ara-diac-news-1.0/ara-vocalized-news-1.0.zip
     sha256: e5a52b1530dfa6d6c7ef8970443206ce33af865d0337a58d145945adab33484e
     size: 399018923
     metrics:
@@ -695,8 +695,8 @@ models:
     - Hebr
     kind: plane
     precision: int8
-    filename: heb-diac-plane-1.0.zip
-    url: https://github.com/interscript/interscript-models/releases/download/heb-diac-plane-1.0/heb-diac-plane-1.0.zip
+    filename: heb-vocalized-plane-1.0.zip
+    url: https://github.com/interscript/interscript-models/releases/download/heb-diac-plane-1.0/heb-vocalized-plane-1.0.zip
     sha256: dd9ae811c60c38f28ead57bdefa022b281867401ee13e38563b990eaf7f81f95
     size: 219322007
     metrics:
@@ -711,8 +711,8 @@ models:
     - Hebr
     kind: plane
     precision: int8
-    filename: heb-diac-plane-2.0.zip
-    url: https://github.com/interscript/interscript-models/releases/download/heb-diac-plane-2.0/heb-diac-plane-2.0.zip
+    filename: heb-vocalized-plane-2.0.zip
+    url: https://github.com/interscript/interscript-models/releases/download/heb-diac-plane-2.0/heb-vocalized-plane-2.0.zip
     sha256: 9c8f0432294ebae6abc847ddb79572c1ab979f4851f03d44a9bb6495ba767a9e
     size: 415901226
     metrics:

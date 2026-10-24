@@ -139,7 +139,7 @@ def test_fp16_smaller_than_fp32(zips: dict[str, Path]) -> None:
 def test_int8_keeps_head_matmul_in_fp32(zips: dict[str, Path]) -> None:
     """The logits-producing MatMul (the tied head) must survive int8
     quantization unconverted — quantizing it moves argmax directly
-    (heb-diac-1.1: 9.34% confident-position flips; head-fp32 fixes it,
+    (heb-vocalized-1.1: 9.34% confident-position flips; head-fp32 fixes it,
     E1 in docs/EXPERIMENTS.md)."""
     import onnx
 
