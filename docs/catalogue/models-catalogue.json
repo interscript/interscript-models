@@ -723,6 +723,23 @@
       "status": "shipped"
     },
     {
+      "id": "tha-phonemic-1.0",
+      "task": "g2p",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "metrics": [
+        {
+          "name": "per",
+          "value": 19.29,
+          "protocol": "phoneme-token PER, clean v1 test split (3,210 rows), single-row greedy",
+          "anchor": null
+        }
+      ],
+      "status": "release-candidate"
+    },
+    {
       "id": "urd-diac-1.0",
       "task": "diacritization",
       "precision": "fp32",
