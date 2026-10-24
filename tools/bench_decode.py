@@ -39,7 +39,7 @@ def main() -> None:
     vectors_path = args.vectors
     if vectors_path is None:
         # vector files predate full version suffixes
-        # (urd-diac-base-vectors.json for urd-diac-base-1.0)
+        # (urd-diac-base-vectors.json for urd-vocalized-base-1.0)
         matches = sorted((REPO / "conformance").glob(
             f"{args.model_id.split('-')[0]}*{args.model_id.split('-')[1]}*-vectors.json"))
         vectors_path = matches[0] if matches else (
