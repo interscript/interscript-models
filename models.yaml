@@ -1,5 +1,24 @@
 version: 1
 models:
+  tha-g2p-lex-1.0:
+    task: g2p
+    precision: fp32
+    url: https://github.com/interscript/interscript-models/releases/download/UNPUBLISHED/tha-g2p-lex-1.0.zip
+    sha256: 534bc68960517da36c38d9ef79f1178722751e36e72a3313c0e21b6f66e95198
+    size: 1111939721
+    metrics:
+    - name: per
+      value: 19.29
+      protocol: phoneme-token PER, clean v1 test split (3,210 rows), single-row greedy
+      source: interscript/interscript-train run-080-thai-lex-v6a eval (run-080-thai-lex-v6a/eval-verdict.json lineage; WO67)
+    parity:
+      samples: 0
+      note: PENDING — intermediate comparison exact (encoder 0.000000, step-1 logits
+        0.0000, greedy ids identical); the legacy harness contradicts the proven-exact
+        artifact (CER 1.02 at BS=1) and is under investigation — gate NOT claimed
+    license: BSD-3-Clause
+    trained_from: ByT5-small; corpora/tha-phonemic-v5.yaml (92,669 length-filtered
+      pairs: orst+thai_words+volubilis+wiki-agree); 4 epochs BS4; WO67
   khm-latn-1.0:
     task: translit
     scripts:
