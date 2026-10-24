@@ -39,7 +39,7 @@ models:
   tha-phonemic-1.0:
     task: g2p
     precision: fp32
-    url: https://github.com/interscript/interscript-models/releases/download/UNPUBLISHED/tha-g2p-lex-1.0.zip
+    url: https://github.com/interscript/interscript-models/releases/download/tha-phonemic-1.0/tha-phonemic-1.0.zip
     sha256: 534bc68960517da36c38d9ef79f1178722751e36e72a3313c0e21b6f66e95198
     size: 1111939721
     metrics:
