@@ -1,4 +1,15 @@
 version: 1
+
+# WO87 target-accurate renames (evidence: docs/naming/target-documentation.json).
+# Old ids stay resolvable via index aliases at the next index tag (zero breakage).
+renames:
+  urd-g2p-1.0: urd-ipa-1.0                 # narrow IPA with stress (2026-10-24 decode evidence)
+  urd-g2p-base-1.0: urd-ipa-base-1.0       # narrow IPA with stress
+  fas-g2p-1.0: fas-phonemic-1.0            # Latin-letter phonemic (salAm)
+  tha-g2p-base-1.0: tha-phonemic-base-1.0  # toned phonemic, dot-separated
+  tha-g2p-small-1.0: tha-phonemic-small-1.0
+  tha-g2p-small-1.0-int4: tha-phonemic-small-1.0-int4
+
 models:
   tha-phonemic-1.0:
     task: g2p
@@ -722,6 +733,12 @@ models:
     - Arab
     precision: fp32
     filename: ara-diac-news-1.1.zip
+    status: withdrawn
+    withdraw_note: >-
+      artifact lost — the release was never created and the bytes exist nowhere
+      (bucket sha 280f6be9 is news-1.0's; WO87 evidence 2026-10-24). Restore
+      via re-export from run-029-news-specialist/best as a new version if
+      wanted.
     url: https://github.com/interscript/interscript-models/releases/download/ara-diac-news-1.1/ara-diac-news-1.1.zip
     sha256: 2f55e2a3c9e97da3666ef236e8ba31a24399257c9cc448363cc19f96541eb3ba
     size: 2160091218
