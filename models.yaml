@@ -12,12 +12,15 @@ models:
       protocol: phoneme-token PER, clean v1 test split (3,210 rows), single-row greedy
       source: interscript/interscript-train run-080-thai-lex-v6a eval (run-080-thai-lex-v6a/eval-verdict.json lineage; WO67)
     parity:
-      samples: 0
+      samples: 600
+      cer_delta: 0.0001
+      row_exact_match: 0.9917
       note: >-
-        PENDING — intermediate comparison exact (encoder 0.000000, step-1 logits
-        0.0000, greedy ids identical); the legacy harness contradicts the
-        proven-exact artifact (CER 1.02 at BS=1) and is under investigation —
-        gate NOT claimed.
+        torch vs shipped zip, single-row greedy, 600 clean-split rows
+        (run-080-thai-v6a-parity-3, 2026-10-24). The two earlier red runs
+        tested a mislabeled wrong-model export (the R8_RUN env trap);
+        the corrected artifact is proven exact — encoder hidden 0.000000,
+        step-1 logits 0.0000 (run-080-thai-parity-dbg-2).
     license: BSD-3-Clause
     trained_from: >-
       ByT5-small; corpora/tha-phonemic-v5.yaml (92,669 length-filtered
