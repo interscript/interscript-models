@@ -19,7 +19,8 @@ models:
         proven-exact artifact (CER 1.02 at BS=1) and is under investigation —
         gate NOT claimed.
     license: BSD-3-Clause
-    trained_from: ByT5-small; corpora/tha-phonemic-v5.yaml (92,669 length-filtered
+    trained_from: >-
+      ByT5-small; corpora/tha-phonemic-v5.yaml (92,669 length-filtered
       pairs: orst+thai_words+volubilis+wiki-agree); 4 epochs BS4; WO67
   khm-latn-1.0:
     task: translit
