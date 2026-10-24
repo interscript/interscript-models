@@ -88,7 +88,7 @@ CER unless stated).
 | model | task | size | headline metric |
 |---|---|---|---|
 | `ara-diac-2.0` | Arabic diacritization | 2.78 GB fp32 | SadeedDiac-25 DER **2.29%** (beats GLM-5.2 2.69); WikiNews-2024 17.38 WER |
-| `ara-diac-news-1.1` | Arabic news register | 2.16 GB fp32 | WikiNews multiref 8.85 WER |
+| ~~`ara-diac-news-1.1`~~ | Arabic news register | — | **WITHDRAWN** — artifact lost (never shipped; WO87). `ara-diac-2.0` covers the register |
 | `ara-diac-small-2.1` | Arabic, fast tier | 1.42 GB fp32 | fullset DER 4.57 (teacher 2.29) |
 | `ara-diac-plane-large-1.0` | Arabic, int8 fast tier | 0.87 GB int8 | DER 2.74 / WER 8.61 |
 | `urd-diac-base-1.0` | Urdu diacritization | 1.35 GB fp16 | CER **3.57%** |
