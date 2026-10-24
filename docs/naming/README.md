@@ -27,3 +27,21 @@ target-accurate naming.
 3. **ara-diac-small-1.0-int8 output corruption**: spurious 'F' tokens
    ('...عَلَيْكُمْFمْF') — quantization-era artifact; superseded by the
    2.x line anyway.
+
+## The final MECE taxonomy (2026-10-24, owner-adopted)
+
+The target tag is one of four, mutually exclusive by output
+inventory, collectively exhaustive over the zoo:
+
+| tag | output inventory | families |
+|---|---|---|
+| `vocalized` | native script + full diacritics | ara, urd, fas, heb (the diac lines) |
+| `ipa` | narrow IPA (stress, phonetic diacritics) | urd g2p line |
+| `phonemic` | broad phoneme-level transcription | fas (Latin letters), tha (IPA glyphs + tone contours) |
+| `latn` | orthographic romanization | khm |
+
+Name shape: `{lang}-{target}[-{tier}]-{major.minor}`. Tiers
+(quantization: int8/int4/fp16; architecture: layerdrop/plane;
+register: news; size: base/small) are orthogonal accurate dimensions.
+Old ids remain resolvable through index aliases at the next index tag;
+`renames:` in models.yaml is the authoritative old→new map.

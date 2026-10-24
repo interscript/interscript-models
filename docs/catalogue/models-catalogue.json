@@ -1,13 +1,46 @@
 {
   "generated_note": "generated from models.yaml + index-v12; regenerate, never edit",
+  "naming": {
+    "taxonomy": {
+      "vocalized": "native script + full diacritics",
+      "ipa": "narrow IPA (stress, diacritics)",
+      "phonemic": "broad phoneme-level transcription",
+      "latn": "orthographic romanization"
+    },
+    "aliases": "old ids resolve via index aliases at the next index tag (WO87)"
+  },
   "models": [
     {
-      "id": "ara-diac-1.0",
+      "id": "ara-diac-news-1.1",
       "task": "diacritization",
       "precision": "fp32",
       "license": "BSD-3-Clause",
-      "size_bytes": 2780311342,
-      "sha256": "9e6d9777fe2474b150450774aaa1c9e8a9051b502b184fde298b91636dcfdac6",
+      "size_bytes": 2160091218,
+      "sha256": "2f55e2a3c9e97da3666ef236e8ba31a24399257c9cc448363cc19f96541eb3ba",
+      "status": "withdrawn",
+      "metrics": [
+        {
+          "name": "wer_wikinews2024_multiref",
+          "value": 8.85,
+          "protocol": "greedy decode, first-alternate protocol, WikiNews-2024 multiref (WO35)",
+          "anchor": null
+        },
+        {
+          "name": "der_total_greedy",
+          "value": 2.84,
+          "protocol": "greedy decode, first-alternate protocol, WikiNews-2024 multiref (WO35)",
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ara-vocalized-1.0",
+      "task": "diacritization",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_total_greedy",
@@ -21,16 +54,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "ara-diac-2.0",
+      "id": "ara-vocalized-2.0",
       "task": "diacritization",
       "precision": "fp32",
       "license": "BSD-3-Clause",
-      "size_bytes": 2780299051,
-      "sha256": "872c655ec6750bf44e5986f958de26767eafa13f8e0a7c64340bc35fd8a4550e",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_total_greedy",
@@ -56,16 +89,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "ara-diac-2.0-int8",
+      "id": "ara-vocalized-2.0-int8",
       "task": "diacritization",
       "precision": "int8",
       "license": "BSD-3-Clause",
-      "size_bytes": 519207340,
-      "sha256": "7f1d55d43f97564ad62fc14a7e0cabe52c01d8298b747677a75900de748bb6c6",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_total_greedy",
@@ -91,16 +124,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "ara-diac-layerdrop-1.0",
+      "id": "ara-vocalized-layerdrop-1.0",
       "task": "diacritization",
       "precision": "fp32",
       "license": "BSD-3-Clause",
-      "size_bytes": 1015218371,
-      "sha256": "8f297bdc0e7eba5160c6ed8a2a437abbd399687fd14f2f2b640a4b4c639a3d16",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_teacher_fullset",
@@ -114,16 +147,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "ara-diac-layerdrop-1.0-int4",
+      "id": "ara-vocalized-layerdrop-1.0-int4",
       "task": "diacritization",
       "precision": "int4",
       "license": "BSD-3-Clause",
-      "size_bytes": 145195702,
-      "sha256": "352e02105645a6e283e2c3602505bea0e90085b741666fd863e478e4835e7bc9",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_teacher_fullset",
@@ -137,16 +170,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "ara-diac-layerdrop-1.0-int8",
+      "id": "ara-vocalized-layerdrop-1.0-int8",
       "task": "diacritization",
       "precision": "int8",
       "license": "BSD-3-Clause",
-      "size_bytes": 191603048,
-      "sha256": "68dcc06cd8861e017c4d4912ce3e1fe057d78b79b0a7b6246ae8603c99930963",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_teacher_fullset",
@@ -160,16 +193,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "ara-diac-news-1.0",
+      "id": "ara-vocalized-news-1.0",
       "task": "diacritization",
       "precision": "int8",
       "license": "BSD-3-Clause",
-      "size_bytes": 399018923,
-      "sha256": "e5a52b1530dfa6d6c7ef8970443206ce33af865d0337a58d145945adab33484e",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "wer_wikinews2024_multiref",
@@ -189,39 +222,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "ara-diac-news-1.1",
-      "task": "diacritization",
-      "precision": "fp32",
-      "license": "BSD-3-Clause",
-      "size_bytes": 2160091218,
-      "sha256": "2f55e2a3c9e97da3666ef236e8ba31a24399257c9cc448363cc19f96541eb3ba",
-      "metrics": [
-        {
-          "name": "wer_wikinews2024_multiref",
-          "value": 8.85,
-          "protocol": "greedy decode, first-alternate protocol, WikiNews-2024 multiref (WO35)",
-          "anchor": null
-        },
-        {
-          "name": "der_total_greedy",
-          "value": 2.84,
-          "protocol": "greedy decode, first-alternate protocol, WikiNews-2024 multiref (WO35)",
-          "anchor": null
-        }
-      ],
-      "status": "shipped"
-    },
-    {
-      "id": "ara-diac-plane-1.0",
+      "id": "ara-vocalized-plane-1.0",
       "task": "diacritization",
       "precision": "int8",
       "license": "BSD-3-Clause",
-      "size_bytes": 219076965,
-      "sha256": "1310204e36acc4fcbb988e9f9c46cf6422e7ea3860bd467fb469ea0ad4d39ef3",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_total_greedy",
@@ -235,16 +245,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "ara-diac-plane-large-1.0",
+      "id": "ara-vocalized-plane-large-1.0",
       "task": "diacritization",
       "precision": "int8",
       "license": "BSD-3-Clause",
-      "size_bytes": 866052488,
-      "sha256": "a66df2e12ddc935e8ab59836fd45486f17ac40b764c1619c03b2b0e191608a52",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_total_greedy",
@@ -264,16 +274,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "ara-diac-small-1.0",
+      "id": "ara-vocalized-small-1.0",
       "task": "diacritization",
       "precision": "fp32",
       "license": "BSD-3-Clause",
-      "size_bytes": 1418126835,
-      "sha256": "8b149beb04294a2e482af876a34ae0fca3e87412606116fae1a376845fd4111a",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_teacher_greedy",
@@ -299,16 +309,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "ara-diac-small-1.0-int8",
+      "id": "ara-vocalized-small-1.0-int8",
       "task": "diacritization",
       "precision": "int8",
       "license": "BSD-3-Clause",
-      "size_bytes": 256959713,
-      "sha256": "af247d837bee7e755b5287102cfb715c48dc90c2cf41ec1c41e7238e1a72b678",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_teacher_greedy",
@@ -334,16 +344,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "ara-diac-small-2.0",
+      "id": "ara-vocalized-small-2.0",
       "task": "diacritization",
       "precision": "fp32",
       "license": "BSD-3-Clause",
-      "size_bytes": 1418516306,
-      "sha256": "d9aa95d0e8fd0d7da80fd2f7dabedf0ac65f55ba984de565d252f5e14906d98c",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_teacher_fullset",
@@ -357,16 +367,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "ara-diac-small-2.0-int8",
+      "id": "ara-vocalized-small-2.0-int8",
       "task": "diacritization",
       "precision": "int8",
       "license": "BSD-3-Clause",
-      "size_bytes": 264043016,
-      "sha256": "f4d07acdaf9c18cded97e15e0c5636e6cee90de2fa32c5a373a44c0cc912bf50",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_teacher_fullset",
@@ -380,16 +390,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "ara-diac-small-2.1",
+      "id": "ara-vocalized-small-2.1",
       "task": "diacritization",
       "precision": "fp32",
       "license": null,
-      "size_bytes": 1419756840,
-      "sha256": "a69918de9f87664fd97cdab3bf68b655966f608211dbeadd7b6fb3f7b03e5ffb",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_teacher_fullset",
@@ -403,16 +413,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "ara-diac-small-2.1-fp16",
+      "id": "ara-vocalized-small-2.1-fp16",
       "task": "diacritization",
       "precision": "fp16",
       "license": "BSD-3-Clause",
-      "size_bytes": 706351903,
-      "sha256": "395ee72137d1cdfa9cd53bf167ad0d2f5fe5cbf9a5b62f118e0c9e0fa63c972d",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_teacher_fullset",
@@ -426,16 +436,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "ara-diac-small-2.1-int8",
+      "id": "ara-vocalized-small-2.1-int8",
       "task": "diacritization",
       "precision": "int8",
       "license": "BSD-3-Clause",
-      "size_bytes": 267965657,
-      "sha256": "9b4e4aad2ab53a8cfbec432a78e27b409376627243aec3fd043f06574552a32b",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_teacher_fullset",
@@ -449,16 +459,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "ara-diac-small-int8static-2.1",
+      "id": "ara-vocalized-small-int8static-2.1",
       "task": "diacritization",
       "precision": "int8",
       "license": "BSD-3-Clause",
-      "size_bytes": 515362212,
-      "sha256": "7836bfd5582ad054ee419bfbd45a2b4a87fe8dc91e1f849898428faefd0c95da",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_teacher_fullset",
@@ -472,33 +482,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "fas-diac-base-1.0",
-      "task": "diac",
-      "precision": "fp16",
-      "license": "BSD-3-Clause",
-      "size_bytes": 711254463,
-      "sha256": "620b31ab96e6d7588d583fa5119406ea7c08506d483cc8ee253b3c479c6d87f0",
-      "metrics": [
-        {
-          "name": "cer",
-          "value": 0.603,
-          "protocol": "greedy decode, 9288-row docs split, row-mean",
-          "anchor": null
-        }
-      ],
-      "status": "shipped"
-    },
-    {
-      "id": "fas-g2p-1.0",
+      "id": "fas-phonemic-1.0",
       "task": "g2p",
       "precision": "fp32",
       "license": "BSD-3-Clause",
-      "size_bytes": 2780254270,
-      "sha256": "b53fd69196127efcc596935d24e135b3c897006872c1646c674e70f3c0d9a0e3",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "cer",
@@ -512,16 +505,33 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "heb-diac-1.0",
+      "id": "fas-vocalized-base-1.0",
+      "task": "diac",
+      "precision": "fp16",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "cer",
+          "value": 0.603,
+          "protocol": "greedy decode, 9288-row docs split, row-mean",
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "heb-vocalized-1.0",
       "task": "diacritization",
       "precision": "fp32",
       "license": "BSD-3-Clause",
-      "size_bytes": 2781139753,
-      "sha256": "b32fa239e0c56708b6004942de4b9e6e9f265e7cc3828f41d560e96386e20dd8",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_greedy",
@@ -535,16 +545,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "heb-diac-1.1",
+      "id": "heb-vocalized-1.1",
       "task": "diacritization",
       "precision": "fp32",
       "license": "BSD-3-Clause",
-      "size_bytes": 2780987905,
-      "sha256": "f0022dde8d06e46e8f08cf0b2f7bbb887a05ed686b90f1d5aa82ca3ef690a0b0",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_greedy",
@@ -558,16 +568,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "heb-diac-plane-1.0",
+      "id": "heb-vocalized-plane-1.0",
       "task": "diacritization",
       "precision": "int8",
       "license": "BSD-3-Clause",
-      "size_bytes": 219322007,
-      "sha256": "dd9ae811c60c38f28ead57bdefa022b281867401ee13e38563b990eaf7f81f95",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_total_greedy",
@@ -575,16 +585,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "heb-diac-plane-2.0",
+      "id": "heb-vocalized-plane-2.0",
       "task": "diacritization",
       "precision": "int8",
       "license": "BSD-3-Clause",
-      "size_bytes": 415901226,
-      "sha256": "9c8f0432294ebae6abc847ddb79572c1ab979f4851f03d44a9bb6495ba767a9e",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_total_greedy",
@@ -592,16 +602,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "heb-diac-small-1.0",
+      "id": "heb-vocalized-small-1.0",
       "task": "diacritization",
       "precision": "fp32",
       "license": null,
-      "size_bytes": 1418663344,
-      "sha256": "905c53873d5a62bbe6252c6ec0ecef5f37e96e78cb01e8cd99b6b24c4d4d74ad",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "der_teacher_greedy",
@@ -615,8 +625,7 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
       "id": "khm-latn-1.0",
@@ -625,6 +634,7 @@
       "license": "BSD-3-Clause",
       "size_bytes": 1418009977,
       "sha256": "55993d473a2ed9489058779cad7e115db05e4020085b71616468cfae4f2f65cb",
+      "status": "shipped",
       "metrics": [
         {
           "name": "cer",
@@ -638,16 +648,33 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "tha-g2p-base-1.0",
+      "id": "tha-phonemic-1.0",
       "task": "g2p",
       "precision": "fp32",
       "license": "BSD-3-Clause",
-      "size_bytes": 2781174343,
-      "sha256": "f341a5868867a9847d3f897d1fcc4d1d63b9a59b8913871bcf4ecab48f4fa895",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "release-candidate",
+      "metrics": [
+        {
+          "name": "per",
+          "value": 19.29,
+          "protocol": "phoneme-token PER, clean v1 test split (3,210 rows), single-row greedy",
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "tha-phonemic-base-1.0",
+      "task": "g2p",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "per_teacher",
@@ -661,16 +688,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "tha-g2p-small-1.0",
+      "id": "tha-phonemic-small-1.0",
       "task": "g2p",
       "precision": "int8",
       "license": null,
-      "size_bytes": 257468517,
-      "sha256": "f2cfa93a42d98aabf08fdc82dfc6bd1574e21993f36558aa581fbe29e0588a94",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "per_teacher",
@@ -690,16 +717,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "tha-g2p-small-1.0-int4",
+      "id": "tha-phonemic-small-1.0-int4",
       "task": "g2p",
       "precision": "int4",
       "license": "BSD-3-Clause",
-      "size_bytes": 201958073,
-      "sha256": "e5d12a3d65c6ac39fa08f52c975c99ff7a51c3e7b7aca7fbb461d2de2345e4cb",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
       "metrics": [
         {
           "name": "per_teacher",
@@ -719,67 +746,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "tha-phonemic-1.0",
+      "id": "urd-ipa-1.0",
       "task": "g2p",
       "precision": "fp32",
       "license": "BSD-3-Clause",
       "size_bytes": null,
       "sha256": null,
-      "metrics": [
-        {
-          "name": "per",
-          "value": 19.29,
-          "protocol": "phoneme-token PER, clean v1 test split (3,210 rows), single-row greedy",
-          "anchor": null
-        }
-      ],
-      "status": "release-candidate"
-    },
-    {
-      "id": "urd-diac-1.0",
-      "task": "diacritization",
-      "precision": "fp32",
-      "license": "BSD-3-Clause",
-      "size_bytes": 1417851421,
-      "sha256": "c299ea44a4da4851a52283f8e42d2fb6f8c7a9c443ba7eb0270f97372e10b8ea",
-      "metrics": [
-        {
-          "name": "cer",
-          "value": 3.74,
-          "protocol": null,
-          "anchor": null
-        }
-      ],
-      "status": "shipped"
-    },
-    {
-      "id": "urd-diac-base-1.0",
-      "task": "diacritization",
-      "precision": "fp16",
-      "license": "BSD-3-Clause",
-      "size_bytes": 1347488093,
-      "sha256": "6818469cbeeb58b822279c06e921669e4e79dc174d0b54c37a1be34687068252",
-      "metrics": [
-        {
-          "name": "cer",
-          "value": 3.57,
-          "protocol": null,
-          "anchor": null
-        }
-      ],
-      "status": "shipped"
-    },
-    {
-      "id": "urd-g2p-1.0",
-      "task": "g2p",
-      "precision": "fp32",
-      "license": "BSD-3-Clause",
-      "size_bytes": 1418039605,
-      "sha256": "9f0a248c7116aa7f6b9ac125fb9684a3556f3b8ce8b64567c05a5e7e7a018ebf",
+      "status": "shipped",
       "metrics": [
         {
           "name": "cer",
@@ -793,16 +769,16 @@
           "protocol": null,
           "anchor": null
         }
-      ],
-      "status": "shipped"
+      ]
     },
     {
-      "id": "urd-g2p-base-1.0",
+      "id": "urd-ipa-base-1.0",
       "task": "g2p",
       "precision": "fp32",
       "license": "BSD-3-Clause",
-      "size_bytes": 2159598918,
-      "sha256": "d3e35dd435bf18fedec03d4a15bba097fca743737b729312fa08f4fdcac24282",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "research-only",
       "metrics": [
         {
           "name": "cer",
@@ -816,8 +792,41 @@
           "protocol": "greedy decode, full 12699-row test split, row-mean",
           "anchor": null
         }
-      ],
-      "status": "research-only"
+      ]
+    },
+    {
+      "id": "urd-vocalized-1.0",
+      "task": "diacritization",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "cer",
+          "value": 3.74,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "urd-vocalized-base-1.0",
+      "task": "diacritization",
+      "precision": "fp16",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "cer",
+          "value": 3.57,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
     }
   ]
 }
