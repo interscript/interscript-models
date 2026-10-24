@@ -1,7 +1,13 @@
 # WO87 — target-accurate model naming: document, then rename
 
-Status: PLANNED · Phase 1 DONE (tha-phonemic-1.0, models#357); Phase 2
-= the legacy 33
+Status: DONE (2026-10-24) — Phase 1 (tha-phonemic-1.0, models#357);
+Phase 2 executed: all 33 legacy ids decoded for evidence
+(docs/naming/target-documentation.json), the final MECE taxonomy
+adopted (vocalized/ipa/phonemic/latn), 31 renames applied zoo-wide
+with the authoritative renames: map (models#362); the reference
+generated (docs/naming/naming-reference.{md,json}); the naming law in
+CLAUDE.md. Three defects found by the sweep recorded below. Index
+aliases land at the next index tag (owner).
 
 Owner decision (2026-10-24): model names target the output convention.
 Phase 1 renamed the release candidate (tha-g2p-lex-1.0 ->
