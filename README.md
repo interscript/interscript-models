@@ -87,20 +87,20 @@ CER unless stated).
 
 | model | task | size | headline metric |
 |---|---|---|---|
-| `ara-diac-2.0` | Arabic diacritization | 2.78 GB fp32 | SadeedDiac-25 DER **2.29%** (beats GLM-5.2 2.69); WikiNews-2024 17.38 WER |
-| ~~`ara-diac-news-1.1`~~ | Arabic news register | — | **WITHDRAWN** — artifact lost (never shipped; WO87). `ara-diac-2.0` covers the register |
-| `ara-diac-small-2.1` | Arabic, fast tier | 1.42 GB fp32 | fullset DER 4.57 (teacher 2.29) |
-| `ara-diac-plane-large-1.0` | Arabic, int8 fast tier | 0.87 GB int8 | DER 2.74 / WER 8.61 |
-| `urd-diac-base-1.0` | Urdu diacritization | 1.35 GB fp16 | CER **3.57%** |
-| `urd-diac-1.0` | Urdu, small tier | 1.42 GB fp32 | CER 3.74% |
-| `urd-g2p-base-1.0` | Urdu G2P | 2.16 GB fp32 | CER 15.65% — **RESEARCH-ONLY** (non-commercial data) |
-| `fas-diac-base-1.0` | Persian diacritization | 0.71 GB fp16 | CER **0.603%** row-mean / 0.777% corpus, 82.3% word-acc (CC0 data) |
-| `fas-g2p-1.0` | Persian G2P | 2.78 GB fp32 | CER 1.6% |
-| `tha-g2p-base-1.0` | Thai G2P | 2.78 GB fp32 | teacher PER 1.25% |
-| `tha-g2p-small-1.0` | Thai G2P, int8 | 0.26 GB int8 | PER 2.85% (beam-4 12.06%) |
+| `ara-vocalized-2.0` | Arabic diacritization | 2.78 GB fp32 | SadeedDiac-25 DER **2.29%** (beats GLM-5.2 2.69); WikiNews-2024 17.38 WER |
+| ~~`ara-diac-news-1.1`~~ | Arabic news register | — | **WITHDRAWN** — artifact lost (never shipped; WO87). `ara-vocalized-2.0` covers the register |
+| `ara-vocalized-small-2.1` | Arabic, fast tier | 1.42 GB fp32 | fullset DER 4.57 (teacher 2.29) |
+| `ara-vocalized-plane-large-1.0` | Arabic, int8 fast tier | 0.87 GB int8 | DER 2.74 / WER 8.61 |
+| `urd-vocalized-base-1.0` | Urdu diacritization | 1.35 GB fp16 | CER **3.57%** |
+| `urd-vocalized-1.0` | Urdu, small tier | 1.42 GB fp32 | CER 3.74% |
+| `urd-ipa-base-1.0` | Urdu G2P | 2.16 GB fp32 | CER 15.65% — **RESEARCH-ONLY** (non-commercial data) |
+| `fas-vocalized-base-1.0` | Persian diacritization | 0.71 GB fp16 | CER **0.603%** row-mean / 0.777% corpus, 82.3% word-acc (CC0 data) |
+| `fas-phonemic-1.0` | Persian G2P | 2.78 GB fp32 | CER 1.6% |
+| `tha-phonemic-base-1.0` | Thai G2P | 2.78 GB fp32 | teacher PER 1.25% |
+| `tha-phonemic-small-1.0` | Thai G2P, int8 | 0.26 GB int8 | PER 2.85% (beam-4 12.06%) |
 | `khm-latn-1.0` | Khmer → Latin | 1.42 GB fp32 | CER 27.42% / EM 59.66% |
-| `heb-diac-plane-2.0` | Hebrew nikud, int8 | 0.42 GB int8 | DER 8.18% |
-| `heb-diac-1.1` | Hebrew nikud, fp32 | 2.78 GB fp32 | DER 16.44% |
+| `heb-vocalized-plane-2.0` | Hebrew nikud, int8 | 0.42 GB int8 | DER 8.18% |
+| `heb-vocalized-1.1` | Hebrew nikud, fp32 | 2.78 GB fp32 | DER 16.44% |
 
 Quantized variants (int8/int4/fp16) ship as assets of their base
 model's release. Hebrew remains data-supply-limited: newer lanes are
@@ -132,8 +132,8 @@ m = Model.load("urd-diac-base-1.0")        # resolves via the index, verifies sh
 print(m.translate("کلیدهای پرکینزمانند"))
 ```
 
-Artifact notice (2026-10-21): `urd-diac-base-1.0` and
-`fas-diac-base-1.0` were re-published with exporter-side fp16→fp32
+Artifact notice (2026-10-21): `urd-vocalized-base-1.0` and
+`fas-vocalized-base-1.0` were re-published with exporter-side fp16→fp32
 graph-IO normalization — same weights, portable graph boundary (node
 ONNX Runtime no longer corrupts fp16 bytes; the ruby loader, which
 lacks Float16 materialization, decodes them). The re-published digests
@@ -145,7 +145,7 @@ sha256 verification and must be re-fetched.
 In training, not shipped: the Arabic r8 noisy-student chain (stage 2),
 the Khmer lexicon-conditioned arm, and the Thai lexicon-first arm —
 each ships only after its stage-3 external-benchmark verdict clears
-the gates. `urd-g2p-base-1.0` ships but is **research-only**
+the gates. `urd-ipa-base-1.0` ships but is **research-only**
 (non-commercial training data). `models.yaml` also carries
 legacy/superseded generations (e.g. `ara-diac-1.0`, `layerdrop`,
 `ara-diac-small-1.0/2.0`) that resolve via the index but are not
