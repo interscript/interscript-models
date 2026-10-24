@@ -1,6 +1,6 @@
 version: 1
 models:
-  tha-g2p-lex-1.0:
+  tha-phonemic-1.0:
     task: g2p
     precision: fp32
     url: https://github.com/interscript/interscript-models/releases/download/UNPUBLISHED/tha-g2p-lex-1.0.zip
