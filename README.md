@@ -128,7 +128,7 @@ models above. Python (`SECRYST_INDEX`) and ruby
 
 ```python
 from interscript_ml import Model           # reference runtime (this repo)
-m = Model.load("urd-diac-base-1.0")        # resolves via the index, verifies sha256
+m = Model.load("urd-vocalized-base-1.0")        # resolves via the index, verifies sha256
 print(m.translate("کلیدهای پرکینزمانند"))
 ```
 
@@ -147,8 +147,8 @@ the Khmer lexicon-conditioned arm, and the Thai lexicon-first arm —
 each ships only after its stage-3 external-benchmark verdict clears
 the gates. `urd-ipa-base-1.0` ships but is **research-only**
 (non-commercial training data). `models.yaml` also carries
-legacy/superseded generations (e.g. `ara-diac-1.0`, `layerdrop`,
-`ara-diac-small-1.0/2.0`) that resolve via the index but are not
+legacy/superseded generations (e.g. `ara-vocalized-1.0`, `layerdrop`,
+`ara-vocalized-small-1.0/2.0`) that resolve via the index but are not
 recommended for new use; the table above is the recommended set.
 
 ## Repositories
