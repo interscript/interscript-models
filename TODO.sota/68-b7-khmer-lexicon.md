@@ -26,3 +26,14 @@ prefix conditioning); fp16 zip hygiene (khm fp32 corruption lesson);
 conformance fixtures for the new artifact.
 Acceptance: gates green; hit-rate + CER on held-out; release via the
 strict publish path.
+
+
+## Lineage recovery (2026-10-25)
+
+khm-latn-1.0 traces to the **secryst project**
+(`~/src/interscript/secryst`; README documents
+`scripts/export_onnx_byt5.py <hf_checkpoint_dir> khm-latn-byt5.zip`).
+The training corpus is re-derivable from the secryst repo's data
+pipeline + khmer-dict-spice — the recovery question is now concrete:
+pin the exact secryst-era corpus files, run them through
+corpora/khm-latn.yaml provenance, and the retrain is unblocked.
