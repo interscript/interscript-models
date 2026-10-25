@@ -1,0 +1,16 @@
+id: khm-latn
+task: transliteration
+sources:
+  # WO88 migration: the secryst-era khm-latn training lineage, recorded
+  # with honest provenance markers — the original corpus predates the
+  # pinning contract. Decode evidence + the khmer-dict-spice source
+  # (Chuon Nath + SBBIC) are documented; the exact training tsv/tsv
+  # generation script lives in the secryst repo
+  # (scripts/export_onnx_byt5.py lineage). UNVERIFIED fields are the
+  # retrain blockers listed in WO68/88.
+  - kind: repo
+    id: secryst (~/src/interscript/secryst lineage)
+    license: UNVERIFIED
+    provenance: UNVERIFIED — recover the exact training corpus before any retrain
+splits:
+  train: {path: UNVERIFIED, rows: 0, sha256: UNVERIFIED}
