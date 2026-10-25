@@ -29,6 +29,19 @@ jobs:
         run: |
           test -f models.yaml
           cp models.yaml models-index.yaml
+          # WO87: expand the renames map into alias entries — old ids
+          # resolve to the renamed entry's artifact, forever.
+          python3 - <<'PY'
+          import yaml
+          idx = yaml.safe_load(open("models-index.yaml"))
+          ren = idx.pop("renames", {})
+          models = idx["models"]
+          for old, new in ren.items():
+              if new in models:
+                  e = dict(models[new]); e["alias_for"] = new
+                  models[old] = e
+          yaml.safe_dump(idx, open("models-index.yaml", "w"), allow_unicode=True, sort_keys=True)
+          PY
           shasum -a 256 models-index.yaml | awk '{print $1 "  models-index.yaml"}' > models-index.yaml.sha256
           echo "--- models-index.yaml.sha256 ---"
           cat models-index.yaml.sha256
