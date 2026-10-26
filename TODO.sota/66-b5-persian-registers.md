@@ -19,3 +19,15 @@ Acceptance: register-stratified external-protocol numbers published.
 
 Owner picks the sources -> corpora/<x>.yaml with sha256 pins ->
 the register-hold arm (target: CER < 0.7 across registers).
+
+
+## Register gap MEASURED (2026-10-26, full run)
+
+fas-diac-base-1.0 on the Ganjoor vocalized poetry eval (3,497 verses,
+79 poets, harakat-stripped inputs vs vocalized gold): **CER 33.67%** —
+vs 0.603% on the news-classic register. The register gap is ~56x, now
+quantified. The poetry corpus + eval are pinned
+(run-089-fas-poetry-eval, sha 94f318f688b556be). The register-hold arm
+(<0.7 across registers) requires poetry in training: the 3,497
+vocalized verses are the seed; the owner source picks (dossier above)
+scale it.
