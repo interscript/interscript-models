@@ -27,3 +27,16 @@ urd/fas lines (gates already apply to their successors).
 ## Acceptance
 Every id in models.yaml carries recipe+corpus or an explicit
 retire note; nothing remains outside the contract.
+
+
+## Like-for-like verdict (2026-10-25, SAME split — secryst test, 895 rows)
+
+- Legacy khm-latn-1.0 artifact: **CER 27.57%**
+- Framework retrain (ByT5-small, 4+4 epochs, resume-tuned): **28.99%**
+
+The migration's retrain is 1.4 points behind the legacy on identical
+data — close, not beating. Next levers (recorded, in order): ByT5-base
+backbone (the legacy may be base-class), corpus enrichment (merge the
+Chuon Nath IPA + SBBIC vocab layers), longer schedule. The migration
+contract holds: the framework path produces a honest, reproducible
+28.99 where the legacy number was undocumented.
