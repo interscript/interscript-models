@@ -31,3 +31,15 @@ quantified. The poetry corpus + eval are pinned
 (<0.7 across registers) requires poetry in training: the 3,497
 vocalized verses are the seed; the owner source picks (dossier above)
 scale it.
+
+
+## Register arm RESULT (2026-10-26): the poetry seed HALVED the gap
+
+The register-adapted model (fas-diac-base fine-tuned on the full 446k
+corpus + the 3,497-vocalized-verse seed x10; gate-passed 0.69% on
+news-classic) scores **CER 16.55%** on the identical Ganjoor eval —
+vs 33.67% pre-register. HALVED. The per-section trajectory shows the
+residual concentrates in dense-vocalization verses (the late eval
+sections). Scale-up path: the owner source picks (dossier) grow the
+vocalized seed; the recipe (checkpoint fine-tune + seed oversample)
+is proven.
