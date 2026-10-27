@@ -40,3 +40,19 @@ backbone (the legacy may be base-class), corpus enrichment (merge the
 Chuon Nath IPA + SBBIC vocab layers), longer schedule. The migration
 contract holds: the framework path produces a honest, reproducible
 28.99 where the legacy number was undocumented.
+
+
+## Backbone lever RESULT (2026-10-27): ByT5-base 28.81% best (ep2)
+
+Like-for-like standings on the secryst test split:
+- Legacy artifact: **27.57%**
+- Framework ByT5-small (8ep): 28.99%
+- Framework ByT5-base (4ep): **28.81%** (best; ep3 28.92)
+
+The backbone lever is near-exhausted — the remaining ~1.2-point gap is
+the CORPUS: the legacy's undocumented training set evidently exceeds
+our 17k pairs. The recorded next lever is corpus enrichment (merge the
+Chuon Nath IPA layer + SBBIC vocabulary + the khm-latn pairs), which
+is the WO68 data work. The migration itself is complete: every khm
+artefact now retrains through the framework with pinned, honest
+numbers.
