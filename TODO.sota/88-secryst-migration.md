@@ -56,3 +56,16 @@ Chuon Nath IPA layer + SBBIC vocabulary + the khm-latn pairs), which
 is the WO68 data work. The migration itself is complete: every khm
 artefact now retrains through the framework with pinned, honest
 numbers.
+
+
+## Multi-task RESULT (2026-10-27): the framework BEATS the legacy
+
+khm multi-task (<latn>+<ipa> task prefixes, ByT5-small, 4ep):
+**dev CER 24.50%** (best; final 24.54) — vs legacy 27.57% like-for-like.
+The multi-task IPA+Latin reinforcement beats the legacy artifact by
+3+ points on identical data. The migration is COMPLETE and POSITIVE:
+the framework-native model replaces the legacy artifact.
+
+Next: export the multi-task model → fixtures → gates → publish as the
+khm-latn successor (owner: id + version — the convention is
+khm-phonemic-1.0 under the MECE taxonomy, since the output is IPA).
