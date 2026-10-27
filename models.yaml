@@ -40,7 +40,7 @@ models:
     task: g2p
     precision: fp32
     filename: khm-phonemic-1.0.zip
-    url: https://github.com/interscript/interscript-models/releases/download/UNPUBLISHED/khm-phonemic-1.0.zip
+    url: https://github.com/interscript/interscript-models/releases/download/khm-phonemic-1.0/khm-phonemic-1.0.zip
     sha256: b1eb0cd613fbd06a33f4ec15902f6e425469be89606f629f5e10bd45ac6d4283
     size: 1112390964
     metrics:
