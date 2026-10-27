@@ -36,6 +36,34 @@ renames:
   urd-g2p-base-1.0: urd-ipa-base-1.0
 
 models:
+  khm-phonemic-1.0:
+    task: g2p
+    precision: fp32
+    filename: khm-phonemic-1.0.zip
+    url: https://github.com/interscript/interscript-models/releases/download/UNPUBLISHED/khm-phonemic-1.0.zip
+    sha256: b1eb0cd613fbd06a33f4ec15902f6e425469be89606f629f5e10bd45ac6d4283
+    size: 1112390964
+    metrics:
+    - name: cer
+      value: 24.50
+      protocol: dev CER, multi-task test split (997 rows), single-row greedy
+      source: run-090-khm-multi oepoch-2 eval (WO88; like-for-like vs legacy 27.57%)
+    - name: cer_legacy_split
+      value: 24.16
+      protocol: dev CER after the accidental resume-extend (oepoch-7)
+      source: run-090-khm-multi oepoch-7 eval
+    parity:
+      samples: 600
+      cer_delta: 0.0032
+      row_exact_match: 0.9867
+      note: >-
+        torch vs shipped zip, single-row greedy, 600 secryst-split rows
+        (run-090-khm-parity, 2026-10-27)
+    license: BSD-3-Clause
+    trained_from: >-
+      ByT5-small multi-task <latn>+<ipa> prefixes; corpora/khm-latn.yaml
+      (17,015 secryst-lineage pairs) + khm-lexicon-train (2,935 Chuon Nath
+      IPA); 4 epochs BS4; WO88
   tha-phonemic-1.0:
     task: g2p
     precision: fp32
