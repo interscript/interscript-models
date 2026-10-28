@@ -88,7 +88,7 @@ Reference collection: 8 DIN PDFs; 4 encoded (32706, 32707, 33903, 33904).
 |-----|-------|-------|
 | DIN 1460-2 | D | subject confirmed against the document at encoding |
 | DIN 31635 | D | Arabic |
-| DIN 31636 | D | subject confirmed at encoding |
+| DIN 31636 | D | Hebrew column SHIPPED — maps PR #217; Yiddish column still open |
 | DIN 32706 | D | SHIPPED — maps PR #216 (Armenian; also closes the ISO 9985 scope gap in A6) |
 | DIN 32708 | D | subject confirmed at encoding |
 
