@@ -1,6 +1,6 @@
 # WO91 — DIN + BSI + ICS Annex D batch
 
-Status: IN_PROGRESS (2026-10-28) — 4 of 8 items shipped (maps PRs #216, #217, #218, #219)
+Status: IN_PROGRESS (2026-10-28) — 5 of 8 items shipped (maps PRs #216-#220); Table A COMPLETE (all five columns merged)
 Goal: encode the five DIN gaps, the two BSI documents, and ICS Annex D;
 A1 items D-classes all deterministic (WO89 section A3/A4/A5).
 Reference collection: `interscript-private-references/{din,bsi,ics-630-01}/`;
@@ -11,7 +11,7 @@ text extracted to /tmp/wo91-*.txt.
 | Item | Doc | Contents | State |
 |------|-----|----------|-------|
 | DIN 32706 Armenian | din-32706.pdf (8 pp) | 39-row table aligned with ISO 9985 | **SHIPPED — maps PR #216** (also closes the ISO 9985 scope gap in WO89 A6) |
-| BS 2979:1958 | BS-2979-1958.pdf (24 pp) | FIVE systems in one document: "British" Cyrillic (Table A/B), "International" Cyrillic (= ISO/R9, Table C), Church Slavonic (Table D), Rumanian Cyrillic (Table E), Greek (Table G) | **UNBLOCKED by owner directive (visual reading of the scans). Table A Russian column SHIPPED — maps PR #219 (48 rows; examples as tests; rows 45-47 little-yus/fita/izhitsa not rendered — parenthesized cells not legible beyond doubt). Remaining columns of Table A: Ukrainian, Byelorussian (ў→w), Bulgarian (щ→sht, ъ→ŭ), Serbian/Macedonian (latinica: đ for both ђ and ѓ per the footnote, ć for ћ and ќ, dž, dz, lj, nj). Table B/F are back-transliterations (skip; A2 territory). Table C = ISO/R9 (cite). Table D = pdf page 16, Table E = pdf 17, Table G = pdf 20+ (legacy-font text; now also readable visually). Document examples page (pdf 7) gives British+International renderings of 17 periodical titles - test material.** |
+| BS 2979:1958 | BS-2979-1958.pdf (24 pp) | FIVE systems in one document: "British" Cyrillic (Table A/B), "International" Cyrillic (= ISO/R9, Table C), Church Slavonic (Table D), Rumanian Cyrillic (Table E), Greek (Table G) | **UNBLOCKED by owner directive (visual reading of the scans). Table A COMPLETE — Russian #219; ukr/bel/bul/srp/mkd #220 (160 tests; settled at 9x: Bulgarian щ=sht, Bulgarian ъ=ŭ — the examples-page S-ibreve-yuz was a breve-vowel confusion; Ukrainian и=ȳ; Byelorussian ы=ȳ; the Zapiski example uses pre-reform letters outside the bel column — recorded, not embedded). Rows 45-47 not rendered in any column. Table B/F are back-transliterations (skip; A2 territory). Table C = ISO/R9 (cite). Table D = pdf page 16, Table E = pdf 17, Table G = pdf 20+ (legacy-font text; now also readable visually). Document examples page (pdf 7) gives British+International renderings of 17 periodical titles - test material.** |
 | PD 6505:1982 | PD-6505-1982.pdf (49 pp) | Greek transliteration | **UNBLOCKED by owner directive — read visually; not yet transcribed.** |
 | DIN 1460-2 | din-1460-2.pdf (29 pp) | Cyrillic alphabets of NON-SLAVIC languages (part 2), 2011-10 | PENDING — 52.8k chars |
 | DIN 31635 | din-31635.pdf (29 pp) | Arabic | PENDING — 35.8k chars |
