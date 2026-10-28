@@ -1,6 +1,6 @@
 # WO91 — DIN + BSI + ICS Annex D batch
 
-Status: IN_PROGRESS (2026-10-29) — BS 2979 COMPLETE (Tables A, D, E, G; maps PRs #219-#222). WO91 remaining: PD 6505, DIN 1460-2/31635/32708, ICS Annex D Appendix A
+Status: IN_PROGRESS (2026-10-29) — BS 2979 COMPLETE + DIN 31635 Arabic SHIPPED (maps PR #223). WO91 remaining: PD 6505, DIN 1460-2/32708, DIN 31635 Persian/Kurdish/Urdu columns, ICS Annex D Appendix A
 Goal: encode the five DIN gaps, the two BSI documents, and ICS Annex D;
 A1 items D-classes all deterministic (WO89 section A3/A4/A5).
 Reference collection: `interscript-private-references/{din,bsi,ics-630-01}/`;
@@ -14,7 +14,7 @@ text extracted to /tmp/wo91-*.txt.
 | BS 2979:1958 | BS-2979-1958.pdf (24 pp) | FIVE systems in one document: "British" Cyrillic (Table A/B), "International" Cyrillic (= ISO/R9, Table C), Church Slavonic (Table D), Rumanian Cyrillic (Table E), Greek (Table G) | **UNBLOCKED by owner directive (visual reading of the scans). Table A COMPLETE — Russian #219; ukr/bel/bul/srp/mkd #220 (160 tests; settled at 9x: Bulgarian щ=sht, Bulgarian ъ=ŭ — the examples-page S-ibreve-yuz was a breve-vowel confusion; Ukrainian и=ȳ; Byelorussian ы=ȳ; the Zapiski example uses pre-reform letters outside the bel column — recorded, not embedded). Rows 45-47 not rendered in any column. Table B/F are back-transliterations (skip; A2 territory). Table C = ISO/R9 (cite). Table D = pdf page 16, Table E = pdf 17, Table G = pdf 20+ (legacy-font text; now also readable visually). Document examples page (pdf 7) gives British+International renderings of 17 periodical titles - test material.** |
 | PD 6505:1982 | PD-6505-1982.pdf (49 pp) | Greek transliteration | **UNBLOCKED by owner directive — read visually; not yet transcribed.** |
 | DIN 1460-2 | din-1460-2.pdf (29 pp) | Cyrillic alphabets of NON-SLAVIC languages (part 2), 2011-10 | PENDING — 52.8k chars |
-| DIN 31635 | din-31635.pdf (29 pp) | Arabic | PENDING — 35.8k chars |
+| DIN 31635 | din-31635.pdf (29 pp) | Arabic **SHIPPED — maps PR #223** (59 tests; vocalized-input core; the norm also carries Persian, Kurdish and Urdu sections — separate maps; its Ottoman-Turkish section is references-only, cited) |
 | DIN 31636 Hebrew column | din-31636.pdf (14 pp) | HEBREW (2018-10): **SHIPPED — maps PR #217** (tables 1-6 + section 8 rules over vocalized input; Unicode mark-order normalization; reading-side items documented: matres lectionis, qamats qatan, furtive patah, sheva root exceptions, 8h/8j-k) |
 | DIN 31636 Yiddish column | din-31636.pdf (14 pp) | Yiddish vowel table (Table 4), ayin as e, tav as s-with-grave, double forms | **SHIPPED — maps PR #218** (Table 4 spellings as sequence rules; reading-dependent cells resolve first-listed with alternative documented; loshn-koydesh = composition point) |
 | DIN 32708 | din-32708.pdf (19 pp) | JAPANESE (2014-08) | PENDING — kana rows deterministic; kanji readings are the one true M-part (WO89 A2) |
@@ -119,3 +119,18 @@ own legacy-font text layer for this table was deliberately not used.
 BS 2979 verdict: every encodable table is now in the corpus (A x5 columns + B
 skip back-transliteration + C cite ISO/R9 + D + E + F skip + G). Rows 45-47 of
 Table A remain unrendered (illegible cells, not guessed).
+
+## DIN 31635 Arabic (2026-10-29)
+
+din-ara-Arab-Latn-31635-2011 (59 tests), section 6 over vocalized input:
+Table 1 in full; short-vowel signs; fathatan as -an; sukun stripped first
+(keeps the article rule adjacent); shadda doubling for every consonant with
+mark-order swaps; hamza carriers contribute nothing (a+damma-carrier renders
+only the mark's vowel); alif/hamza omitted word-initially; madda per rule f;
+taa marbuta h-after-long-a with the lookbehind accepting BOTH the raw alif
+and the merged a-macron (the long-vowel merge rules run first and consume
+the alif — first-order lesson from the Hebrew mark-order negative); the
+word-initial article with sun-letter assimilation and hyphen including the
+doubled shadda form (aš-š). Reading-side documented: unvocalized waw/ya,
+hamzat al-wasl, article elision after vowel-final words, construct state,
+Allah.
