@@ -1,6 +1,6 @@
 # WO91 — DIN + BSI + ICS Annex D batch
 
-Status: IN_PROGRESS (2026-10-29) — Tables A, D, E shipped (maps PRs #216-#221); BSI remaining: Table G (Greek) + PD 6505
+Status: IN_PROGRESS (2026-10-29) — BS 2979 COMPLETE (Tables A, D, E, G; maps PRs #219-#222). WO91 remaining: PD 6505, DIN 1460-2/31635/32708, ICS Annex D Appendix A
 Goal: encode the five DIN gaps, the two BSI documents, and ICS Annex D;
 A1 items D-classes all deterministic (WO89 section A3/A4/A5).
 Reference collection: `interscript-private-references/{din,bsi,ics-630-01}/`;
@@ -99,3 +99,23 @@ resulting main push.
   neutral yer U+A65E/A65F first typed.
 - Both read visually from the scans at 6x-20x; the two maps' uk renderings
   differ (CS macron, Rumanian breve) — distinct tables, distinct conventions.
+
+## Table G, Greek (2026-10-29)
+
+bsi-ell-Grek-Latn-1958 (54 tests): all 24 rows both cases; eta/omega with
+macrons; phi = f (per the table's own English-to-Greek cross-references); the
+special-signs notes implemented — rough breathing = apostrophe preceding its
+vowel (decomposed combining dasia AND precomposed Greek-Extended forms),
+disregarded over rho; smooth breathing deleted; diaeresis/accents left in
+place; iota subscript = positional i including the precomposed diphthong
+forms (ai, ei-macron-i, o-macron-i + capitals).
+
+Negative recorded: the precomposed block was first written with psili/dasia
+INVERTED (psili = smooth = even codepoints U+1F00..., dasia = rough = odd
+U+1F01...); caught by the smooth-alpha test failing and fixed by swapping the
+blocks and re-pointing the two example tests at the rough forms. The source's
+own legacy-font text layer for this table was deliberately not used.
+
+BS 2979 verdict: every encodable table is now in the corpus (A x5 columns + B
+skip back-transliteration + C cite ISO/R9 + D + E + F skip + G). Rows 45-47 of
+Table A remain unrendered (illegible cells, not guessed).
