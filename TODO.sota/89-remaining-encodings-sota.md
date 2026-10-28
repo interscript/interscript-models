@@ -82,14 +82,14 @@ Class on the table itself; D+M noted where unvocalized/unsegmented input is the 
 
 ### A3. DIN — 5 documents (all D)
 
-Reference collection: 8 DIN PDFs; 3 encoded (32707, 33903, 33904).
+Reference collection: 8 DIN PDFs; 4 encoded (32706, 32707, 33903, 33904).
 
 | Doc | Class | Notes |
 |-----|-------|-------|
 | DIN 1460-2 | D | subject confirmed against the document at encoding |
 | DIN 31635 | D | Arabic |
 | DIN 31636 | D | subject confirmed at encoding |
-| DIN 32706 | D | subject confirmed at encoding |
+| DIN 32706 | D | SHIPPED — maps PR #216 (Armenian; also closes the ISO 9985 scope gap in A6) |
 | DIN 32708 | D | subject confirmed at encoding |
 
 ### A4. BSI — 2 documents (all D)
@@ -111,7 +111,7 @@ Reference collection: 8 DIN PDFs; 3 encoded (32707, 33903, 33904).
 | ISO 9 non-Russian Cyrillic coverage | D | verify per-letter coverage of the 1995 table vs corpus |
 | ISO 259 Hebrew | D | letter mapping; unvocalized input is Track B |
 | ISO 7098 Chinese (pinyin) | D | large per-character table |
-| ISO 9985 Armenian | D | |
+| ISO 9985 Armenian | D | closed by DIN 32706 map (maps PR #216), which is aligned with ISO 9985:1996 |
 | ISO 15919 Indic remainder | D | enumerate the script set vs corpus; encode the missing scripts |
 
 ### A7. Source-acquisition diffs
