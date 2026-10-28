@@ -96,8 +96,8 @@ Reference collection: 8 DIN PDFs; 4 encoded (32706, 32707, 33903, 33904).
 
 | Doc | Class | Notes |
 |-----|-------|-------|
-| BS 2979:1958 | X | four separable systems in one document (British Cyrillic, Church Slavonic, Rumanian Cyrillic, Greek); tables A-F are full-page scans, Table G is legacy-font text — blocked-owner on OCR/manual-transcription tooling (WO91) |
-| PD 6505:1982 | X | Greek; pure scan (no text layer) — same owner gate (WO91) |
+| BS 2979:1958 | D (via visual reading) | unblocked by owner directive; Russian column SHIPPED — maps PR #219; remaining: ukr/bel/bul/srp columns + Tables D, E, G (WO91) |
+| PD 6505:1982 | D (via visual reading) | unblocked by owner directive; scan readable visually, not yet transcribed (WO91) |
 
 ### A5. ICS 630-01 — Annex D Chinese (D)
 
@@ -121,9 +121,9 @@ Reference collection: 8 DIN PDFs; 4 encoded (32706, 32707, 33903, 33904).
 | ICAO systems: obtain current source docs, diff vs corpus | D |
 | UNGEGN systems: obtain source docs, diff vs corpus | D |
 
-**Track A totals: 72 items — 61 D, 8 D+M, 1 M-part (Japanese kanji), 2 X (the BSI
-pair, scan-only sources). Every remaining table except the two scan-only BSI
-documents is encodable as a deterministic map.**
+**Track A totals: 72 items — 63 D, 8 D+M, 1 M-part (Japanese kanji), 0 X (the two
+scan-only BSI documents were unblocked by the owner directive to read the scans
+visually). Every remaining table is encodable as a deterministic map.**
 
 ## B. Track B matrix — model lines vs SOTA targets
 
