@@ -60,3 +60,25 @@ and the DIN Yiddish column were read from high-resolution page crops
   No map is written for them; nothing is fabricated from the mojibake.
 - DIN subjects confirmed from title pages: 31636 = Hebrew (2018), 32708 =
   Japanese (2014), 1460-2 = non-Slavic Cyrillic (2011).
+
+## Merge record (2026-10-28)
+
+All campaign PRs rebase-merged on owner instruction: maps #211-#219 and
+interscript-models #377. #215 (the 8-map batch) conflicted add/add with the
+#211 restore, which had brought back earlier versions of five of the same
+systems (ady, kbd, krc, sah, udm). Cross-running the test suites settled it:
+
+- kbd, krc, udm: main's versions passed 100% of my suites — content-equivalent,
+  mine retained for the fuller tests (506 vs 99 across the five) and the
+  source-anomaly notes.
+- ady: main's version was RIGHT on one cell where mine was wrong — the capital
+  tied digraphs are Z͟H/S͟H (both capitals, U+035F over both) per the source's
+  own inventory note; my map corrected to Z͟H/S͟H (137/137) and the branch
+  rebased with my versions for all five.
+- sah: main's version diverged from the source PDF — it rendered d as D’ and n
+  as N’ (a palatalization-apostrophe scheme) and did not render fita or the nje
+  ligature; the BGN/PCGN 2012 table itself specifies dj and ny. Mine retained
+  (89/89), and the divergence is recorded here.
+
+After the merge: corpus strict-parse 309/309; map-artifact CI green on the
+resulting main push.
