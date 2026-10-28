@@ -1,6 +1,6 @@
 # WO91 — DIN + BSI + ICS Annex D batch
 
-Status: IN_PROGRESS (2026-10-28) — 5 of 8 items shipped (maps PRs #216-#220); Table A COMPLETE (all five columns merged)
+Status: IN_PROGRESS (2026-10-29) — Tables A, D, E shipped (maps PRs #216-#221); BSI remaining: Table G (Greek) + PD 6505
 Goal: encode the five DIN gaps, the two BSI documents, and ICS Annex D;
 A1 items D-classes all deterministic (WO89 section A3/A4/A5).
 Reference collection: `interscript-private-references/{din,bsi,ics-630-01}/`;
@@ -82,3 +82,20 @@ systems (ady, kbd, krc, sah, udm). Cross-running the test suites settled it:
 
 After the merge: corpus strict-parse 309/309; map-artifact CI green on the
 resulting main push.
+
+## Tables D and E (2026-10-29)
+
+- Table D Church Slavonic (bsi-chu-Cyrl-Latn-1958, 90 tests): i-rows are
+  glyph-variant pairs (i long/breve-marked short; i and i-diaeresis); yus series
+  e-ogonek/o-ogonek + j-forms; omega o-macron; uk digraph = u-MACRON (20x crop)
+  with monograph-uk variants; ksi ks; psi ps; fita = f-dot (20x); izhitsa =
+  y-dot (20x); hard sign u-breve (after consonants, per footnote); numerical
+  values documented, not encoded.
+- Table E Rumanian Alfabetul Cirilic (bsi-ron-Cyrl-Latn-1958, 93 tests): k = c
+  (ch before e & i, context rule over е/и/і/ї); yer a-breve; yery âi; yat ea;
+  yuses ê/â; semiyus (row 42) = in (printed "i-circumflex (n)"); fita th;
+  izhitsa y; row 43 = dzhe (ts-with-descender shape) = g before e & i.
+  Codepoint catch: the semiyus is U+A64E/A64F (semiyus), NOT the lookalike
+  neutral yer U+A65E/A65F first typed.
+- Both read visually from the scans at 6x-20x; the two maps' uk renderings
+  differ (CS macron, Rumanian breve) — distinct tables, distinct conventions.
