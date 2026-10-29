@@ -134,3 +134,25 @@ word-initial article with sun-letter assimilation and hyphen including the
 doubled shadda form (aš-š). Reading-side documented: unvocalized waw/ya,
 hamzat al-wasl, article elision after vowel-final words, construct state,
 Allah.
+
+## .imp-era PR migration (2026-10-29, owner directive)
+
+- PR #167 Modern Syriac: MIGRATED — maps/bgnpcgn-syr-Syrc-Latn-2011.isc replaces
+  the .imp on the branch (30 tests, all CI checks green). The source table's three
+  undetermined letters (waw, yod, taw) render deterministically (w, y, t) with the
+  vocalization-dependent alternatives documented.
+- PR #166 Dzongkha: MIGRATED — maps/bgnpcgn-dzo-Tibt-Latn-2010.isc re-derived from
+  ROMANIZATION OF DZONGKHA (the .imp was an unfinished draft: unclosed blocks,
+  duplicated conflicting rows, no valid tests). 71 tests, all CI checks green.
+  Verified against the source: row 23 a-chung = z is genuinely the source's value.
+- PR #168 ICAO 9303: PENDING — the .imp is a MULTI-LANGUAGE map using language()
+  selectors (rus/bel/ukr/mkd/srb + shared Latin-diacritics section). The
+  corpus-correct migration splits it into per-language maps; not yet converted.
+- PR #169 enhance-iso-223-1: PENDING DECISION — the branch adds
+  iso-ara-Arab-Latn-223-1-2021.imp but the content is ISO 233:1984 Arabic and the
+  corpus already carries iso-ara-Arab-Latn-233-1984.isc on main. The relationship
+  (redundant duplicate vs enhancement of the merged map) needs a semantic diff;
+  closing vs updating is an owner decision.
+- ISC semantics negative (recurring): before = lookbehind, after = lookahead -
+  the Dzongkha suffix/cluster rules were first written with the contexts reversed;
+  the Avar probe had established this earlier in the campaign.
