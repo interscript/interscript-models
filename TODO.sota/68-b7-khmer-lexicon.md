@@ -63,3 +63,24 @@ corpora/khm-latn.yaml provenance, and the retrain is unblocked.
   raw.githubusercontent fetch), port the Modal training script to HF Jobs
   (--detach, >=4h, step ckpts), retrain ByT5, eval against khm-latn-1.0's
   27.4 CER on the same protocol, ship via the strict publish path if better.
+
+
+## Lineage recovery VERIFIED by reproduction (2026-10-29)
+
+run-081-khm-latn-recovery (HF job rhtse/6ae32d5e3fb22a235dd5896f, seed 42,
+legacy recipe; first attempt CANCELED externally at epoch 4, attempt 2 of 3
+completed): held-out 5% test split, 895 rows —
+
+- greedy: EM 58.21%, CER 28.13%
+- beam4: EM 58.44%, **CER 27.49%**
+
+Against khm-latn-1.0's 27.42 CER this is reproduction within noise: the
+secryst/data-khmer-translit corpus is confirmed as the khm-latn training
+lineage, and the provenance pin in corpora/khm-latn.yaml is now verified by
+reproduction (the strongest evidence class). Best checkpoint:
+bucket Interscript/isx-training/khmer-translit/run-081-recovery/best.
+
+Consequence for the target: recovery is closed, but reproduction at ~27.5
+also confirms the corpus ceiling — **CER < 15 requires data expansion**, so
+the owner's licensing decision (SEAlang / full Chuon Nath IPA, or a blessed
+corpus-release license opening other sources) is now THE B7 blocker.
