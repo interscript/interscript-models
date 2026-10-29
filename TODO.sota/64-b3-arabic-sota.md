@@ -26,3 +26,28 @@ the news specialist; decode policy unchanged (greedy, first-alternates).
 HF Jobs, --detach, --timeout 23h, step ckpts; ≤2 GPU budget shared
 with B7.
 Acceptance: gates green + external protocol reconciliation (B9).
+
+
+## Oracle-distill launch scoping (2026-10-29)
+
+The WO39 chain is script-complete and ready to run: stage 1
+`distill_oracle_hf.py` (300K QCRI rows, three arms, per-row oracle) and
+stage 2 `continue_oracle_train_hf.py` (continue-train run-047/best 2 epochs,
+SadeedDiac + WikiNews eval, gate first-alt WER < 3.5607, stretch <= 2.70).
+
+Sole launch prerequisite: staging the three WO35 arm checkpoints
+(run-047-large-strip/best — also the stage-2 init, run-040-strip-alt/best,
+run-029-news-specialist/best) and the QCRI train_data mount onto HF storage.
+Findings of the audit:
+
+- The legacy Modal volumes (secryst-checkpoints et al.) list only
+  thai/rababa-era artifacts — no run-047/040/029.
+- rhtse/jobs-artifacts holds 78 timestamped job-sync dirs (r8 era) —
+  candidate location, unverified.
+- Recovery options if the checkpoints are gone: (a) the news specialist arm
+  is SHIPPED (ara-diac-news-1.0/1.1) and the r7 canonical teacher is SHIPPED
+  (ara-diac-2.0 lineage) — two of three arms restageable from pinned
+  releases; (b) run-047-large-strip/best (the stage-2 init) may need a
+  short re-derivation from its recorded recipe, or the stage-2 init moves
+  to the closest recoverable ancestor — an owner-visible design decision
+  recorded before any run.
