@@ -51,3 +51,20 @@ Findings of the audit:
   short re-derivation from its recorded recipe, or the stage-2 init moves
   to the closest recoverable ancestor — an owner-visible design decision
   recorded before any run.
+
+
+### Archaeology CONCLUDED (2026-10-29): arms unrecoverable from buckets
+
+The 78 timestamped job-sync dirs on rhtse/jobs-artifacts contain only script
+copies (train_arabic_r8_hf.py et al.) — no checkpoints. The WO35 arm
+checkpoints are unrecoverable from our storage. The launch decision is now
+owner-visible, with two options:
+
+- **Option A (restage + re-derive):** restage the two shipped arms
+  (ara-diac-news-1.0/1.1, the r7 canonical lineage) from pinned releases;
+  re-derive run-047-large-strip/best from its recorded recipe (a short
+  continue-train of its own) — then run the WO39 chain as designed.
+- **Option B (init substitution):** stage-2 continue-trains from the closest
+  recoverable ancestor instead of run-047/best — cheaper but changes the
+  gate lineage (the 3.5607 gate was measured ON run-047/best; a different
+  init re-baselines the comparison).
