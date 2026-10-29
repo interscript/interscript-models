@@ -145,9 +145,16 @@ Allah.
   ROMANIZATION OF DZONGKHA (the .imp was an unfinished draft: unclosed blocks,
   duplicated conflicting rows, no valid tests). 71 tests, all CI checks green.
   Verified against the source: row 23 a-chung = z is genuinely the source's value.
-- PR #168 ICAO 9303: PENDING — the .imp is a MULTI-LANGUAGE map using language()
-  selectors (rus/bel/ukr/mkd/srb + shared Latin-diacritics section). The
-  corpus-correct migration splits it into per-language maps; not yet converted.
+- PR #168 ICAO 9303: MIGRATED — the multi-language .imp maps onto the six
+  per-language maps main already carries; the branch now brings them to the
+  legacy file's 2015 behavior (bel Ye-with-diaeresis IO/io + ge H/h; ukr ge H/h,
+  i Y/y, and the five word-initial pre-rules with the apostrophe exclusion;
+  bul sht; mkd kj/dj/gj/h/c; srp h/z/h/c/c/s) and adds the shared Latin-folding
+  section as icao-mul-Latn-Latn-2015 (69 letters both cases, primary renderings
+  for the alternative-valued letters). 40 embedded tests. Legacy-file defects
+  corrected: the ukr yu-initial YA-against-doc bug, a sharp-s row miskeyed as
+  y-with-diaeresis, a double-colon language code, urk code typos. All CI checks
+  green on the branch.
 - PR #169 enhance-iso-223-1: PENDING DECISION — the branch adds
   iso-ara-Arab-Latn-223-1-2021.imp but the content is ISO 233:1984 Arabic and the
   corpus already carries iso-ara-Arab-Latn-233-1984.isc on main. The relationship
