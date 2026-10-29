@@ -105,3 +105,16 @@ Alternative license-clear expansion paths identified, attempt 1 launched:
 - FLEURS-Khmer alignment (heavier, parked).
 
 The expansion path makes CER < 15 reachable WITHOUT SEAlang/Chuon Nath.
+
+
+## Attempt 2 launched: self-training on the license-clear SBBIC list (2026-10-29)
+
+khm-phonemic-1.0 (our shipped 24.5-CER model — not an LLM; the LLM-teacher
+law is not implicated) labels the 75,039-word SBBIC list (LGPL-2.1, in
+khmer-dict-spice, staged to the training bucket) with IPA readings plus mean
+token log-prob confidence (run-082b-khm-sbbic-label, HF job
+rhtse/6ae33c0441e90535df78b820). Stage B filters hard on confidence and
+retrains; the Khmer regime (tiny gold, huge unlabeled) is the case weak
+supervision exists for, with held-out validation mandatory against the WO64
+correlated-teacher negative. This path makes CER < 15 reachable without
+SEAlang / Chuon Nath.
