@@ -84,3 +84,24 @@ Consequence for the target: recovery is closed, but reproduction at ~27.5
 also confirms the corpus ceiling — **CER < 15 requires data expansion**, so
 the owner's licensing decision (SEAlang / full Chuon Nath IPA, or a blessed
 corpus-release license opening other sources) is now THE B7 blocker.
+
+
+## Data expansion attempt 1: Wiktionary/kaikki (2026-10-29, launched)
+
+The owner reports SEAlang / full Chuon Nath IPA are not findable/obtainable.
+Alternative license-clear expansion paths identified, attempt 1 launched:
+
+- **kaikki/Wiktionary Khmer** (CC BY-SA 4.0, the tha-lexicon-kaikki-1.0
+  precedent): the dump exists at
+  kaikki.org/dictionary/Khmer/kaikki.org-dictionary-Khmer.jsonl. Job
+  run-082-khm-wikt-expansion extracts word->IPA and word->romanization
+  pairs for Khmer-script headwords.
+- **Self-training expansion** (attempt 2, designed): khm-phonemic-1.0
+  (24.5 CER) labels the 72,048 SBBIC words (license-clear, in
+  khmer-dict-spice) -> confidence-filtered gold expansion. Caution: the
+  noisy-student negative (WO64) was correlated-teacher Arabic — the Khmer
+  regime (tiny gold, huge unlabeled) is the case self-training is for;
+  confidence filtering + held-out VRR-style validation mandatory.
+- FLEURS-Khmer alignment (heavier, parked).
+
+The expansion path makes CER < 15 reachable WITHOUT SEAlang/Chuon Nath.
