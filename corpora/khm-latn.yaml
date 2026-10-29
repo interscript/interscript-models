@@ -1,16 +1,21 @@
 id: khm-latn
 task: transliteration
 sources:
-  # WO88 migration: the secryst-era khm-latn training lineage, recorded
-  # with honest provenance markers — the original corpus predates the
-  # pinning contract. Decode evidence + the khmer-dict-spice source
-  # (Chuon Nath + SBBIC) are documented; the exact training tsv/tsv
-  # generation script lives in the secryst repo
-  # (scripts/export_onnx_byt5.py lineage). UNVERIFIED fields are the
-  # retrain blockers listed in WO68/88.
+  # WO68 lineage recovery (2026-10-29): the secryst-era khm-latn training
+  # corpus identified exactly as secryst/data-khmer-translit — 17,911 word
+  # pairs in two parallel single-column CSVs. Staged to the training bucket
+  # with sha256; the legacy raw.githubusercontent fetch is retired.
+  # Upstream repo carries no license file (predecessor project's own);
+  # the ship gate stays owner-held until the license_review record lands.
   - kind: repo
-    id: secryst (~/src/interscript/secryst lineage)
-    license: UNVERIFIED
-    provenance: UNVERIFIED — recover the exact training corpus before any retrain
+    id: secryst/data-khmer-translit
+    license: UNVERIFIED — predecessor repo, no license file; owner decision pending
+    provenance: https://github.com/secryst/data-khmer-translit (master at recovery, 2026-10-29)
 splits:
-  train: {path: UNVERIFIED, rows: 0, sha256: UNVERIFIED}
+  train: {path: hf://buckets/Interscript/isx-training/khmer-translit/run-081-recovery/train.jsonl, rows: 16120, sha256: SEE-RUN}
+  val: {path: hf://buckets/Interscript/isx-training/khmer-translit/run-081-recovery/val.jsonl, rows: 895, sha256: SEE-RUN}
+  test: {path: hf://buckets/Interscript/isx-training/khmer-translit/run-081-recovery/test.jsonl, rows: 895, sha256: SEE-RUN}
+raw:
+  data_kh.csv: {sha256: 48f9924ac50c941c1fd52a7e5a9152e4478ba6d9679e1732333ed9f76b598a81, path: hf://buckets/Interscript/isx-training/khmer-translit/data_kh.csv, rows: 17911}
+  data_rom.csv: {sha256: 7dff342f4ed214c05d147e71baa10482d80f4ff6d182ee15a2abbdbafb6bc71b, path: hf://buckets/Interscript/isx-training/khmer-translit/data_rom.csv, rows: 17911}
+recovery_run: run-081-khm-latn-recovery (HF job rhtse/6ae32acd41e90535df78a449, seed 42, recipe = legacy run-001)
