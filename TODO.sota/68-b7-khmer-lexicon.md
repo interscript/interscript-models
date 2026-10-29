@@ -37,3 +37,29 @@ The training corpus is re-derivable from the secryst repo's data
 pipeline + khmer-dict-spice — the recovery question is now concrete:
 pin the exact secryst-era corpus files, run them through
 corpora/khm-latn.yaml provenance, and the retrain is unblocked.
+
+
+## Lineage sources pinned precisely (2026-10-29)
+
+- **khm-latn lineage** (the 27.4 CER model): trains on
+  `secryst/data-khmer-translit` — 17,911 word pairs in two parallel CSVs
+  (data_kh.csv, data_rom.csv), fetched by the secryst-era
+  train_khmer_byt5.py from **raw.githubusercontent (a data-law violation to
+  retire)**. The repo carries **no license file** (default copyright) — but
+  it is the predecessor project's own repository, so the fix is the owner
+  adding a license to it (or blessing the migration of the CSVs into our
+  GitHub Releases channel under a license the owner names). No third-party
+  negotiation involved.
+- **khmer-dict-spice** (local clone confirmed): the DICT/IPA line, NOT the
+  latn pairs — ipa_dic.txt (3,286 gold pairs, the exhausted open supply),
+  SBBICkm_KH.txt (72,048 words), kh_dictionary.{csv,sqlite},
+  trained_chuon_small.txt (a frequency list). LGPL-2.1, already recorded.
+- Consequence: **the CER < 15 recovery path needs NO third-party license.**
+  The single owner decision is the secryst data repo's license. The
+  SEAlang / full Chuon Nath licensing only gates expansion beyond the
+  17,911 pairs + 3,286 gold pairs.
+- Recovery plan once the license lands: re-release the two CSVs as a pinned
+  GitHub Release artifact with sha256 + provenance YAML (retiring the
+  raw.githubusercontent fetch), port the Modal training script to HF Jobs
+  (--detach, >=4h, step ckpts), retrain ByT5, eval against khm-latn-1.0's
+  27.4 CER on the same protocol, ship via the strict publish path if better.
