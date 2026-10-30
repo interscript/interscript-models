@@ -145,3 +145,24 @@ student-vs-teacher on the same rows and surface. Gate: student CER <
 teacher CER on that split -> EXPANSION_PAYS. Note the translit test's
 anchor CER band is ~27.4 (run-081 reproduction); the teacher's own CER
 on the same rows is the number that matters.
+
+
+**Stage B2 VERDICT: EXPANSION_PAYS** (2026-10-30, run-082d). Matched-surface
+result on the translit romanization test split (895 rows, exact run-081
+protocol): student CER 40.25% / EM 52.4% vs the phonemic teacher
+(khm-phonemic-1.0, same rows in-job) 47.15% / EM 44.6% — the 57K SBBIC
+weak labels + 16K translit anchor beat the teacher by 6.9 CER points on
+its own surface. Caveat carried forward: this compares against the
+PHONEMIC teacher; the khm-latn lineage's own band is 27.4, and the
+translit-surface score of a convention-blended model is not a lineage
+benchmark.
+
+Attempt 3 (running): the convention-correct experiment — SBBIC labeled
+with the SHIPPED khm-latn-1.0 artifact (run-082e-khm-latn-label, 24
+CPU processes on a100-large, rotating parts, sha256-verified Release
+fetch; plain decoders are batch=1-traced but words are tiny) -> weak
+labels in the translit convention -> train byt5-small (weak + translit
+train anchor, exact run-081 split) -> gate: student CER < teacher CER
+on the identical 895 test rows (the lineage comparison vs 27.4).
+Verdict script: train_khm_expansion3.py (stage-b3 outputs under
+bucket khmer-latn/).
