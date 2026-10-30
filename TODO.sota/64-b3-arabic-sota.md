@@ -121,3 +121,37 @@ refined datasets + the SadeedDiac-25 benchmark) and Misraj/Sadeed_Tashkeela
 (gated, ~doubles the corpus). Cost: r7 re-train + 2-arm relabel +
 continue-train ~= 2-3 GPU-days. The re-baselined gate (first-alt WER against
 the re-trained init) is recorded before launch per the Option-B consequence.
+
+
+### Option-B execution (2026-10-30): stage 1 built, parity-proven, smoke in flight
+
+Stage 1 (`oracle_relabel_onnx.py`, interscript-train PR) decodes the two
+surviving SHIPPED arms over run-047's exact corpus recipe (article shuffle
+seed 7, row shuffle seed 42, WINDOW=600, slash-strip; full stripped corpus
+= 290,575 rows, D_SUBSET covers it). Per-row oracle = arm pred with min
+edit distance to corpus silver, ties -> r7.
+
+Findings recorded:
+- **Parity proof (local CPU, 3 equal-byte-length texts x 2 arms):** the
+  length-bucketed zero-pad batched KV decode (ara-diac-2.0) matches the
+  house runtime byte-exactly (6/6 after the plain fix). Plain-decoder
+  exports (ara-diac-news-1.0) are BATCH=1-TRACED: batched plain decode
+  silently corrupts (garbage logits/replacement chars) — this extends the
+  WO51 finding from "padded batches corrupt unmasked encoders" to "plain
+  decoder graphs are single-row exports; only the kv graph is batch-safe".
+  The relabel plan therefore pins plain arms to single-row decode.
+- **Batching payoff:** corpus byte-length distribution is tight (median
+  38 B; ~91% batch occupancy at BS=48), so the KV arm batches ~48x.
+- **Durability:** HfFileSystem API sync 401s from inside jobs (jobs token
+  lacks bucket write scope); mount appends only flush reliably when files
+  close. Per-arm raw preds therefore use rotating part files
+  (parts-<arm>/part-NNN.jsonl every 2000 rows — the field-proven khm
+  labeler pattern), resume by row-keyed dedup.
+- **ORT-GPU pin:** latest onnxruntime-gpu (1.23) needs CUDA 13; the
+  pytorch 2.5.1-cuda12.4-cudnn9 image gets onnxruntime-gpu==1.22.2.
+- **Arms on record:** ara-diac-2.0 (r7 ByT5-base fp32 kv: DER 2.2864,
+  WikiNews-2024 multiref WER 17.3794) vs ara-diac-news-1.0 (int8 plain:
+  DER 5.5008, multiref WER 10.1262) — decorrelated exactly as Option B
+  intended. Stage 2 trains a fresh google/byt5-base student on the oracle
+  targets; gate re-baselined (RAW multiref WER < 17.3794; stretch <=
+  10.1262; SadeedDiac DER within +0.1 of 2.2864).
