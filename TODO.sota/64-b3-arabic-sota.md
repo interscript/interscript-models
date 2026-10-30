@@ -84,3 +84,20 @@ restage p029 from the shipped ara-diac-news release; (2) re-derive
 run-047-large-strip from the recovered recipe (the stage-2 init); (3)
 re-derive or substitute p040; (4) run the WO39 chain. Steps 1-2 start next
 session as the focused task.
+
+
+### p047 recovery flickered; Option B is the executable path (2026-10-30)
+
+A jobs-artifacts listing showed run-047-large-strip/export/ara-diac-news-1.2.zip
+(821,320,781 B — exactly WO44's recorded size, dated 2026-10-12), but the
+entry vanished from the listing minutes later and cp fails with not-found:
+retention eviction or eventual consistency. One more listing probe is
+worthwhile before declaring it gone.
+
+**Option B concretized — fully executable from pinned releases, no
+archaeology:** arms = {the shipped r7 lineage (ara-diac-2.0), the shipped
+news specialist (ara-diac-news-1.0)}; init = the shipped r7 artifact. The
+2-way oracle forfeits the p040/p047 complementarity and the gate
+re-baselines (first-alt WER is measured against the r7 init's own
+run), but every input is pinned and checksummed today. Recommend B, with
+A opportunistically revisited if the bucket entry reappears.
