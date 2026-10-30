@@ -166,3 +166,23 @@ train anchor, exact run-081 split) -> gate: student CER < teacher CER
 on the identical 895 test rows (the lineage comparison vs 27.4).
 Verdict script: train_khm_expansion3.py (stage-b3 outputs under
 bucket khmer-latn/).
+
+
+**Attempt 3 verdict: nominal EXPANSION_PAYS, statistically a TIE** (2026-10-31,
+run-082f). All 74,992 unique SBBIC words labeled with the shipped
+khm-latn-1.0 (0 empties this pass). Student (byt5-small, 74,992-convention
+weak labels + 16,120 translit anchor) vs teacher on the identical 895-row
+translit test split:
+
+- student CER 27.079% / EM 59.89%
+- teacher CER 27.417% / EM 59.66%  (reproduces the published 27.42
+  benchmark exactly — protocol identity verified)
+
+The +0.34 CER delta is within noise at n=895. Interpretation: weak-label
+expansion REPLICATES the teacher (the labels are the teacher's own
+outputs — training converges to the teacher, including its errors). No
+evidence expansion alone reaches the CER<15 B7 target. The line's next
+real lever is NEW GOLD, not more teacher output: SEAlang / Chuon Nath
+full IPA remain the owner-held data asks (B7 blocker unchanged), since
+a second decorrelated latn-convention teacher for agreement-denoising
+does not exist today.
