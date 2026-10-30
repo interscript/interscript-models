@@ -101,3 +101,23 @@ news specialist (ara-diac-news-1.0)}; init = the shipped r7 artifact. The
 re-baselines (first-alt WER is measured against the r7 init's own
 run), but every input is pinned and checksummed today. Recommend B, with
 A opportunistically revisited if the bucket entry reappears.
+
+
+### Storage verdict (2026-10-30): B3 is a re-train campaign
+
+A full recursive dump of rhtse/jobs-artifacts (2,257 entries) contains ZERO
+run-024 entries — the run-024-arabic-r8-* checkpoint dirs that appeared in
+several listing greps earlier the same day have since vanished, as did the
+p047 export. The bucket layer is lossy for the WO35/r8-era artifacts; no
+launch can be built on restaging them.
+
+**Definitive path (every input stable):** re-train the arms from the
+recorded recipes against the staged corpus — `train_arabic_r7.py` is present
+and the corpus is mounted from the Interscript/arabic-r8 dataset repo
+(owner-approved license review 2026-10-18; also hosting SadeedDiac-25 and
+the WikiNews-2024 multiref eval splits). Additionally documented corpus
+options: qcri/advancing-arabic-diacritization (EMNLP 2025, CC BY-NC-SA —
+refined datasets + the SadeedDiac-25 benchmark) and Misraj/Sadeed_Tashkeela
+(gated, ~doubles the corpus). Cost: r7 re-train + 2-arm relabel +
+continue-train ~= 2-3 GPU-days. The re-baselined gate (first-alt WER against
+the re-trained init) is recorded before launch per the Option-B consequence.
