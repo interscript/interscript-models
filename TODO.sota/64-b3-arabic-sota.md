@@ -68,3 +68,19 @@ owner-visible, with two options:
   recoverable ancestor instead of run-047/best — cheaper but changes the
   gate lineage (the 3.5607 gate was measured ON run-047/best; a different
   init re-baselines the comparison).
+
+
+### Option A scoping continued (2026-10-30)
+
+With the owner unlock, Option A is the chosen path (faithful gate lineage).
+Recipe audit: WO39 records run-047's CORPUS recipe exactly (MIX=qcri,
+R8_GOLD=none, PSEUDO_CAP=900K, seed-7 article shuffle, WINDOW=600,
+STRIP_ALT targets) — stage 1 is runnable once the arm checkpoints restage.
+The large-strip TRAINING script itself is not in interscript-train (the
+r-series scripts cover byt5/r3/r5/r6/r7/r8/r9/plane/raft); identifying or
+reconstructing it is the remaining archaeology. The r7 lineage is fully
+reproducible today (train_arabic_r7.py present). Execution order: (1)
+restage p029 from the shipped ara-diac-news release; (2) re-derive
+run-047-large-strip from the recovered recipe (the stage-2 init); (3)
+re-derive or substitute p040; (4) run the WO39 chain. Steps 1-2 start next
+session as the focused task.
