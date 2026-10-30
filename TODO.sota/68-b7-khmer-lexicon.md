@@ -118,3 +118,30 @@ retrains; the Khmer regime (tiny gold, huge unlabeled) is the case weak
 supervision exists for, with held-out validation mandatory against the WO64
 correlated-teacher negative. This path makes CER < 15 reachable without
 SEAlang / Chuon Nath.
+
+
+### Expansion attempt 2 — stage A done, stage B negative (mis-design), B2 in flight (2026-10-30)
+
+SBBIC 75,039-word list labeled with the shipped khm-phonemic-1.0 teacher
+(house runtime, checkpointed rotating parts): **73,954 labels** persisted
+(bucket khmer-expansion/sbbic-labeled.jsonl, 4.56 MB; 10,046 resume dupes
+dropped; 1,038 unique words dropped by the labeler's empty-output guard —
+words where the teacher emits nothing; 1.4%, acceptable).
+
+**Stage B NEGATIVE — an artifact of target-convention mismatch** (my
+script bug, recorded so it is never re-read as evidence): it trained on
+the teacher's Latin romanizations (SBBIC weak labels) but evaluated
+against the Chuon Nath IPA holdout. CER 0.735 / EM 0 vs the 0.245
+reference measures the Latin-vs-IPA convention gap, not expansion value.
+NO_BETTER_THAN_TEACHER from that run carries no information.
+
+**Stage B2 (corrected, running as run-082d-khm-expansion2)**: matched
+surface — SBBIC weak Latin labels + the translit corpus train anchor
+(exact run-081 protocol: sorted pairs, seed-42 shuffle, 5/5/90), with
+translit words dropped from the weak set (contamination control). The
+teacher is scored on the IDENTICAL 895-row translit test split in-job
+(house runtime on the shipped artifact), so the verdict is
+student-vs-teacher on the same rows and surface. Gate: student CER <
+teacher CER on that split -> EXPANSION_PAYS. Note the translit test's
+anchor CER band is ~27.4 (run-081 reproduction); the teacher's own CER
+on the same rows is the number that matters.
