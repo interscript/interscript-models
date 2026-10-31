@@ -97,7 +97,7 @@ Reference collection: 8 DIN PDFs; 4 encoded (32706, 32707, 33903, 33904).
 | Doc | Class | Notes |
 |-----|-------|-------|
 | BS 2979:1958 | D (via visual reading) | unblocked by owner directive; Russian column SHIPPED — maps PR #219; remaining: ukr/bel/bul/srp columns + Tables D, E, G (WO91) |
-| PD 6505:1982 | D (via visual reading) | unblocked by owner directive; scan readable visually, not yet transcribed (WO91) |
+| PD 6505:1982 | D (via visual reading) | IN PROGRESS: CORRECTION — PD 6505:1982 is the romanization of KOREAN (UDC 003.353:003.571), not Cyrillic; BSI's own MECHANICAL system, not McCune-Reischauer (vowels ai/ei/yai/yei, ㅡ=w, compounds = concatenation: ㅘ=oa ㅙ=oai ㅚ=oi ㅝ=ue ㅞ=uei ㅟ=ui ㅢ=wi). Core letters captured (14 consonants incl. ㅇ silent-initial//ng/-final; 14 vowels); syllable mechanics 3.1-3.8 captured (zero-initial circle, hyphen per syllable, final clusters); sections 5 N/S orthographies, 6 punctuation, 7 word separation, 10 re-transliteration read; numbered rules 11.x with tables run through pages 10-30 (11.15 seen). Remaining: transcribe 8-9 + 11.x-15.x rule sections + examples, then encode maps/bsi-kor-Kore-Latn-6505-1982.isc + tests |
 
 ### A5. ICS 630-01 — Annex D Chinese (D)
 
