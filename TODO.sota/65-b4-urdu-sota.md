@@ -29,3 +29,25 @@ Engineering, UET Lahore). Owner-side steps enumerated for the record:
 5. On license-green: retrain urd-g2p on the licensed corpus, re-run WO51
    gates, flip card/index from research-only, ship. Separately: whether the
    CLE corpus also feeds the urd-diac 3.57 -> < 3 push is its own WO.
+
+
+### WO65 stage-1 staged (2026-10-31): launch command ready
+
+The B3 oracle machinery generalizes to Urdu (oracle_relabel_onnx.py:
+D_ARM1_* env primary arm + D_ROWS_JSONL pre-paired corpus mode, PR'd in
+interscript-train #141). Launch after the B3 arms free the a100s:
+
+- Arms (both SHIPPED, stable): urd-diac-1.0 (urd-diac-1.0-fp32.zip,
+  release tag urd-diac-1.0, 1.42GB fp32) + urd-diac-base-1.0
+  (urd-diac-base-1.0-fp16.zip, tag urd-diac-base-1.0, 1.35GB fp16,
+  different lineage = decorrelated). Stage both zips to bucket
+  urd-arms/ first (sha256 from models.yaml).
+- Corpus: bucket rhtse/jobs-artifacts/rababa-urdu-cc174b96 revision
+  data-diacrit -> mount /data-dia; rows = data-diacrit/train.jsonl
+  (573,130 rows, sha256 in corpora/urd-dia.yaml, owner-approved
+  license review 2026-10-18). D_ROWS_JSONL=/data-dia/data-diacrit/
+  train.jsonl D_SUBSET=200000 D_MAXB=300 D_BS=48.
+- Run dir: D_RUN=run-088-urd-oracle; two parallel D_ARM_ONLY jobs as
+  in B3. Then stage 2 = train_oracle_student_hf.py adapted (O_INIT
+  google/byt5-base; corpus mounts change) -> gate CER < 3.57 baseline,
+  target CER < 3 (WO65 method: decorrelated teacher arms only).
