@@ -212,3 +212,29 @@ Dependency edges that matter:
 - Every row of section B is at or past its target with external-protocol numbers,
   quantization delta green, and runtime parity fixtures shipped.
 - No negative lever retried as written; every miss recorded in its WO.
+
+
+### ALA-LC 47-gap scrub (2026-10-31): concrete batch structure
+
+The guide's TOC has 47 systems; the corpus's 55 alalc maps cover 30
+languages — ~44 of the 47 rows remain (Inuktitut shipped as
+bgnpcgn-iu-Cans-Latn-2013, Syriac as bgnpcgn-syc-Syrc-Latn-2011; the
+Non-Slavic-Cyrillic row is meta). Batched by script family for encoding
+efficiency — one PR per batch, tests from the guide's own examples:
+
+- **Batch ALA-1 (Brahmic/SE-Asian, 14)**: Burmese, Khmer, Lao, Thai,
+  Shan, Javanese/Sundanese/Madurese, Cham, Balinese, Batak, Lepcha,
+  Limbu, Santali (Ol), Manipuri (Meitei), Tibetan
+- **Batch ALA-2 (Arabic-script, 13)**: Hebrew & Yiddish, Judeo-Arabic,
+  Jawi-Pegon, Malay (Jawi), Kazakh (Arabic), Kurdish, Ladino, Moplah,
+  Sindhi, Uighur, Urdu, Pushto, Ottoman Turkish
+- **Batch ALA-3 (Cyrillic/Cyrillistic, 4)**: Church Slavic, Romanian
+  (Cyrillic), Rusyn, non-Slavic Cyrillic leftovers
+- **Batch ALA-4 (East Asian, 2)**: Chinese (Wade-Giles), Japanese
+  (McCune-Reischauer)
+- **Batch ALA-5 (misc, 10)**: Armenian, Coptic, Deseret, Cherokee,
+  Manchu, Mandekan (N'ko), Moroccan Tamazight, Tamashek,
+  Tod-Oirat-Old Kalmyk, Vai
+
+Sources: the ALA-LC romanization guide (loc.gov); tables transcribed
+per the visual-reading directive where scans only.
