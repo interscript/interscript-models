@@ -238,3 +238,15 @@ efficiency — one PR per batch, tests from the guide's own examples:
 
 Sources: the ALA-LC romanization guide (loc.gov); tables transcribed
 per the visual-reading directive where scans only.
+
+
+### SOURCES ACQUIRED (2026-11-01): all 92 ALA-LC guide documents
+
+The complete ALA-LC romanization guide corpus is downloaded and
+validated (all PDFs open; text layers thin/partial — tables read
+visually per the owner directive) into
+interscript-private-references/alalc/alalc-<lang>.pdf from
+loc.gov/catdir/cpso/romanization/. This completes the source-
+acquisition step for ALL five batches (ALA-1 through ALA-5); encoding
+is now purely local work, one PR per batch, tests from each guide's
+own examples.
