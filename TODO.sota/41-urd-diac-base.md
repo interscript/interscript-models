@@ -34,3 +34,11 @@ flagship gap) → **WO41** (last).
 ## Cost
 
 ≈ 5.5 GPU-h (run-059 measured 5h23m at the same scale).
+
+
+## Verdict (2026-10-15): GATE PASS
+
+run-066 full-split CER **0.0357 < 0.0377** (urd-diac-1.0),
+word_acc 0.6981. Base tier confirmed on diacritization too. Ship:
+fp32 IMF export (single-file-clean at base size) + repack tool +
+publish — the urd publish chain applies verbatim.

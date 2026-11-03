@@ -78,10 +78,15 @@ hf jobs run --flavor a100-large -d \
 | 40 | 40-heb-teacher-reeval.md | P1 | 36 | VERDICT 0.1382 TRUE (was 0.87 bug) — student-bottleneck; teacher v4 demoted to last resort |
 | 39 | 39-ar-oracle-distill.md | P1 | 35 | RUNNING — stage-1 relabel on l4x1 (chunk-resume, 9 tests green); stage-2 continue-train queued on a100 |
 | 41 | 41-urd-diac-base.md | P2 | 38 | STAGED — script in bucket; last in a100 queue (after WO39 stage 2) |
-| 42 | 42-heb-label-filter.md | P2 | 40 | STAGED (conditional — fires if e12 misses; self-consistency filter, 10 GPU-h) |
-| 43 | 43-heb-gold-nikud.md | P2 | 36/42 | STAGED — micsell campus GOLD nikud verified (28.6GB, public); license check then queue after WO41 |
+| 42 | 42-heb-label-filter.md | P2 | 40 | PARKED — smoke: 88% retention (labels self-consistent), 134 GPU-h cost; gap = domain mismatch → WO48b is the HE path |
+| 43 | 43-heb-gold-nikud.md | P2 | 36/42 | BLOCKED — dataset has NO license (all-rights-reserved default); owner-to-owner ask to micsell required |
 | 44 | 44-release-plan.md | P1 | owner | PROPOSAL — naming law + publication order + decisions D1-D5 (owner states, I execute) |
-| 45 | 45-large-static-int8.md | P2 | 44 | STAGED — byt5-large encoder cannot ship single-file at fp32/fp16 (2GB protobuf cap); static-int8 arm defined |
+| 45 | 45-large-static-int8.md | P2 | 44 | PARKED — 3 toolchain walls (ORT-static, fp16-refuse, torch-dynamic trace); large tier = measurement; artifact needs external-data-in-zip (runtime-arch) |
+| 46 | 46-int8-artifact-remediation.md | P1 | 44 | CLOSED — shipped 1.0 int8 VERIFIED GOOD (v8: 4.15/1.04); no withdrawal; fp32 re-export optional |
+| 47 | 47-fas-diac-release.md | P1 | — | NEW GAP FOUND — fas-diac trained at 0.52% CER, NEVER released; checkpoint on a Modal volume; probe queued |
+| 48b | (48 ext) | P2 | 48 | API routes exhausted (wiki thin, wikisource-extracts empty ×2) — supply pivots to Wikisource DB dumps (next session); trainer READY |
+| 49 | 49-ur-lexicon-probe.md | P2 | 38 | DEAD — lexicon-oracle 0.2268 WORSE than model 0.1565 on 30% coverage; lever closed at zero GPU |
+| 50 | 50-imf-external-data-contract.md | P3 | 45 | PROPOSAL — IMF v2 external-data contract; unblocks the large-tier artifact; owner-gated release train |
 
 ## Schedule
 

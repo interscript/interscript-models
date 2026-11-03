@@ -33,6 +33,14 @@ instinct; note in RESULTS before launch).
    nikud arm as a MEASUREMENT (is gold speech data worth anything to
    the chain?) before committing the plane retrain.
 
+## License check (2026-10-14): FAILED — arm BLOCKED
+
+The dataset README carries NO license field (default all-rights-
+reserved). Training on it without permission is off-limits. Unblock
+path: owner-to-owner ask to micsell for a research license; until
+granted, the gold-nikud arm stays parked and the HE g2p path rides on
+WO36/42 only.
+
 ## Queue position
 
 After WO41 (urd-diac-base) and only if WO36/42 haven't closed the
@@ -43,3 +51,14 @@ parity l4, 500h cpu).
 ## Cost
 
 Fine-tune ≈ 8-14 GPU-h; byt5 measurement arm ≈ 6 GPU-h.
+
+## Owner-ask draft (micsell, pending review — do NOT send without approval)
+
+Subject: Research license request — hebrew_speech_campus_nikud
+
+Hi — we (Interscript, BSD-3-Clause open source) would like to use
+hebrew_speech_campus_nikud (gold nikud annotations over campus-radio
+speech) to fine-tune our open Hebrew nikud model. The dataset README
+carries no license, so we are asking directly: would you grant a
+research-use license (attribution + share-alike of derivative
+annotations acceptable)? Happy to discuss terms.

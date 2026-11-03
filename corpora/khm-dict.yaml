@@ -1,0 +1,19 @@
+id: khm-dict
+task: transliteration
+sources:
+  # Chuon Nath dictionary data, digitalized by the Open Institute
+  # (SPICE / USAID-funded) — github.com/interscript/khmer-dict-spice.
+  # Repo LICENSE: LGPL-2.1 (SPDX-open; gate clears). Owner note:
+  # LGPL semantics for a data corpus are unusual; flagged for owner
+  # review without blocking (registry law: SPDX-open clears).
+  - kind: bucket
+    id: Interscript/isx-training/run-080-khm-lexicon
+    revision: run-080-khm-lexicon
+    license: LGPL-2.1
+    mount: /data-khm
+splits:
+  # Gold reading pairs (word -> IPA, Chuon Nath via SPICE ipa_dic):
+  # 3261 pairs, 326 held out as test. SBBIC vocabulary (72,048 words,
+  # no readings) carries the lexicon-coverage layer.
+  train: {path: khm-lexicon-train.jsonl, rows: 74983, sha256: 83eba4945044543c6a0af467ecdcb72a16b2f552fa86e041bb5eeca6e9b2e9be}
+  test: {path: khm-lexicon-test.jsonl, rows: 326, sha256: 23385241b606f3ca1f74d09df5bf34fe32b364545171edf157f0c90a58bd5b18}

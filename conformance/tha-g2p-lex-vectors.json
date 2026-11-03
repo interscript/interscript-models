@@ -1,0 +1,58 @@
+{
+ "model": "tha-g2p-lex-1.0",
+ "index_version": 12,
+ "decode": {
+  "mode": "single-row-greedy"
+ },
+ "source": "run-080-thai-lex-v6a oepoch-3 (clean-split PER 19.29)",
+ "vectors": [
+  {
+   "src": "ก",
+   "out": "k ɔː ˧"
+  },
+  {
+   "src": "ก กา",
+   "out": "k a ˨˩ . k aː ˧"
+  },
+  {
+   "src": "ก ข ไม่กระดิกหู",
+   "out": "k o k̚ ˨˩ . kʰ a ˨˩ . k a  ˧ . k uː ˧"
+  },
+  {
+   "src": "ก หัน",
+   "out": "k a ˨˩ . h a n ˩˩˦"
+  },
+  {
+   "src": "กก",
+   "out": "k o k̚ ˨˩"
+  },
+  {
+   "src": "กกช้าง",
+   "out": "k o k̚ ˨˩ . t͡ɕʰ aː ŋ ˦˥"
+  },
+  {
+   "src": "กกธูป",
+   "out": "k o k̚ ˨˩ . kʰ uː p̚ ˥˩"
+  },
+  {
+   "src": "กกหู",
+   "out": "k o k̚ ˨˩ . h uː ˩˩˦"
+  },
+  {
+   "src": "กกุธภัณฑ์",
+   "out": "k a ˨˩ . k u t̚ ˨˩ . pʰ a n ˧"
+  },
+  {
+   "src": "กกเสา",
+   "out": "k o k̚ ˨˩ . s a w ˩˩˦"
+  },
+  {
+   "src": "กง",
+   "out": "k o ŋ ˧"
+  },
+  {
+   "src": "กงกอน",
+   "out": "k o ŋ ˧ . k ɔː n ˧"
+  }
+ ]
+}

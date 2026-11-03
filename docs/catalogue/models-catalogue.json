@@ -1,0 +1,832 @@
+{
+  "generated_note": "generated from models.yaml + index-v12; regenerate, never edit",
+  "naming": {
+    "taxonomy": {
+      "vocalized": "native script + full diacritics",
+      "ipa": "narrow IPA (stress, diacritics)",
+      "phonemic": "broad phoneme-level transcription",
+      "latn": "orthographic romanization"
+    },
+    "aliases": "old ids resolve via index aliases at the next index tag (WO87)"
+  },
+  "models": [
+    {
+      "id": "ara-diac-news-1.1",
+      "task": "diacritization",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": 2160091218,
+      "sha256": "2f55e2a3c9e97da3666ef236e8ba31a24399257c9cc448363cc19f96541eb3ba",
+      "status": "withdrawn",
+      "metrics": [
+        {
+          "name": "wer_wikinews2024_multiref",
+          "value": 8.85,
+          "protocol": "greedy decode, first-alternate protocol, WikiNews-2024 multiref (WO35)",
+          "anchor": null
+        },
+        {
+          "name": "der_total_greedy",
+          "value": 2.84,
+          "protocol": "greedy decode, first-alternate protocol, WikiNews-2024 multiref (WO35)",
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ara-vocalized-1.0",
+      "task": "diacritization",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_total_greedy",
+          "value": 2.5793,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_morph_greedy",
+          "value": 1.5317,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ara-vocalized-2.0",
+      "task": "diacritization",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_total_greedy",
+          "value": 2.2864,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_morph_greedy",
+          "value": 1.3343,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "wer_wikinews_multiref",
+          "value": 17.3794,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_wikinews_multiref",
+          "value": 11.8273,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ara-vocalized-2.0-int8",
+      "task": "diacritization",
+      "precision": "int8",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_total_greedy",
+          "value": 2.2864,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_morph_greedy",
+          "value": 1.3343,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "wer_wikinews_multiref",
+          "value": 17.3794,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_wikinews_multiref",
+          "value": 11.8273,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ara-vocalized-layerdrop-1.0",
+      "task": "diacritization",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_teacher_fullset",
+          "value": 2.2921,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_student_fullset",
+          "value": 5.784,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ara-vocalized-layerdrop-1.0-int4",
+      "task": "diacritization",
+      "precision": "int4",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_teacher_fullset",
+          "value": 2.2921,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_student_fullset",
+          "value": 5.784,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ara-vocalized-layerdrop-1.0-int8",
+      "task": "diacritization",
+      "precision": "int8",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_teacher_fullset",
+          "value": 2.2921,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_student_fullset",
+          "value": 5.784,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ara-vocalized-news-1.0",
+      "task": "diacritization",
+      "precision": "int8",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "wer_wikinews2024_multiref",
+          "value": 4.0976,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_wikinews2024_multiref",
+          "value": 1.5606,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_total_greedy",
+          "value": 5.4814,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ara-vocalized-plane-1.0",
+      "task": "diacritization",
+      "precision": "int8",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_total_greedy",
+          "value": 3.5905,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_morph_greedy",
+          "value": 2.2149,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ara-vocalized-plane-large-1.0",
+      "task": "diacritization",
+      "precision": "int8",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_total_greedy",
+          "value": 2.7397,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_morph_greedy",
+          "value": 1.6717,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "wer_total_greedy",
+          "value": 8.6083,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ara-vocalized-small-1.0",
+      "task": "diacritization",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_teacher_greedy",
+          "value": 1.3205,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_student_greedy",
+          "value": 3.658,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_teacher_fullset",
+          "value": 2.5815,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_student_fullset",
+          "value": 8.259,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ara-vocalized-small-1.0-int8",
+      "task": "diacritization",
+      "precision": "int8",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_teacher_greedy",
+          "value": 1.3205,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_student_greedy",
+          "value": 3.658,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_teacher_fullset",
+          "value": 2.5815,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_student_fullset",
+          "value": 8.259,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ara-vocalized-small-2.0",
+      "task": "diacritization",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_teacher_fullset",
+          "value": 2.289,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_student_fullset",
+          "value": 5.0821,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ara-vocalized-small-2.0-int8",
+      "task": "diacritization",
+      "precision": "int8",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_teacher_fullset",
+          "value": 2.289,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_student_fullset",
+          "value": 4.8218,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ara-vocalized-small-2.1",
+      "task": "diacritization",
+      "precision": "fp32",
+      "license": null,
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_teacher_fullset",
+          "value": 2.289,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_student_fullset",
+          "value": 4.5701,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ara-vocalized-small-2.1-fp16",
+      "task": "diacritization",
+      "precision": "fp16",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_teacher_fullset",
+          "value": 2.289,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_student_fullset",
+          "value": 4.5701,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ara-vocalized-small-2.1-int8",
+      "task": "diacritization",
+      "precision": "int8",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_teacher_fullset",
+          "value": 2.289,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_student_fullset",
+          "value": 4.5701,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ara-vocalized-small-int8static-2.1",
+      "task": "diacritization",
+      "precision": "int8",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_teacher_fullset",
+          "value": 2.289,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_student_fullset",
+          "value": 4.5701,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "fas-phonemic-1.0",
+      "task": "g2p",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "cer",
+          "value": 1.6,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "sb_homograph_ezafe_norm",
+          "value": 77.34,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "fas-vocalized-base-1.0",
+      "task": "diac",
+      "precision": "fp16",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "cer",
+          "value": 0.603,
+          "protocol": "greedy decode, 9288-row docs split, row-mean",
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "heb-vocalized-1.0",
+      "task": "diacritization",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_greedy",
+          "value": 29.0,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_beam4",
+          "value": 17.46,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "heb-vocalized-1.1",
+      "task": "diacritization",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_greedy",
+          "value": 16.44,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_beam4",
+          "value": 16.43,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "heb-vocalized-plane-1.0",
+      "task": "diacritization",
+      "precision": "int8",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_total_greedy",
+          "value": 12.48,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "heb-vocalized-plane-2.0",
+      "task": "diacritization",
+      "precision": "int8",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_total_greedy",
+          "value": 8.18,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "heb-vocalized-small-1.0",
+      "task": "diacritization",
+      "precision": "fp32",
+      "license": null,
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "der_teacher_greedy",
+          "value": 24.79,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "der_student_greedy",
+          "value": 30.37,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "khm-latn-1.0",
+      "task": "translit",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": 1418009977,
+      "sha256": "55993d473a2ed9489058779cad7e115db05e4020085b71616468cfae4f2f65cb",
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "cer",
+          "value": 27.42,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "em",
+          "value": 59.66,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "tha-phonemic-1.0",
+      "task": "g2p",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "release-candidate",
+      "metrics": [
+        {
+          "name": "per",
+          "value": 19.29,
+          "protocol": "phoneme-token PER, clean v1 test split (3,210 rows), single-row greedy",
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "tha-phonemic-base-1.0",
+      "task": "g2p",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "per_teacher",
+          "value": 1.25,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "per_student",
+          "value": 3.53,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "tha-phonemic-small-1.0",
+      "task": "g2p",
+      "precision": "int8",
+      "license": null,
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "per_teacher",
+          "value": 4.43,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "per_student_beam4",
+          "value": 12.06,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "per_student",
+          "value": 2.85,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "tha-phonemic-small-1.0-int4",
+      "task": "g2p",
+      "precision": "int4",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "per_teacher",
+          "value": 4.43,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "per_student_beam4",
+          "value": 12.06,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "per_student",
+          "value": 2.85,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "urd-ipa-1.0",
+      "task": "g2p",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "cer",
+          "value": 14.77,
+          "protocol": null,
+          "anchor": null
+        },
+        {
+          "name": "em",
+          "value": 33.6,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "urd-ipa-base-1.0",
+      "task": "g2p",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "research-only",
+      "metrics": [
+        {
+          "name": "cer",
+          "value": 15.65,
+          "protocol": "greedy decode, full 12699-row test split, row-mean",
+          "anchor": null
+        },
+        {
+          "name": "cer_normalized",
+          "value": 10.75,
+          "protocol": "greedy decode, full 12699-row test split, row-mean",
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "urd-vocalized-1.0",
+      "task": "diacritization",
+      "precision": "fp32",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "cer",
+          "value": 3.74,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    },
+    {
+      "id": "urd-vocalized-base-1.0",
+      "task": "diacritization",
+      "precision": "fp16",
+      "license": "BSD-3-Clause",
+      "size_bytes": null,
+      "sha256": null,
+      "status": "shipped",
+      "metrics": [
+        {
+          "name": "cer",
+          "value": 3.57,
+          "protocol": null,
+          "anchor": null
+        }
+      ]
+    }
+  ]
+}

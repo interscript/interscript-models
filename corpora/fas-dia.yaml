@@ -1,0 +1,19 @@
+id: fas-dia
+task: diacritization
+sources:
+  # Upstream: verified CC0-1.0 via HF cardData (2026-10-17).
+  # haraqat targets derived deterministically from HomoRich's Mapped
+  # Phoneme field per rababa-farsi/docs/RESULTS.md — derived work of a
+  # CC0 dataset stays CC0.
+  - kind: hf-dataset
+    id: MahtaFetrat/HomoRich-G2P-Persian
+    revision: main
+    license: CC0-1.0
+  # Staged jsonl splits consumed by training (bucket copy of the above).
+  - kind: bucket
+    id: Interscript/isx-training/run-076-fas-diac-retrain
+    revision: run-076
+    license: CC0-1.0
+splits:
+  train: {path: train.jsonl, rows: 445869, sha256: 05ea4b33aaaec7fcddabd8d6bbefa56323efd6fac30b6ae242869372026eb845}
+  test: {path: test.jsonl, rows: 9288, sha256: 67513aa16ec142abde1df2d1782d548aa84f3841c171150b53a7ba82cb60b95f}

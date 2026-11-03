@@ -1961,6 +1961,8 @@ continuation from the epoch-3 checkpoint (run-062-ivrit-student-e12,
 LAUNCHED — epoch-resume machinery now works). If still >0.24: label
 quality filter, then WO36 stage-3 teacher scale (300-500h).
 
+## run-059 urd-g2p-base gate pass
+
 run-059 urd-g2p-base — GATE PASS, processed late (2026-10-14; job
 completed 2026-10-12, verdict unprocessed until now): full 12,699-row
 test split CER **0.1565 < 0.1578** (urd-g2p-1.0) — byt5-base on 610K
@@ -2165,3 +2167,202 @@ the broken isc artifact (parsanol#5), the rake.yml PR-overlay fix
 repo-wide standardrb cleanup, and the windows tampered-zip platform
 skip. CI: 10/10 green — the rake workflow's first fully green run in
 its history (29 prior failures, 0 successes).
+
+LARGE TIER PARKED (2026-10-14): third single-file toolchain attempt
+(torch.ao quantize_dynamic → ONNX) failed on untraceable quantized
+attention modules. WO45 fallback fires — 3.5607/1.4588 stands as the
+measurement; the artifact awaits external-data-in-zip (runtime-arch).
+The release ships ara-diac-news-1.0 + 1.1 + urd-g2p-base-1.0, all
+verified.
+
+RELEASE VERIFICATION CATCH (2026-10-14): post-publish smoke of npm
+5.8.0 found imf.firstAlternates UNREACHABLE — the imf barrel never
+re-exported it (ts#108's tests used source-tree imports). Fixed in
+interscript-ts#109 (barrel + public-surface test), shipped as 5.8.1
+(verified loading + export). Gem 3.1.0 smoke passed (loads,
+first_alternates reachable). Also: fas-diac checkpoint CONFIRMED
+alive on the Modal volume (sanctioned one-time export run; bucket
+run-073-fas-diac/best) — WO47 proceeds to protocol verification.
+UR lexicon lever DEAD (probe: oracle 0.2268 worse than model 0.1565).
+he-wiki vocalized mining DUD (1,244 pairs) → Wikisource pivot spec'd.
+
+WO42 PARKED WITH DATA (2026-10-15): the batched filter smoke (2
+shards) shows 88% label retention under ±10% stretch-decode
+self-consistency — the teacher's labels are largely stable; the
+0.4462 student gap is podcast-vs-citation DOMAIN mismatch. Filter
+cost would be ~134 GPU-h for a lever that cannot close a 2× domain
+gap → parked. HE g2p path consolidates on WO48b (vocalized-supply →
+nikud model → shipped rules chain). Also: the original 12h "hang"
+was re-diagnosed — bs-1 decodes at ~95 min/shard with prints only
+every 20 shards (a sizing bug, not a hang).
+
+AR PARITY HARNESS ANOMALY (2026-10-15): the v5 parity jobs (bs-8
+variant) scored torch WER ~73.14/73.17 — nearly IDENTICAL garbage on
+TWO DIFFERENT checkpoints (run-040 and run-029) that score 4.00-4.33
+under the v3 configuration. Identical garbage across different
+models = harness/scoring failure in that configuration, not model
+quality. Reverted to the exact v3 config (bs 16, no env) and
+relaunched the shipped-1.0 diagnostic (run-029-zipcheck-v6); the 1.1
+zip parity retries after v6 confirms the harness. Lesson: the AR
+parity harness has a bs-sensitive failure mode — keep the known-good
+configuration frozen until root-caused.
+
+urd-diac-base PARITY v2-vs-v3 (2026-10-15): v2 accidentally fed the
+G2P test split to the diac model (torch CER 1.2188 = wrong-data
+garbage) — BUT the ONNX artifact tracked torch at delta 0.046 / 65%
+row-exact even on garbage input: fp32 conversion fidelity confirmed
+on a second model independent of data. v3 rerun on the correct
+data-diacrit split pending (PARITY_DATA env added to the harness).
+
+urd-diac-base PARITY v3 (correct split, 2026-10-15): torch 0.0352
+(harness validated — matches the 0.0357 gate ✓) but ONNX zip CER
+0.1391 with 89.3% row-exact — the arithmetic signature of ~11% rows
+collapsing to near-empty outputs. Two hypotheses: (a) my python
+parity decode loop has an edge-case (batch padding/EOS interaction),
+(b) the exported graph drops rows. DISCRIMINATOR queued: run the
+actual py runtime IMF loader on this zip — if the runtime decodes
+correctly, the parity loop is the bug and the artifact ships with a
+runtime-verified parity; if not, the graph export needs a fix before
+urd-diac-base-1.0 publishes. Publish HELD either way until the
+runtime-side check passes.
+
+DISCRIMINATOR VERDICT — the artifact WORKS (2026-10-15): raw ORT
+decode of the shipped urd-diac-base-1.0 zip on real rows produces
+real diacritics (not empty, not identity). The ~11% collapsed parity
+rows are a PARITY-HARNESS artifact: MAXLEN=256 truncated long rows
+(collapsed-row CER ≈ 1.0), and the local discriminator loop's own
+400-step cap truncated its sample tail the same way. Parity rerun at
+MAXLEN=512 (the runtime's decode length) launched — its numbers are
+the publish-parity of record. The over-marking visible in samples
+(sukun-heavy) is a training-convention trait, scoreable, not a
+defect gate.
+
+THE BF16-IMPORT/FP32-ARTIFACT DIVERGENCE — session-closing finding
+(2026-10-15): urd-diac-base parity at MAXLEN 512 is IDENTICAL to 256
+(row-exact 89.33% both) — truncation REFUTED. The ~11% rows that
+collapse to near-total mismatch are a NUMERIC cascade: the gate
+engine runs torch under bf16 autocast (as trained); the exported
+ONNX artifact is fp32 — when an autoregressive row crosses a
+decision boundary under different numerics it cascades to garbage.
+The same signature explains the urd-g2p fp32 delta growth (0.024@300
+→ 0.078@1K) and likely part of the int8 "catastrophe". CONSEQUENCE:
+byt5-base fp32 artifacts carry an artifact-level CER ~3-4× their
+torch gate (0.176 vs 0.0357 measured here) — ALL THREE staged
+byt5-base publishes (urd-g2p-base-1.0, urd-diac-base-1.0,
+ara-diac-news-1.1) are HELD until resolved. Next-session fix
+candidates: (a) EXPORT_DTYPE=fp16 (numerics-match the bf16 gate;
+single-file fits at base size), (b) a torch-fp32 vs ORT-fp32
+three-way probe to separate conversion error from model-edge
+sensitivity. The plane family is unaffected (static int8, its own
+parity GREEN).
+
+FP16 EXPORT REFUTED — refined divergence hypothesis (2026-10-15):
+urd-diac-base fp16 export (1.35GB zip, sanity green) parity → ONNX
+0.1938 vs torch-bf16 0.0352 (delta 0.159, 89% row-exact — same
+signature). Weight precision is NOT the variable: fp32→0.139,
+fp16→0.194, both ~4-5× the gate engine. Remaining discriminator:
+torch-fp32-decode vs torch-bf16 on identical rows — if fp32-torch
+also collapses, the MODEL is numerically fragile (razor-edge
+autoregressive decisions) and NO faithful export can carry the torch
+gate number; the honest artifact CER (~0.14) becomes the gate, and
+either the model retrains with numeric-robustness awareness or the
+runtime ships bf16 graphs. Next-session: the three-way probe, then
+the export fix or the retrain decision. ALL THREE byt5-base
+publishes remain HELD. (The plane family remains unaffected —
+static-int8, its own parity GREEN.)
+
+urd-g2p-base-1.0 PUBLISH HELD — artifact-truth measured (2026-10-15):
+the fp32 zip's 1,000-row parity: torch 0.1429 / **ONNX 0.2783**
+(delta 0.135, 73% row-exact) vs the 0.1578 gate — the artifact misses
+by ~1.8×, unambiguous at this sample size. Combined with the diac-base
+signature (torch 0.0352 / ONNX 0.1391, 89% exact) the finding is
+CONFIRMED on two models: byt5-base fp32 ONNX exports diverge from
+torch-bf16 by ~0.08-0.14 CER with 73-90% row-exact and the remainder
+cascading. The small-tier artifacts (urd-g2p-1.0, parity delta 0.0)
+are FINE — the divergence scales with model size/sequence length.
+NEXT SESSION OPENER — the three-way probe (torch-fp32-decode vs
+torch-bf16 vs ORT-fp32 on identical rows): if fp32-torch ≈ ORT, the
+bf16 gate numbers were numerics mirages and the base tiers genuinely
+perform ~0.14-0.28 (retrain-for-robustness decision); if fp32-torch ≈
+bf16-torch, the ONNX conversion is defective (fix the export). ALL
+byt5-base publishes stay HELD pending that answer.
+
+THREE-WAY PROBE VERDICT (2026-10-16, run-066-probe3way): torch-bf16
+0.0343 / torch-fp32 0.0343 / agree 1.000 — the MODEL is numerically
+robust. ORT 0.1301 / agree 0.8867 vs both — **the opset-14 ONNX
+export is the defect**, diverging on ~11% of rows. The retrain-
+for-robustness path is CLEARED; the fix is the export (candidates:
+opset 17+, per-token logit diff on a failing row to find the first
+diverging op, or the known T5 relative-position-bias export issue).
+All byt5-base publishes remain HELD until an export passes parity at
+its gate level. The fix is bounded debugging, next session's opener.
+
+WO46 CLOSED — shipped int8 fleet clean (2026-10-16): zipcheck-v8 on
+the RELEASED ara-diac-news-1.0 int8 zip: WER 4.15/DER 1.04 (30-row
+harness-validated sample) — no withdrawal needed. The urd-g2p int8
+catastrophe remains isolated to that export. Note: the int8 ONNX CPU
+decode is extremely slow (~hours/batch) — the 30-row envelope was
+required; future int8 parity runs need the CUDA EP or GPU-adjacent
+environments.
+
+LOGIT-DIFF PROBE VERDICT — case closed, fix reclassified (2026-10-16):
+the local probe on the shipped zip shows enc_max_gap 0.0 (ONNX
+encoder bit-identical to torch), first_divergence null (torch and
+ORT argmax agree at EVERY step), and degenerate repetition-loop
+predictions (ڈْھُواڈْھْوا...) with NUL bytes — **the MODEL itself
+collapses to repetition loops on ~11% of rows in BOTH engines**. The
+export is fully exonerated; the trainer's 0.0357 gate differed only
+because the collapse is BATCH-NUMERICS-DEPENDENT (bs-16 eval masked
+it; bs-1 inference exposes it). THE FIX IS DECODE-SIDE: repetition
+penalty (or 3-gram blocking) in the three runtimes' seq2seq decode —
+no retrain, no export change. All byt5-base artifact gates
+re-evaluate WITH repetition-penalty decode; if clean, the held
+publishes (urd-g2p-base-1.0, urd-diac-base-1.0, ara-diac-news-1.1)
+unblock with a decode-contract note. Next session: implement
+repetition penalty in the parity harness + the three runtimes
+(penalty ~1.2 / no-repeat-3gram), re-run gates, publish.
+
+PENALTY PARITY FINAL (2026-10-16): with repetition_penalty 1.2 +
+3-gram blocking, BOTH engines converge (torch 0.1834 / ONNX 0.2010,
+delta 0.018 — engine parity restored, conversion fidelity confirmed)
+but NEITHER recovers the 0.0357 gate. Conclusion: the repetition
+loop was a symptom; the root is BATCH-COMPOSITION-DEPENDENT collapse
+in the model — the gate's 0.0357 was measured at bs 16, and
+different batching exposes ~11% collapse rows. The artifact question
+reduces to model numeric robustness: urd-diac-base-1.0's honest
+decode numbers are ~0.18-0.20 (penalty decode) or ~0.14-0.28
+(free decode) vs the 0.0357 torch-at-training-batching number.
+NEXT SESSION: (1) characterize the collapse rows (input properties,
+batch-position dependence), (2) evaluate at the trainer's EXACT
+batching (bs 16) through ORT — if ORT@bs16 matches 0.0357, the
+runtime fix is decode-batching standardization (decode at fixed bs
+16 in the loaders), (3) re-gate and publish on the honest number.
+ALL HOLDS REMAIN.
+
+RELABEL DURABLE-SYNC: first fix wrong (2026-10-16). HfApi.upload_file
+rejects repo_type="bucket" — valid types are [None, model, dataset,
+space]. Decode is HEALTHY (resumed at 20,640 ✓, running). Next
+session: change repo_type to None (bucket surfaces as a None-type
+repo) or shell out to `hf buckets cp` in-job; verify one sync
+succeeds, then the p047 remainder (~4h) + p029 + consolidation run
+death-proof. The mount (/ckpt = the bucket) may itself be durable
+for properly-closed files — untested; the explicit sync removes the
+doubt.
+
+## run-066 urd-diac-base gate pass and artifact parity (2026-10-19)
+
+Gate: full 11,940-row test split, raw char CER, row-mean — **3.57**
+(beat urd-diac-1.0 small tier 3.77), word accuracy 69.8%. Artifact
+parity under the WO51 single-row contract: ONNX fp16 CER 3.64,
+500/500 rows identical to torch, three-way bf16/fp32/ORT agreement
+1.0. Shipped runtime reproduces 12/12 frozen conformance vectors
+byte-exactly. Data: 573,130 pairs (urd-dia registry, sha256-pinned).
+
+## run-059 urd-g2p base gate pass
+
+Gate: full 12,699-row test split, raw char CER, row-mean — **15.65**
+(beat urd-g2p-1.0 small tier 15.78); normalized CER 10.75. Data:
+610K pairs (humair025/urdu-g2p-dictionary via rababa-urdu/data,
+sha256-pinned in the urd-g2p-dict registry). Training data is
+non-commercial: weights ship RESEARCH-ONLY (owner decision
+2026-10-18).
