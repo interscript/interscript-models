@@ -69,6 +69,7 @@ class CorpusSource(_Strict):
     sha256: str | None = None
     license: str
     mount: str | None = None  # container mount point for legacy scripts (e.g. /data-dia)
+    provenance: str | None = None  # upstream URL + snapshot date for recovered corpora
     license_review: LicenseReview | None = None
 
     @model_validator(mode="after")
@@ -94,6 +95,10 @@ class CorpusSpec(_Strict):
     task: TaskKind
     sources: list[CorpusSource] = Field(min_length=1)
     splits: dict[str, SplitSpec]
+    # recovery lineage: raw source files as staged + the run that rebuilt
+    # the splits (khm-latn recovery record)
+    raw: dict[str, dict[str, str | int]] | None = None
+    recovery_run: str | None = None
 
     @model_validator(mode="after")
     def _splits(self) -> CorpusSpec:
