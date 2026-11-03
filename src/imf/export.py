@@ -308,7 +308,7 @@ def quantize_int8(
     DynamicQuantizeLinear buffers.
 
     nodes_to_exclude keeps the logits-producing MatMul (the tied head) in
-    fp32 — measured on heb-diac-1.1 (E1, docs/EXPERIMENTS.md): quantizing
+    fp32 — measured on heb-vocalized-1.1 (E1, docs/EXPERIMENTS.md): quantizing
     the node that computes argmax moves the decision boundary directly —
     9.34% of positions flip (80% at confident margins); keeping the head
     fp32 cuts that to 0.26%, all near-tie, at +0.4% artifact size.

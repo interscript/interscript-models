@@ -158,3 +158,20 @@ def test_license_policy_is_encapsulated() -> None:
     })
     strict = type(DEFAULT_LICENSE_POLICY)(allow_waivers=False)
     assert strict.blocked(restricted), "policies vary without core edits"
+
+
+def test_budget_gate_enforces_declared_size() -> None:
+    from pipeline.gates import BudgetGate, GateContext
+
+    gate = BudgetGate()
+    over = gate.check(None, GateContext(extra={"index_entry": {
+        "size": 100_000_000, "perf": {"size_mb": 50}}}))
+    assert not over.passed
+
+    ok = gate.check(None, GateContext(extra={"index_entry": {
+        "size": 40_000_000, "perf": {"size_mb": 50}}}))
+    assert ok.passed
+
+    no_budget = gate.check(None, GateContext(extra={"index_entry": {
+        "size": 1}}))
+    assert no_budget.passed  # nothing declared -> nothing to enforce

@@ -1,6 +1,6 @@
 # WO72 — C2: gates reject undeclared metric conventions
 
-Status: PLANNED
+Status: DONE (anchor law enforced in src/pipeline/contracts.py; undeclared conventions rejected)
 Goal: quality gates refuse a metric that doesn't declare its convention
 (row-mean vs corpus-level) and anchor.
 Method: extend the gate registry (WO55 pattern): MetricDeclaration

@@ -1,6 +1,6 @@
 # WO73 — C3: performance budgets in CI
 
-Status: PLANNED
+Status: IN_PROGRESS (BudgetGate size check DONE; decode-latency budget = remainder)
 Goal: decode latency + artifact size budgets enforced so regressions
 block like test failures.
 Method: measure current shipped baselines (single-row greedy, p50/p95

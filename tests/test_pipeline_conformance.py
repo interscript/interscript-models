@@ -24,7 +24,7 @@ from pipeline.conformance import (
 )
 
 VECTORS = {
-    "model": "urd-diac-base-1.0",
+    "model": "urd-vocalized-base-1.0",
     "decode": {"mode": "single-row-greedy"},
     "vectors": [
         {"src": "سلام", "out": "سَلَام"},
@@ -37,7 +37,7 @@ def test_validate_vectors_accepts_good(tmp_path: Path) -> None:
     p = tmp_path / "v.json"
     p.write_text(json.dumps(VECTORS), encoding="utf-8")
     v = load_vectors(p)
-    assert v["model"] == "urd-diac-base-1.0"
+    assert v["model"] == "urd-vocalized-base-1.0"
     assert validate_vectors(v) == []
 
 

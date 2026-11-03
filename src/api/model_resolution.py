@@ -3,8 +3,8 @@ by every consumer. A model id resolves to the exact index filename
 when the volume carries it, falling back to the precision convention
 (``{id}-{precision}.zip``) and then ``{id}-fp32.zip`` — volume copies
 have historically landed under convention names even when the release
-artifact uses another name (heb-diac-1.1 ships as heb.zip but the
-volume copy is heb-diac-1.1-fp32.zip).
+artifact uses another name (heb-vocalized-1.1 ships as heb.zip but the
+volume copy is heb-vocalized-1.1-fp32.zip).
 
 Callers pass the volume listing; candidate names are built server-side
 and matched by equality only — user input never touches path

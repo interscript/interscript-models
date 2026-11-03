@@ -1,0 +1,58 @@
+{
+ "model": "khm-phonemic-1.0",
+ "index_version": 12,
+ "decode": {
+  "mode": "single-row-greedy"
+ },
+ "source": "run-090-khm-multi multi-task (secryst lineage + Chuon Nath IPA); WO88",
+ "vectors": [
+  {
+   "src": "ភាសាវិទូ",
+   "out": "pheasaeavitou"
+  },
+  {
+   "src": "គ្របគ្រង",
+   "out": "krobakrong"
+  },
+  {
+   "src": "រាជអាណាចក្រ",
+   "out": "anachakr"
+  },
+  {
+   "src": "លសិកា",
+   "out": "lseka"
+  },
+  {
+   "src": "កំសាក",
+   "out": "kamsaak"
+  },
+  {
+   "src": "ឱត្តប្បៈ",
+   "out": "aottabb"
+  },
+  {
+   "src": "រណៈ",
+   "out": "rn"
+  },
+  {
+   "src": "ដំរង់",
+   "out": "damrng"
+  },
+  {
+   "src": "ខ្ចីឲ្យ",
+   "out": "khchei aoy"
+  },
+  {
+   "src": "បាល័ដ្ឋ",
+   "out": "baldth baldtha"
+  },
+  {
+   "src": "មានទោស",
+   "out": "meantosa"
+  },
+  {
+   "src": "បិណ្ឌមួយ",
+   "out": "bendamuoy"
+  }
+ ]
+}
