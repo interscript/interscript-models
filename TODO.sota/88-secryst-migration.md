@@ -69,3 +69,13 @@ the framework-native model replaces the legacy artifact.
 Next: export the multi-task model → fixtures → gates → publish as the
 khm-latn successor (owner: id + version — the convention is
 khm-phonemic-1.0 under the MECE taxonomy, since the output is IPA).
+
+## Packaging defect (found 2026-11-03): tha-phonemic-1.0.zip
+
+The RELEASED tha-phonemic-1.0.zip on GitHub Releases carries the
+internal model id `tha-g2p-lex-1.0` (the pre-rename id) instead of
+`tha-phonemic-1.0`. Loaders that key on the artifact's declared id
+will mismatch. OWNER DECISION: re-release the zip with the corrected
+internal id (same-release asset swap or a new release — owner's call);
+consumers in the meantime should key on sha256, not the internal id.
+Recorded, not worked around.
