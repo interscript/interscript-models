@@ -44,3 +44,21 @@ becomes a runtime-arch work item (WO16 parking lot candidate).
 ## Cost
 
 Export + calibrate + parity ≈ 2-3 GPU-h (l4x1), no training.
+
+## Status: PARKED at the toolchain wall (2026-10-14, three attempts)
+
+1. ORT quantize_static: the calibrator's augment_graph must serialize
+   the full 2.4GB fp32 graph → EncodeError (external-data not
+   threaded through augmentation).
+2. fp16 export + refuse: encoder serializes >2GB even at fp16 →
+   EncodeError on onnx.save.
+3. torch.ao quantize_dynamic before export: quantized attention
+   modules return tuples with Nones — untraceable by
+   torch.onnx.export (RuntimeError, Type Tuple[Tensor, NoneType...]).
+
+Fallback clause fires: the large tier's **3.5607/1.4588** stands as a
+MEASUREMENT (models.yaml/RESULTS); the shipped client artifacts are
+ara-diac-news-1.0 + ara-diac-news-1.1 (base tier). Unblocking the
+large artifact requires the loader contract to carry external-data
+files inside the IMF zip (all three runtimes) — runtime-arch work
+item, not an export fix.

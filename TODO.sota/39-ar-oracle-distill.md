@@ -61,3 +61,38 @@ silver itself.
 
 ≈ 20-28 GPU-h total (relable 10-14 + train 10-14). Under every
 prior arm's budget; no new data, no new infra.
+
+## Stage-1 COMPLETE (2026-10-18, resume9)
+
+290,575 rows consolidated in minutes once the consolidation levenshtein
+moved to the C wheel (the pure-python loop needed ~56h vs the 23h
+timeout — resume6/8 died exactly there). Stats:
+
+- arm CER vs silver: p047 0.72% · p040 0.74% · p029 0.82%
+- disagreement 31.4% — the oracle's opportunity space
+- **oracle CER 0.54%** (−25% vs best single arm); picks: p047 87%,
+  p040 11%, p029 2%
+
+**Stage-2 LAUNCHED THROUGH THE SPINE** (job 6ad494b9): the ara recipe's
+sft stage planned it (O_* envs, both mounts) and the Runner's budget
+guard cleared it — the first dogfooded launch; hand-typed job commands
+retire here. Gate: first-alt WER < 3.5607; stretch ≤ 2.70.
+
+## FINAL (2026-10-19): stage-2 REJECTED — ara canonical unchanged
+
+oepoch-1 dual-surface eval (the training itself converged, loss 0.002;
+eval initially crashed on missing pandas — rerun eval-only):
+
+- SadeedDiac-25: Total DER **8.32** (gate: hold r7's 2.29) — identity
+  COLLAPSE
+- WikiNews-2024 multiref: RAW 9.95 WER / 9.06 DER; first-alt
+  **3.97 WER** (gate < 3.5607) — MISS
+
+The stage-1 oracle was real (0.54% relabel CER) but continue-training
+on the relabeled 290K subset regressed both surfaces — domain-narrowed
+distillation destroyed general calibration. Same family of negative as
+fas stage-2. **ara canonical: ara-diac-2.0 (shipped, DER 2.29); the
+oracle-distillation lever is now data-closed for BOTH ara and fas.**
+
+Ops scars recorded: spine deps gap (fixed, #303), eval-only rerun
+pattern (eval_oepoch1.py), eval extras belong in recipe deps.

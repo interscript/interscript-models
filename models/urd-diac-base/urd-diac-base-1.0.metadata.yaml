@@ -1,0 +1,23 @@
+format: imf-v1
+id: urd-diac-base-1.0
+task: diacritization
+source_script: Arab
+target: Arab
+tokenizer: bytes
+opset: 14
+decoder: plain
+precision: fp16
+license: BSD-3-Clause
+trained_from: byt5-base, 573130 urdu-diacrit pairs, run-066 (TODO.sota WO41)
+metrics:
+- name: cer
+  value: 3.57
+  source: interscript/interscript-models docs/RESULTS.md#run-066-urd-diac-base-gate-pass-and-artifact-parity-2026-10-19
+  protocol: greedy decode, full 11940-row test split, row-mean CER (WO51 single-row
+    artifact contract)
+sha256:
+  encoder.onnx: ac2ccda95bdfeea5536a81099a3f70241b44b05a8d6bfb05f59ec21c086ff88e
+  decoder.onnx: 13a140f8a85794fc93537b88c77493483d414aad1c5d53316a5e4c86dd930c10
+parity:
+  samples: 500
+  cer_delta: 0.07

@@ -98,3 +98,47 @@ need first_alternates or score raw).
 - PARITY GATE: int8 zip FAILED (0.44 vs 0.14 CER) → fp32 shipping
   decision; 4-job fp32 re-export wave in flight; GH Releases gated
   on green zip parity.
+
+## Release-notes drafts (owner reviews wording before posting)
+
+**Runtime wave (shipped: npm 5.8.0 ✓, gem 3.1.0 ✓; py 0.2.0 pending
+the PyPI trusted-publisher entry):**
+> Seq2seq models trained on multi-reference corpora emit
+> slash-separated alternates; the decode contract now returns the
+> primary choice by default and exposes `first_alternates` /
+> `firstAlternates` for callers who want the full set. Fixes the
+> WikiNews-style scoring artifact (raw-protocol numbers were
+> inflated); models.yaml metrics are stated under the corrected
+> first-alternate protocol.
+
+**Model wave (gated on parity/releases):**
+> urd-g2p-base-1.0: base-tier Urdu G2P, full-split CER 15.65 (beats
+> the small tier's 15.78 gate); fp32, shipped-bytes parity verified.
+> ara-diac-news-1.1: alternate-free base-tier news specialist
+> (no decode-contract dependency). ara-diac-news-large-1.0: NEW BEST
+> 3.5607/1.4588 first-alt on WikiNews-2024 multiref (ship pending
+> WO45 static-int8 — the fp32/fp16 graphs exceed the 2GB ONNX cap).
+
+## QCRI full-silver ask draft (owner review — the AR outside lever)
+
+Subject: Full silver diacritization release + convention notes — research request (Interscript)
+
+Salaam — we build Interscript, a BSD-3-Clause transliteration and
+diacritization toolchain. Our news-register specialist, trained on the
+QCRI silver you published with the EMNLP 2025 paper, scores 3.56 WER /
+1.46 DER on WikiNews-2024 multiref under the first-alternate protocol
+(vs 4.10/1.56 trained on the public release) — your data taught our
+model your conventions, which was the decisive factor.
+
+Two asks, either alone would help:
+1. The FULL silver release (our training used a 900K-window slice):
+   wider coverage would directly close part of our remaining 0.86 WER
+   to your reported frontier.
+2. Convention notes for the multi-reference alternates (when the
+   annotator emits alternates, what the primary choice represents) —
+   we reverse-engineered the first-alternate convention from the data
+   and want to confirm it.
+
+We publish everything BSD-3-Clause and will cite your datasets/paper.
+Happy to share our eval harness (WikiNews-2024 multiref) and full
+results.
