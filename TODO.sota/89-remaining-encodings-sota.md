@@ -99,10 +99,16 @@ Reference collection: 8 DIN PDFs; 4 encoded (32706, 32707, 33903, 33904).
 | BS 2979:1958 | D (via visual reading) | COMPLETE: Russian column #219; Tables A/D/E/G as ukr/bel/bul/srp #220, chu/ron #221, ell #222; the "International" table is ISO/R9 — cited, not duplicated |
 | PD 6505:1982 | D (via visual reading) | COMPLETE: mechanical system #227 (23 tests; Table VIII layer recorded); the Sino-Korean Table VIII layer now encoded as its own system bsi-kor-Kore-Latn-6505-1982-t8 (#251, 14 tests; MR-style vowels, assimilation grid, silent ㅇ, ㅆ ss-, hyphenated syllables) |
 
-### A5. ICS 630-01 — Annex D Chinese (D)
+### A5. ICS 630-01 — Annex D Chinese (CLOSED 2026-11-03)
 
-29 documents in the reference collection; Annexes encoded through WO-series
-(Annex G = PR #213). Annex D (Chinese personal names, pinyin) remains.
+COMPLETE: odni-zho-Hani-Latn-2015 (maps PR #253) — 115 surname rules
+(STC-coded, printed alternates annotated) + orthographic rules +
+criterion-b capitalization; 132 embedded tests, 132/132 on fresh
+origin/main. All four Annex D documents read completely (WO89's
+Appendix-A note was wrong: the Hanzi data is Appendix C; Appendix B
+preserved in full in tools/ics-630-01-annexd.json). With A4's close
+the same day, every Track-A item is now either encoded or
+owner-gated.
 
 ### A6. ISO scope gaps (all D tables; scope, not new authorities)
 
