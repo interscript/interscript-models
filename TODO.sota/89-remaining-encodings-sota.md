@@ -92,12 +92,12 @@ Reference collection: 8 DIN PDFs; 4 encoded (32706, 32707, 33903, 33904).
 | DIN 32706 | D | SHIPPED — maps PR #216 (Armenian; also closes the ISO 9985 scope gap in A6) |
 | DIN 32708 | D | subject confirmed at encoding |
 
-### A4. BSI — 2 documents (reclassified D -> X, 2026-10-28)
+### A4. BSI — 2 documents (CLOSED 2026-11-03)
 
 | Doc | Class | Notes |
 |-----|-------|-------|
-| BS 2979:1958 | D (via visual reading) | unblocked by owner directive; Russian column SHIPPED — maps PR #219; remaining: ukr/bel/bul/srp columns + Tables D, E, G (WO91) |
-| PD 6505:1982 | D (via visual reading) | IN PROGRESS: CORRECTION — PD 6505:1982 is the romanization of KOREAN (UDC 003.353:003.571), not Cyrillic; BSI's own MECHANICAL system, not McCune-Reischauer (vowels ai/ei/yai/yei, ㅡ=w, compounds = concatenation: ㅘ=oa ㅙ=oai ㅚ=oi ㅝ=ue ㅞ=uei ㅟ=ui ㅢ=wi). Core letters captured (14 consonants incl. ㅇ silent-initial//ng/-final; 14 vowels); syllable mechanics 3.1-3.8 captured (zero-initial circle, hyphen per syllable, final clusters); sections 5 N/S orthographies, 6 punctuation, 7 word separation, 10 re-transliteration read; numbered rules 11.x with tables run through pages 10-30 (11.15 seen). Remaining: transcribe 8-9 + 11.x-15.x rule sections + examples, then encode maps/bsi-kor-Kore-Latn-6505-1982.isc + tests |
+| BS 2979:1958 | D (via visual reading) | COMPLETE: Russian column #219; Tables A/D/E/G as ukr/bel/bul/srp #220, chu/ron #221, ell #222; the "International" table is ISO/R9 — cited, not duplicated |
+| PD 6505:1982 | D (via visual reading) | COMPLETE: mechanical system #227 (23 tests; Table VIII layer recorded); the Sino-Korean Table VIII layer now encoded as its own system bsi-kor-Kore-Latn-6505-1982-t8 (#251, 14 tests; MR-style vowels, assimilation grid, silent ㅇ, ㅆ ss-, hyphenated syllables) |
 
 ### A5. ICS 630-01 — Annex D Chinese (D)
 
