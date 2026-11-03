@@ -1,0 +1,324 @@
+{
+  "_generated": "from models.yaml + target-documentation.json — regenerate, never edit",
+  "taxonomy": {
+    "vocalized": "native script + full diacritics",
+    "ipa": "narrow IPA (stress, diacritics)",
+    "phonemic": "broad phoneme-level transcription",
+    "latn": "orthographic romanization"
+  },
+  "rules": [
+    "name shape: {lang}-{target}[-{tier}]-{major.minor}; lang = ISO 639-3",
+    "the target tag is one of the four MECE conventions above — assign from decode evidence, never by analogy",
+    "tiers are orthogonal accurate dimensions (quantization / architecture / register / size)",
+    "renaming a published id requires: (a) decode evidence, (b) the old->new entry in models.yaml renames:, (c) index aliases at the next index tag — old ids resolve forever",
+    "withdrawn ids stay frozen under their historical name"
+  ],
+  "models": [
+    {
+      "id": "ara-diac-news-1.1",
+      "target": null,
+      "tier": "news",
+      "precision": "fp32",
+      "status": "withdrawn",
+      "evidence_output": "—",
+      "was": null
+    },
+    {
+      "id": "ara-vocalized-1.0",
+      "target": "vocalized",
+      "tier": "—",
+      "precision": "fp32",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "ara-diac-1.0"
+    },
+    {
+      "id": "ara-vocalized-2.0",
+      "target": "vocalized",
+      "tier": "—",
+      "precision": "fp32",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "ara-diac-2.0"
+    },
+    {
+      "id": "ara-vocalized-2.0-int8",
+      "target": "vocalized",
+      "tier": "int8",
+      "precision": "int8",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "ara-diac-2.0-int8"
+    },
+    {
+      "id": "ara-vocalized-layerdrop-1.0",
+      "target": "vocalized",
+      "tier": "layerdrop",
+      "precision": "fp32",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "ara-diac-layerdrop-1.0"
+    },
+    {
+      "id": "ara-vocalized-layerdrop-1.0-int4",
+      "target": "vocalized",
+      "tier": "int4",
+      "precision": "int4",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "ara-diac-layerdrop-1.0-int4"
+    },
+    {
+      "id": "ara-vocalized-layerdrop-1.0-int8",
+      "target": "vocalized",
+      "tier": "int8",
+      "precision": "int8",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "ara-diac-layerdrop-1.0-int8"
+    },
+    {
+      "id": "ara-vocalized-news-1.0",
+      "target": "vocalized",
+      "tier": "news",
+      "precision": "int8",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "ara-diac-news-1.0"
+    },
+    {
+      "id": "ara-vocalized-plane-1.0",
+      "target": "vocalized",
+      "tier": "plane",
+      "precision": "int8",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "ara-diac-plane-1.0"
+    },
+    {
+      "id": "ara-vocalized-plane-large-1.0",
+      "target": "vocalized",
+      "tier": "plane",
+      "precision": "int8",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "ara-diac-plane-large-1.0"
+    },
+    {
+      "id": "ara-vocalized-small-1.0",
+      "target": "vocalized",
+      "tier": "small",
+      "precision": "fp32",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "ara-diac-small-1.0"
+    },
+    {
+      "id": "ara-vocalized-small-1.0-int8",
+      "target": "vocalized",
+      "tier": "int8",
+      "precision": "int8",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "ara-diac-small-1.0-int8"
+    },
+    {
+      "id": "ara-vocalized-small-2.0",
+      "target": "vocalized",
+      "tier": "small",
+      "precision": "fp32",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "ara-diac-small-2.0"
+    },
+    {
+      "id": "ara-vocalized-small-2.0-int8",
+      "target": "vocalized",
+      "tier": "int8",
+      "precision": "int8",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "ara-diac-small-2.0-int8"
+    },
+    {
+      "id": "ara-vocalized-small-2.1",
+      "target": "vocalized",
+      "tier": "small",
+      "precision": "fp32",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "ara-diac-small-2.1"
+    },
+    {
+      "id": "ara-vocalized-small-2.1-fp16",
+      "target": "vocalized",
+      "tier": "fp16",
+      "precision": "fp16",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "ara-diac-small-2.1-fp16"
+    },
+    {
+      "id": "ara-vocalized-small-2.1-int8",
+      "target": "vocalized",
+      "tier": "int8",
+      "precision": "int8",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "ara-diac-small-2.1-int8"
+    },
+    {
+      "id": "ara-vocalized-small-int8static-2.1",
+      "target": "vocalized",
+      "tier": "int8-static",
+      "precision": "int8",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "ara-diac-small-int8static-2.1"
+    },
+    {
+      "id": "fas-phonemic-1.0",
+      "target": "phonemic",
+      "tier": "—",
+      "precision": "fp32",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "fas-g2p-1.0"
+    },
+    {
+      "id": "fas-vocalized-base-1.0",
+      "target": "vocalized",
+      "tier": "base",
+      "precision": "fp16",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "fas-diac-base-1.0"
+    },
+    {
+      "id": "heb-vocalized-1.0",
+      "target": "vocalized",
+      "tier": "—",
+      "precision": "fp32",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "heb-diac-1.0"
+    },
+    {
+      "id": "heb-vocalized-1.1",
+      "target": "vocalized",
+      "tier": "—",
+      "precision": "fp32",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "heb-diac-1.1"
+    },
+    {
+      "id": "heb-vocalized-plane-1.0",
+      "target": "vocalized",
+      "tier": "plane",
+      "precision": "int8",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "heb-diac-plane-1.0"
+    },
+    {
+      "id": "heb-vocalized-plane-2.0",
+      "target": "vocalized",
+      "tier": "plane",
+      "precision": "int8",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "heb-diac-plane-2.0"
+    },
+    {
+      "id": "heb-vocalized-small-1.0",
+      "target": "vocalized",
+      "tier": "small",
+      "precision": "fp32",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "heb-diac-small-1.0"
+    },
+    {
+      "id": "khm-latn-1.0",
+      "target": "latn",
+      "tier": "—",
+      "precision": "fp32",
+      "status": "shipped",
+      "evidence_output": "suostei",
+      "was": null
+    },
+    {
+      "id": "tha-phonemic-1.0",
+      "target": "phonemic",
+      "tier": "—",
+      "precision": "fp32",
+      "status": "release-candidate",
+      "evidence_output": "—",
+      "was": null
+    },
+    {
+      "id": "tha-phonemic-base-1.0",
+      "target": "phonemic",
+      "tier": "base",
+      "precision": "fp32",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "tha-g2p-base-1.0"
+    },
+    {
+      "id": "tha-phonemic-small-1.0",
+      "target": "phonemic",
+      "tier": "small",
+      "precision": "int8",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "tha-g2p-small-1.0"
+    },
+    {
+      "id": "tha-phonemic-small-1.0-int4",
+      "target": "phonemic",
+      "tier": "int4",
+      "precision": "int4",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "tha-g2p-small-1.0-int4"
+    },
+    {
+      "id": "urd-ipa-1.0",
+      "target": "ipa",
+      "tier": "—",
+      "precision": "fp32",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "urd-g2p-1.0"
+    },
+    {
+      "id": "urd-ipa-base-1.0",
+      "target": "ipa",
+      "tier": "base",
+      "precision": "fp32",
+      "status": "research-only",
+      "evidence_output": "—",
+      "was": "urd-g2p-base-1.0"
+    },
+    {
+      "id": "urd-vocalized-1.0",
+      "target": "vocalized",
+      "tier": "—",
+      "precision": "fp32",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "urd-diac-1.0"
+    },
+    {
+      "id": "urd-vocalized-base-1.0",
+      "target": "vocalized",
+      "tier": "base",
+      "precision": "fp16",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": "urd-diac-base-1.0"
+    }
+  ]
+}

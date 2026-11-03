@@ -21,8 +21,8 @@ This repo owns three things and nothing else:
    model ids against (with per-artifact sha256s and split-part support).
 2. **The IMF v1 model-zip format** — the artifact contract:
    `metadata.yaml` + ONNX graphs + member sha256 manifest. The normative
-   text is [SPEC.md](SPEC.md); the reference loader now lives in the
-   [Python crystal](https://github.com/secryst/secryst-py).
+   text is [SPEC.md](SPEC.md); the reference loader is [`runtime/` in this
+   repo](https://github.com/interscript/interscript-models/tree/main/runtime).
 3. **The model zoo + publish pipeline** — teachers from
    [secryst-train](https://github.com/secryst/secryst-train)
    are distilled, gated (parity written into the artifact), and released
@@ -34,10 +34,10 @@ This repo owns three things and nothing else:
 |---|---|
 | Benchmark | [Misraj/SadeedDiac-25](https://huggingface.co/datasets/Misraj/SadeedDiac-25) (auto-fetched) |
 | Protocol CLI | `pip install interscript-ml-tools[sadeed]` ([PyPI](https://pypi.org/project/interscript-ml-tools/)) |
-| Python runtime | `pip install secryst` ([PyPI](https://pypi.org/project/secryst/)) |
+| Python runtime | [`runtime/`](runtime/) in this repo — the reference loader (PyPI distribution pending publisher registration) |
 | Raw predictions, every frontier run | Release [`frontier-predictions-v1`](https://github.com/interscript/interscript-models/releases/tag/frontier-predictions-v1) |
 | Teachers + provenance labels | Release [`teachers-arabic-v1`](https://github.com/interscript/interscript-models/releases/tag/teachers-arabic-v1) |
-| Student artifacts | `models.yaml` (index-v5) — sha256-verified in every runtime |
+| Student artifacts | `models.yaml` (index-v12) — sha256-verified in every runtime |
 
     interscript-sadeed-eval score --preds <file> --data Misraj/SadeedDiac-25
 
@@ -87,20 +87,20 @@ CER unless stated).
 
 | model | task | size | headline metric |
 |---|---|---|---|
-| `ara-diac-2.0` | Arabic diacritization | 2.78 GB fp32 | SadeedDiac-25 DER **2.29%** (beats GLM-5.2 2.69); WikiNews-2024 17.38 WER |
-| `ara-diac-news-1.1` | Arabic news register | 2.16 GB fp32 | WikiNews multiref 8.85 WER |
-| `ara-diac-small-2.1` | Arabic, fast tier | 1.42 GB fp32 | fullset DER 4.57 (teacher 2.29) |
-| `ara-diac-plane-large-1.0` | Arabic, int8 fast tier | 0.87 GB int8 | DER 2.74 / WER 8.61 |
-| `urd-diac-base-1.0` | Urdu diacritization | 1.35 GB fp16 | CER **3.57%** |
-| `urd-diac-1.0` | Urdu, small tier | 1.42 GB fp32 | CER 3.74% |
-| `urd-g2p-base-1.0` | Urdu G2P | 2.16 GB fp32 | CER 15.65% — **RESEARCH-ONLY** (non-commercial data) |
-| `fas-diac-base-1.0` | Persian diacritization | 0.71 GB fp16 | CER **0.603%** row-mean / 0.777% corpus, 82.3% word-acc (CC0 data) |
-| `fas-g2p-1.0` | Persian G2P | 2.78 GB fp32 | CER 1.6% |
-| `tha-g2p-base-1.0` | Thai G2P | 2.78 GB fp32 | teacher PER 1.25% |
-| `tha-g2p-small-1.0` | Thai G2P, int8 | 0.26 GB int8 | PER 2.85% (beam-4 12.06%) |
+| `ara-vocalized-2.0` | Arabic diacritization | 2.78 GB fp32 | SadeedDiac-25 DER **2.29%** (beats GLM-5.2 2.69); WikiNews-2024 17.38 WER |
+| ~~`ara-diac-news-1.1`~~ | Arabic news register | — | **WITHDRAWN** — artifact lost (never shipped; WO87). `ara-vocalized-2.0` covers the register |
+| `ara-vocalized-small-2.1` | Arabic, fast tier | 1.42 GB fp32 | fullset DER 4.57 (teacher 2.29) |
+| `ara-vocalized-plane-large-1.0` | Arabic, int8 fast tier | 0.87 GB int8 | DER 2.74 / WER 8.61 |
+| `urd-vocalized-base-1.0` | Urdu diacritization | 1.35 GB fp16 | CER **3.57%** |
+| `urd-vocalized-1.0` | Urdu, small tier | 1.42 GB fp32 | CER 3.74% |
+| `urd-ipa-base-1.0` | Urdu G2P | 2.16 GB fp32 | CER 15.65% — **RESEARCH-ONLY** (non-commercial data) |
+| `fas-vocalized-base-1.0` | Persian diacritization | 0.71 GB fp16 | CER **0.603%** row-mean / 0.777% corpus, 82.3% word-acc (CC0 data) |
+| `fas-phonemic-1.0` | Persian G2P | 2.78 GB fp32 | CER 1.6% |
+| `tha-phonemic-base-1.0` | Thai G2P | 2.78 GB fp32 | teacher PER 1.25% |
+| `tha-phonemic-small-1.0` | Thai G2P, int8 | 0.26 GB int8 | PER 2.85% (beam-4 12.06%) |
 | `khm-latn-1.0` | Khmer → Latin | 1.42 GB fp32 | CER 27.42% / EM 59.66% |
-| `heb-diac-plane-2.0` | Hebrew nikud, int8 | 0.42 GB int8 | DER 8.18% |
-| `heb-diac-1.1` | Hebrew nikud, fp32 | 2.78 GB fp32 | DER 16.44% |
+| `heb-vocalized-plane-2.0` | Hebrew nikud, int8 | 0.42 GB int8 | DER 8.18% |
+| `heb-vocalized-1.1` | Hebrew nikud, fp32 | 2.78 GB fp32 | DER 16.44% |
 
 Quantized variants (int8/int4/fp16) ship as assets of their base
 model's release. Hebrew remains data-supply-limited: newer lanes are
@@ -111,24 +111,45 @@ blocked upstream, not on models.
 Artifacts are plain public downloads; any IMF v1 runtime works
 (single-row greedy decode: ids = byte + 3 with trailing EOS —
 `conformance/CONFORMANCE.md`). The reference python loader is
-`runtime/src/interscript_ml` (conformance-proven).
+`runtime/src/interscript_ml` (conformance-proven, source of the frozen
+fixtures).
 
-Point a crystal's index at the current release and resolve by id:
+Runtime status:
 
-```sh
-export SECRYST_INDEX="https://github.com/interscript/interscript-models/releases/download/index-v12/models-index.yaml"   # python crystal
-export INTERSCRIPT_ML_INDEX="$SECRYST_INDEX"   # ruby gem (archived: override is required)
-```
+| runtime | release | state |
+|---|---|---|
+| Python | reference loader in this repo (`runtime/src/interscript_ml`) | current; PyPI distribution pending publisher registration |
+| TypeScript | `interscript` npm **5.9.0** | current — behaviorally identical to main, conformance matrix green; pins `index-v12` (no env override) |
+| Ruby | `interscript` gem **3.2.0** | decode caveat — predates the 512-step cap and the UTF-8 scrub: outputs truncate at ~100 tokens and invalid UTF-8 raises instead of U+FFFD. Fine for short strings; for long documents use the reference loader or npm until a patch release |
+
+All three pin `index-v12` by default — no override needed for the
+models above. Python (`SECRYST_INDEX`) and ruby
+(`INTERSCRIPT_ML_INDEX`) accept an override to track a newer index.
 
 ```python
 from interscript_ml import Model           # reference runtime (this repo)
-m = Model.load("urd-diac-base-1.0")        # resolves via the index, verifies sha256
+m = Model.load("urd-vocalized-base-1.0")        # resolves via the index, verifies sha256
 print(m.translate("کلیدهای پرکینزمانند"))
 ```
 
-Release pins move per index tag (v11: urd-diac-base; v12: urd-g2p-base,
-fas-diac-base). Crystal releases re-pin on their own cadence — until
-then the env override above is the supported path.
+Artifact notice (2026-10-21): `urd-vocalized-base-1.0` and
+`fas-vocalized-base-1.0` were re-published with exporter-side fp16→fp32
+graph-IO normalization — same weights, portable graph boundary (node
+ONNX Runtime no longer corrupts fp16 bytes; the ruby loader, which
+lacks Float16 materialization, decodes them). The re-published digests
+are in `index-v12`; an index fetched before that date fails loudly on
+sha256 verification and must be re-fetched.
+
+## Not yet ready
+
+In training, not shipped: the Arabic r8 noisy-student chain (stage 2),
+the Khmer lexicon-conditioned arm, and the Thai lexicon-first arm —
+each ships only after its stage-3 external-benchmark verdict clears
+the gates. `urd-ipa-base-1.0` ships but is **research-only**
+(non-commercial training data). `models.yaml` also carries
+legacy/superseded generations (e.g. `ara-vocalized-1.0`, `layerdrop`,
+`ara-vocalized-small-1.0/2.0`) that resolve via the index but are not
+recommended for new use; the table above is the recommended set.
 
 ## Repositories
 
@@ -136,7 +157,7 @@ then the env override above is the supported path.
 |---|---|
 | [interscript/interscript-models](https://github.com/interscript/interscript-models) | this — contract + zoo + isxml framework |
 | [interscript/interscript](https://github.com/interscript/interscript) | ISC map DSL (the transliteration contract) |
-| [interscript/interscript-ruby](https://github.com/interscript/interscript-ruby) | Ruby ISC gem (maps; the ML-model crystal is archived, see below) |
+| [interscript/interscript-ruby](https://github.com/interscript/interscript-ruby) | Ruby ISC gem — maps + `Interscript::ML` model runtime |
 | [interscript/interscript-py](https://github.com/interscript/interscript-py) | Python crystal — live |
 | [secryst/secryst](https://github.com/secryst/secryst) · [secryst/secryst-py](https://github.com/secryst/secryst-py) · [secryst/secryst-ts](https://github.com/secryst/secryst-ts) | **archived** original crystals (est. 2020; the ML ruby gem's default index URL is dead — override `INTERSCRIPT_ML_INDEX`) |
 | [interscript/interscript-train](https://github.com/interscript/interscript-train) · [rababa-farsi](https://github.com/interscript/rababa-farsi) · [rababa-urdu](https://github.com/interscript/rababa-urdu) | archived origins of the train monorepo (full history merged there) |

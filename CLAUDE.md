@@ -32,6 +32,14 @@ Project purpose and direction live in README.md.
 
 ## Hard rules
 
+- **Model naming (WO87, 2026-10-24)**: `{lang}-{target}[-{tier}]-{major.minor}`;
+  the target tag is one of four MECE conventions — `vocalized`
+  (native script + diacritics), `ipa` (narrow), `phonemic` (broad),
+  `latn` (romanization) — assigned from decode evidence
+  (`docs/naming/`), never by analogy. Renaming a published id requires
+  the evidence, the `renames:` entry in models.yaml, and index aliases
+  at the next index tag. Reference: `docs/naming/naming-reference.md`.
+
 - PRs only, never commit to main. Versions are owner decisions — never
   pick a number.
 - NEVER use an LLM as a label teacher for diacritization — they

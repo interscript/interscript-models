@@ -1,6 +1,6 @@
 # WO77 — E2: paper — technique dispatch for underdetermined mappings
 
-Status: PLANNED · Depends WO62 + plane B results
+Status: IN_PROGRESS (draft merged #334; results matrix needs plane B final numbers)
 Goal: a complete draft presenting the dispatch doctrine: ambiguity
 class → technique, with the negative-results registry (RL, CTC,
 LLM-teachers, correlated distillation) as a first-class contribution

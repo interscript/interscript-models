@@ -1,6 +1,6 @@
 # WO76 — E1: paper — the ISC formalism, corpus, and interoperability
 
-Status: PLANNED · Depends WO57/WO60
+Status: IN_PROGRESS (draft merged #333; camera-ready needs A4 completion)
 Goal: a complete draft (LREC/COLING-class) presenting ISC as an
 executable formalism for authority script conversion; the 293-system
 corpus; the differential-testing interoperability methodology; the

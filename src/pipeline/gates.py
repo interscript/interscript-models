@@ -225,11 +225,106 @@ class RegressionGate(BaseGate):
         return GateResult("regression", True, "at parity with registry")
 
 
+
+
+class BudgetGate(BaseGate):
+    """C3: declared performance budgets vs actual index values.
+
+    The index entry may declare perf budgets (size_mb today; latency
+    budgets ride the fixture decode in CI). A declared budget that the
+    actual artifact violates blocks the gate — regressions are release
+    failures, not notes."""
+
+    name = "budgets"
+
+    def check(self, recipe: RecipeSpec, ctx: GateContext) -> GateResult:
+        entry = (ctx.extra or {}).get("index_entry") or {}
+        perf = entry.get("perf") or {}
+        size_mb = perf.get("size_mb")
+        if size_mb is None:
+            return GateResult(self.name, True, "no perf budgets declared")
+        size = entry.get("size")
+        if size is None:
+            return GateResult(self.name, False,
+                              "perf.size_mb declared but index has no size")
+        actual_mb = size / 1_000_000
+        if actual_mb > float(size_mb):
+            return GateResult(self.name, False,
+                              f"artifact {actual_mb:.1f} MB exceeds the "
+                              f"declared {float(size_mb):.1f} MB budget")
+        detail = (f"{actual_mb:.1f} MB within the "
+                  f"{float(size_mb):.1f} MB budget")
+
+        budget_ms = perf.get("decode_ms_per_row")
+        if budget_ms is not None:
+            measured = (ctx.extra or {}).get("measured") or {}
+            ms = measured.get("decode_ms_per_row")
+            if ms is None:
+                return GateResult(
+                    self.name, False,
+                    "perf.decode_ms_per_row declared but never assumed: "
+                    "no measurement supplied — run tools/bench_decode.py "
+                    "or the CI decode bench")
+            if float(ms) > float(budget_ms):
+                return GateResult(
+                    self.name, False,
+                    f"decode {float(ms):.1f} ms/row exceeds the declared "
+                    f"{float(budget_ms):.1f} ms/row budget")
+            detail += (f"; decode {float(ms):.1f} ms/row within the "
+                       f"{float(budget_ms):.1f} ms/row budget")
+        return GateResult(self.name, True, detail)
+
+
+class GraphIoGate(BaseGate):
+    """WO83: no artifact ships fp16 at the graph boundary. Weights may
+    stay fp16 (WO79 owner decision); every graph input and output must
+    be fp32 (or non-float). Enforced here so the exporter default can
+    never silently regress."""
+
+    name = "graph_io"
+
+    def check(self, recipe: RecipeSpec, ctx: GateContext) -> GateResult:
+        art = (ctx.extra or {}).get("artifact_path")
+        if not art:
+            return GateResult(self.name, True,
+                              "artifact not provided — IO guard not "
+                              "evaluated (enforced at export/publish)")
+        path = Path(art)
+        if not path.is_file():
+            return GateResult(self.name, False,
+                              f"artifact missing: {path}")
+        import zipfile
+
+        import onnx
+        from onnx import TensorProto
+
+        offenders = []
+        with zipfile.ZipFile(path) as z:
+            for member in z.namelist():
+                if not member.endswith(".onnx"):
+                    continue
+                m = onnx.load_from_string(z.read(member))
+                for kind, infos in (("input", m.graph.input),
+                                    ("output", m.graph.output)):
+                    for t in infos:
+                        tt = t.type.tensor_type
+                        if tt.elem_type == TensorProto.FLOAT16:
+                            offenders.append(f"{member} {kind} {t.name}")
+        if offenders:
+            return GateResult(
+                self.name, False,
+                "fp16 at the graph boundary (WO79): "
+                + ", ".join(offenders))
+        return GateResult(self.name, True, "graph boundary fp32-clean")
+
+
 register_gate(QualityGate())
 register_gate(ParityGate())
 register_gate(LicenseGate())
 register_gate(ConformanceGate())
 register_gate(RegressionGate())
+register_gate(BudgetGate())
+register_gate(GraphIoGate())
 
 
 def evaluate(
