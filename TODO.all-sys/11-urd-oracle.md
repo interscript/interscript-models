@@ -36,3 +36,20 @@ On gate green: export IMF artifact + parity (≥500 single-row greedy)
 + certify — the VERSION IS THE OWNER'S. Parts contract and publish
 gates per README; never LLM teachers for the labels (the oracle is
 the shipped arms).
+
+STAGE 2 RESULT (2026-11-04): MISSED. run-088 student (google/byt5-base,
+3 epochs, 37.5K steps, oracle-targets 200K x 300B): final-checkpoint
+greedy CER 4.0765 on the 1200-row val subset (protocol: O_EVAL_JSONL,
+row-mean, batch 32, bf16, window 600). Epoch sweep: oepoch-0 4.8905,
+oepoch-1 4.2430, oepoch-2 4.0765 — monotonically improving, no
+overfitting; the gate CER < 3.57 is met by NO checkpoint (target < 3
+likewise). All three epoch checkpoints are durable in
+rhtse/run-088-urd-oracle (uploaded in-job via the HF_TOKEN secret —
+the run-1 failure mode was the read-only /ckpt repo mount, fixed by
+mounting at /targets + a local writable ckpt dir).
+
+OWNER OPTIONS (recorded, not pursued): (a) longer schedule — the
+curve is still descending at 3 epochs; (b) ByT5-large backbone;
+(c) data-side levers per the standing no-RL/no-LLM-teacher laws.
+Infra note: stage-2 evals now have a standalone sweep harness
+(interscript-train eval_oracle_student.py, E_CKPTS/E_EVAL_JSONL).
