@@ -24,3 +24,14 @@ versions are owner decisions.
 - [ ] 11-urd-oracle.md — WO65 stage 1+2 (staged commands)
 - [ ] 12-owner-gates.md — Hebrew data, PyPI, urd-g2p license, corpus
       duplicates (record; owner decides)
+
+
+## Corpus quality state (2026-11-05)
+
+The registry's embedded tests are FULLY GREEN: 400 maps run, 399 with
+tests, 11,048 passed, 0 failed (rust iscrs test-all; ruby parity
+confirmed per map during the repairs). The last 29 known aspirational
+failures across nine maps were repaired in maps PRs #255 and #256,
+every change source-anchored to the reference documents (test-vs-map
+decided per failing row against the source page). This is the corpus's
+first zero-known-failure state.
