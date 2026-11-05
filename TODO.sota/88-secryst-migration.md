@@ -67,8 +67,14 @@ The multi-task IPA+Latin reinforcement beats the legacy artifact by
 the framework-native model replaces the legacy artifact.
 
 Next: export the multi-task model → fixtures → gates → publish as the
-khm-latn successor (owner: id + version — the convention is
-khm-phonemic-1.0 under the MECE taxonomy, since the output is IPA).
+khm-latn successor. RECOMMENDATION (2026-11-05, decode evidence per the
+WO87 naming law): **khm-latn-2.0** — the like-for-like eval (24.50% vs
+legacy 27.57%) was measured on the <latn> task output, so the target
+tag is latn, not phonemic; major bump 1.0 -> 2.0 follows the
+ara-diac-2.0 successor precedent. (The earlier khm-phonemic-1.0
+parenthetical here was analogy, the thing the naming law forbids.)
+Publish runs the export -> fixtures -> gates chain first; owner
+confirms the id before any release.
 
 ## Packaging defect (found 2026-11-03): tha-phonemic-1.0.zip
 
