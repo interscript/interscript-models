@@ -69,8 +69,12 @@ models:
     precision: fp32
     filename: tha-phonemic-1.0.zip
     url: https://github.com/interscript/interscript-models/releases/download/tha-phonemic-1.0/tha-phonemic-1.0.zip
-    sha256: 534bc68960517da36c38d9ef79f1178722751e36e72a3313c0e21b6f66e95198
-    size: 1111939721
+    # 2026-11-05: asset swapped in place - metadata.yaml's internal id was
+    # the pre-rename tha-g2p-lex-1.0; now tha-phonemic-1.0 (owner-approved
+    # rerelease). encoder.onnx/decoder.onnx byte-identical; conformance
+    # 12/12 byte-exact post-swap.
+    sha256: cbee359e3d7ac4be05800044463ea4d3bdcb4bdd8dcb5a6545aaeca1e2aa6993
+    size: 1111068394
     metrics:
     - name: per
       value: 19.29
