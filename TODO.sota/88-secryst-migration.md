@@ -73,12 +73,12 @@ run-090-khm-multi oepoch-2. An earlier edit here recommended
 khm-latn-2.0; that re-derived an id for an already-published model and
 is withdrawn. The shipped id is the owner's decision and stands.
 
-## Packaging defect (found 2026-11-03): tha-phonemic-1.0.zip
+## Packaging defect (found 2026-11-03, RESOLVED 2026-11-05): tha-phonemic-1.0.zip
 
-The RELEASED tha-phonemic-1.0.zip on GitHub Releases carries the
+The RELEASED tha-phonemic-1.0.zip on GitHub Releases carried the
 internal model id `tha-g2p-lex-1.0` (the pre-rename id) instead of
-`tha-phonemic-1.0`. Loaders that key on the artifact's declared id
-will mismatch. OWNER DECISION: re-release the zip with the corrected
-internal id (same-release asset swap or a new release — owner's call);
-consumers in the meantime should key on sha256, not the internal id.
-Recorded, not worked around.
+`tha-phonemic-1.0`. RESOLVED per the owner's rerelease call: the asset
+was swapped in place on the same release/tag (metadata.yaml id
+corrected, encoder/decoder byte-identical, conformance 12/12
+byte-exact post-swap, consumer-path download+sha verified), and
+models.yaml pins the new sha256 + size.
