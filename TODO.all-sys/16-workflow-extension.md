@@ -1,7 +1,8 @@
 # WO16 — ISC workflow-extension layer (spec for owner review)
 
-Status: LANDED as ISC-WF-1 (maps docs/isc-wf-1.md) — ruby/py/ts
-merged, pilots merged; rs in flight. Execution log below.
+Status: LANDED end-to-end as ISC-WF-1 (maps docs/isc-wf-1.md) —
+ruby/py/ts/rs all merged, pilots merged, site docs live. Execution
+log below.
 Authority: owner directive 2026-11-07 ("this is clearly a workflow
 definition problem in ISC"); /goal directive 2026-11-07 ("finish the
 ISC workflow-extension layer (WO16) end-to-end").
@@ -182,7 +183,7 @@ landing (TDD: failing test first, interscript-ts wf1.test.ts).
 | 6 | Pilot: ALA-LC leading-vowel machinery | maps PR #261 MERGED (17e8034): new `libs/thai-latn.isc` `ruleset leading_vowel_digraphs` (327 rows common to alalc-tha-Thai-Latn-2011's 738 and bgnpcgn-tha-Thai-Latn-2002's 344 digraph rows; 159 byte-identical, 168 convention-differing, BGN/PCGN forms as base); bgnpcgn uses the ruleset + 17 map-only override rows; alalc overrides the 168 ALA-LC forms + 1196 map-only rows | per-pass compiled IR set-identical before/after (alalc 5 passes, bgnpcgn 9, row multisets equal); 11,048 golden rows zero new deltas through py AND ruby runtimes; pilot-map golden rows byte-identical |
 | 6 | Pilot: ISO 9 descender rows — DISSOLVED | superseded by evidence, not done | owner-directed PDF validation (2026-11-07, `tools/iso9-1995-textlayer.txt`): the printed ISO 9:1995 table has ONE Latin rendering per row; the comma-below forms sit in the CYRILLIC column; the corpus map is faithful as-is. No variant ruling, no W3 conditioning needed. The goal's pilot premise ("comma-below-primary with cedilla language-conditioned") is void — changing the map would falsify the printed standard. |
 | 7 | Website documentation | interscript.github.io PR #228 MERGED (`src/content/docs/Workflow_Extension.adoc`) | CI green |
-| 5 | RS runtime | agent in flight (branch `feat/isc-wf1-rs`, grammar+builder+interpreter staged, tests/wf1.rs 21 fns) — sync note sent (trailing-parallel join §4.2.6, constraint fix, pilots corpus) | pending |
+| 5 | RS runtime | interscript-rs PR #10 MERGED (feat/isc-wf1-rs 3c8efb2): grammar productions synced with the ruby reference (incl. §4.2.6 trailing-parallel join), builder load-time expansion, W3 runtime filtering + CLI `--language`, reversal carries the new fields | `cargo test --release --test wf1` 20/20; `--test golden_capture` zero delta vs current maps main incl. pilot maps; full suite green; CI green |
 | — | Flaky ML funcall spec (blocks CI) | interscript-ruby PR #835 open: contract pinned against a local index fixture (offline-deterministic) | 3 CI failures today (Net::ReadTimeout/502 on the registry fetch), all this spec |
 
 Verification commands (reproducible):
