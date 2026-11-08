@@ -63,17 +63,25 @@ versions are owner decisions.
       duplicates (record; owner decides)
 
 
-## Corpus quality state (2026-11-05)
+## Corpus quality state (2026-11-09)
 
-The registry's embedded tests are FULLY GREEN: 400 maps run, 399 with
-tests, 11,048 passed, 0 failed (rust iscrs test-all; ruby parity
-confirmed per map during the repairs). The last 29 known aspirational
-failures across nine maps were repaired in maps PRs #255 and #256,
-every change source-anchored to the reference documents (test-vs-map
-decided per failing row against the source page). This is the corpus's
-first zero-known-failure state.
-- 16-workflow-extension.md — ISC workflow layer: rulesets, override, language conditioning (spec for owner review)
+The registry's embedded tests are FULLY GREEN: 424 maps run, 423 with
+tests, 12,337 passed, 0 failed (`iscrs test-all` on maps main
+b9ea8c4, 2026-11-09). Previous state (2026-11-05): 400 maps / 11,048
+tests after the repairs in maps PRs #255 and #256 (every change
+source-anchored to the reference documents — test-vs-map decided per
+failing row against the source page) — the corpus's first
+zero-known-failure state. The 2026-11-09 growth (+24 maps /
++~1,289 tests) came from the ALA-LC batches 02-05 (maps
+#263/#264/#265/#266), each map's tests carried from its own source
+document; the 11,048-row golden additivity capture stayed zero-delta
+throughout.
 
+## Catalogue-note cleanup
+
+The stray trailing index line for WO16 below the corpus-quality
+section was a layout artifact; WO16 is fully recorded in its own file
+and the execution log.
 ## Site catalogue follow-up (owner-gated dependency)
 
 The site's `src/data/maps-catalogue.json` regeneration against the
