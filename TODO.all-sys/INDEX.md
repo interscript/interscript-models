@@ -35,3 +35,4 @@ failures across nine maps were repaired in maps PRs #255 and #256,
 every change source-anchored to the reference documents (test-vs-map
 decided per failing row against the source page). This is the corpus's
 first zero-known-failure state.
+- 16-workflow-extension.md — ISC workflow layer: rulesets, override, language conditioning (spec for owner review)
