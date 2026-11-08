@@ -73,3 +73,17 @@ every change source-anchored to the reference documents (test-vs-map
 decided per failing row against the source page). This is the corpus's
 first zero-known-failure state.
 - 16-workflow-extension.md — ISC workflow layer: rulesets, override, language conditioning (spec for owner review)
+
+## Site catalogue follow-up (owner-gated dependency)
+
+The site's `src/data/maps-catalogue.json` regeneration against the
+428-map corpus is BLOCKED on an npm release of `interscript-ts`
+carrying the ISC-WF-1 parser: the site pins the published
+`interscript@^5.5.1`, which cannot parse the two WF-1 pilot maps
+(`alalc-tha-Thai-Latn-2011`, `bgnpcgn-tha-Thai-Latn-2002`) — the
+regenerated catalogue would add the 24 batch maps but silently drop
+those two live entries (a site regression), so it was not committed.
+Sequence for the owner: release an npm version with WF-1 (version
+number is the owner's call), then re-run `npm run
+generate:catalogue` on the site and PR the regenerated file
+(428/428, zero drops).
