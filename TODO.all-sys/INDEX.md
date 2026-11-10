@@ -95,3 +95,21 @@ Sequence for the owner: release an npm version with WF-1 (version
 number is the owner's call), then re-run `npm run
 generate:catalogue` on the site and PR the regenerated file
 (428/428, zero drops).
+
+## Ruby lockstep probe: maps 3.0.0 vs `~> 2.5` (owner decision)
+
+The weekly `lockstep-check` resolve job (interscript-ruby, cron Mon
+06:00 UTC) fired red on 2026-11-09 exactly as designed: it clones
+maps main and runs `bundle lock`, and the resolution now fails —
+maps main carries `INTERSCRIPT_MAPS_VERSION = "3.0.0"` (released
+2026-11-08) while `interscript.gemspec` line 36 constrains
+`interscript-maps "~> 2.5"` (>= 2.5, < 3.0). Every bundler
+resolution against the maps path source is unsolvable until the
+constraint moves. Same-sha evidence: ruby main 346a957 resolved
+green on 2026-11-08 13:01 UTC (pre-release maps state in CI) and
+red on 2026-11-09 15:07 UTC.
+
+OWNER DECISION (dependency contract + release, not mine to set):
+raise `interscript.gemspec` to `interscript-maps "~> 3.0"` (or the
+range the owner wants) as part of the next interscript-ruby release.
+Until then the weekly probe stays red — that is its function.
