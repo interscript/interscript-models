@@ -90,3 +90,36 @@ Owner-held (unchanged): PyPI publisher registration + first py version
 license_review; B3 stage-2 ship; ISO 259/7098/15919 source
 acquisition; release-assets pipeline retire-or-revive (#429); monorepo
 vestigial disposition.
+
+## Harness audit (2026-11-11, step 4a landed)
+
+The cross-grammar parity harness landed as maps PR #270
+(`scripts/parse-parity.mjs`: ts `parseIsc`+`expandDocument` and py
+`parse_isc` projected onto one canonical schema; deterministic,
+~11 s/corpus run, `--json` report, non-zero exit on divergence).
+
+**Audit at origin/main 3bc9098: parity 408/433; 6 divergence kinds in
+four stories:**
+1. py `none`→empty-string lowering (documented behavior in py's
+   builder) — 493 items / 16 files; normalizer-level note.
+2. `any_character` typing (ts function-item vs py alias-item) — 47
+   items / 3 files; normalizer-level.
+3. Written constraint order lost by py (fixed field order) — 5 files;
+   normalizer-level.
+4. **SEMANTIC: py `use`-with-override placement** — ts/ruby join ALL
+   override rows into the trailing parallel block (§4.2.6); py
+   appended unmatched additions as bare stage rules (bgnpcgn-tha
+   344 vs 327+17; alalc-tha 1523 vs 327+1196). FIXED in
+   interscript-ruby PR #842 with failing-first placement specs; the
+   in-process golden (12,337 rows) stayed green in-suite.
+
+**Hardening finding (unfixed, both ts and py):** the stage/rule/
+override body loops lack an end-of-source guard — an unrecognized
+token that swallows its closing brace spins forever at EOF (synthetic
+one-liner repro hangs tsx at 100% CPU; the corpus is safe today; the
+harness's `--timeout` watchdog flags any file that trips it). Fix in
+the grammar single-sourcing round.
+
+Expected post-#842 parity: 410/433 (the two thai pilot files join);
+the remainder is the three normalizer-level stories, which the
+generated-parser switch (step 4b) resolves at the root.
