@@ -120,6 +120,8 @@ one-liner repro hangs tsx at 100% CPU; the corpus is safe today; the
 harness's `--timeout` watchdog flags any file that trips it). Fix in
 the grammar single-sourcing round.
 
-Expected post-#842 parity: 410/433 (the two thai pilot files join);
-the remainder is the three normalizer-level stories, which the
-generated-parser switch (step 4b) resolves at the root.
+CONFIRMED post-#842 (harness re-run against ruby main with the fix,
+2026-11-11): parity 410/433, 3 divergence kinds (item-kind 678,
+constraints 144, item-value 4) — the two thai pilot files joined; the
+remainder is the normalizer-level stories, which the generated-parser
+switch (step 4b) resolves at the root. 4b campaign in flight.
