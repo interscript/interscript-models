@@ -82,19 +82,11 @@ throughout.
 The stray trailing index line for WO16 below the corpus-quality
 section was a layout artifact; WO16 is fully recorded in its own file
 and the execution log.
-## Site catalogue follow-up (owner-gated dependency)
+## Site catalogue top-up — DONE (was blocked on npm WF-1)
 
-The site's `src/data/maps-catalogue.json` regeneration against the
-428-map corpus is BLOCKED on an npm release of `interscript-ts`
-carrying the ISC-WF-1 parser: the site pins the published
-`interscript@^5.5.1`, which cannot parse the two WF-1 pilot maps
-(`alalc-tha-Thai-Latn-2011`, `bgnpcgn-tha-Thai-Latn-2002`) — the
-regenerated catalogue would add the 24 batch maps but silently drop
-those two live entries (a site regression), so it was not committed.
-Sequence for the owner: release an npm version with WF-1 (version
-number is the owner's call), then re-run `npm run
-generate:catalogue` on the site and PR the regenerated file
-(428/428, zero drops).
+npm `interscript@5.11.0` shipped the WF-1 parser; the site dependency
+bumped to `^5.11.0` and the catalogue regenerated **428/428, zero
+drops** (site PR #230, 2026-11-11).
 
 ## Ruby lockstep probe: maps 3.0.0 vs `~> 2.5` (owner decision)
 
@@ -109,7 +101,19 @@ constraint moves. Same-sha evidence: ruby main 346a957 resolved
 green on 2026-11-08 13:01 UTC (pre-release maps state in CI) and
 red on 2026-11-09 15:07 UTC.
 
-OWNER DECISION (dependency contract + release, not mine to set):
-raise `interscript.gemspec` to `interscript-maps "~> 3.0"` (or the
-range the owner wants) as part of the next interscript-ruby release.
-Until then the weekly probe stays red — that is its function.
+RESOLVED 2026-11-11: the owner authorized reasonable version numbers
+for the release round; ruby 3.4.0 ships with `interscript-maps
+"~> 3.0"` (PR #837, tag v3.4.0, rubygems live) and the lockstep probe
+was re-dispatched immediately — **green** (run 42942594684).
+
+## Release round 2026-11-11 (owner: "use reasonable version numbers")
+
+| package | version | channel | verification |
+|---|---|---|---|
+| interscript-maps | 3.1.0 | rubygems (release-gem@v1) + GitHub release | `/api/v1/versions` shows 3.1.0; release assets `interscript-maps-ir-3.1.0.tar.gz` + `interscript-maps-isc-3.1.0.tar.gz` with .sha256 sidecars |
+| interscript (npm) | 5.11.0 | npm OIDC trusted publishing, provenance | dist-tag latest = 5.11.0; run 42940186512 green (lint/build/test/publish) |
+| interscript (rubygems) | 3.4.0 | rubygems trusted publishing | `/api/v1/versions` shows 3.4.0; full spec suite green incl. the constraint move `~> 3.0`; lockstep probe re-dispatched green |
+| interscript (crates.io) | 0.2.0 | crates.io trusted publishing (publish.yml) | max_version 0.2.0; run 42942246925 green — required two CI-mechanics fixes (#13 path→version rewrite with a proven published-form build; #14 `--allow-dirty`, the rewrite IS the dirty state) |
+| site catalogue | — | interscript.github.io PR #230 (merged) | 428/428, zero drops, `^5.11.0` |
+
+ interscript-py stays PyPI-locked (owner gate). 
