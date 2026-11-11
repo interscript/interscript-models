@@ -173,3 +173,34 @@ py normalizer stories above are resolved at the root by the same
 move). Open sweep items: Hebraic cluster ruleset, W3 corpus adoption,
 conformance depth, rs ruleset-only lib loading, EOF-spin hardening
 (subsumed by the grammar round). Owner-held set unchanged.
+
+## Py leg landed (2026-11-12): the py parser is generated from the same .parg
+
+interscript-ruby PR #843 MERGED: `interscript-py/src/interscript/grammar/`
+mirrors the ts milestone module-for-module (grammar_source.py vendoring
+the SAME sha256-pinned .parg as ts; parg_reader.py; peg.py with two
+py-specific additions — match-span recording for the byte-exact
+from_source override key, and failure diagnostics rendering the two
+suite-pinned hand-parser error messages from real parse state;
+actions.py → IscDocument). The W1/W2 expansion, document model and
+converter stay in isc.py; `parse_isc`'s public API unchanged; the ~900
+-line hand scanner is replaced.
+
+**Measured: py-vs-py parity driver 434/434 identical-to-hand (canonical
+schema AND raw field-for-field, byte-exact from_source); maps harness
+411/434 — same score, same 23 files, zero status flips vs the
+incumbent; py failure set byte-identical to a pristine origin/main run
+(18 pre-existing environment gaps, parser-independent); golden
+additivity green in-suite.**
+
+**Owner-flagged tradeoff**: interpreter perf — 434-file corpus ~86 s vs
+hand's ~7 s (megabyte jamo/hanja maps dominate; golden gate 86→187 s,
+suite 107→306 s). Documented in isc.py with closure-compilation
+follow-ups that don't touch semantics. A fourth GRAMMAR_EXTENSION
+(use-in-pass splicing, pinned by the py suite, corpus-dormant) joins
+the ts trio; the cross-runtime `when`-position and dep-name divergences
+remain owner alignment decisions.
+
+**WO17 COMPLETE: all four steps landed. The .parg grammar is now the
+single semantic source for the ts and py parsers, judged continuously
+by the parity harness and the maps-CI four-runtime additivity gates.**
