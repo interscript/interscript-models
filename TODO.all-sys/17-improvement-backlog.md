@@ -125,3 +125,51 @@ CONFIRMED post-#842 (harness re-run against ruby main with the fix,
 constraints 144, item-value 4) — the two thai pilot files joined; the
 remainder is the normalizer-level stories, which the generated-parser
 switch (step 4b) resolves at the root. 4b campaign in flight.
+
+## Step 4b landed (2026-11-12): the TS parser is generated from the .parg
+
+interscript-ts PR #128 MERGED (branch `wo17/generated-parser`): the
+ISC parser is now generated from the canonical ruby `.parg`
+(vendored verbatim in `src/isc/grammar/grammar-source.ts`,
+sha256-pinned with a no-drift test; refreshed via
+`scripts/sync-isc-grammar.mjs`). Four modules: parg-reader (PARG
+lexer/parser/compiler ported from Parsanol), peg.ts (table-driven PEG
+interpreter + parsanol's CanFlatten semantics), actions.ts
+(capture tree → IscDocument, each deliberate quirk carrying a
+DEVIATION comment). `parseIsc`'s public API unchanged (parser.ts
+re-exports the generated entry).
+
+**Measured evidence (harness runs pasted in the PR body):**
+- Capture trees vs the ruby artifact parser: **434/434
+  byte-identical**.
+- Documents vs the replaced hand parser: **434/434 identical**.
+- Cross-grammar harness (generated on the ts side): **411/434 — the
+  SAME 23 files and divergence-kind counts as the hand parser on the
+  same day** (the gap is by design of the py normalizers: py re-sorts
+  constraint kinds into fixed fields and lowers `none` to `""`; the
+  incumbent sits at exactly the same 411/434).
+- ts suite: 364 passed / 4 skipped / 0 failed; tsc + eslint +
+  prettier clean; PR CI green incl. the ISC parser parity (289 maps),
+  conformance matrix, Node 20/22.
+
+**Owner-flagged findings (alignment decisions, not regressions):**
+1. Three grammar extensions live only in the generated parser's
+   documented `GRAMMAR_EXTENSIONS` block (corpus-proven dormant):
+   `any_arg` item fallback (ruby DSL has it, canonical `.parg` drops
+   it, rs copy keeps it); block-rule outside-brace `when` (ruby
+   parses INSIDE-brace only — ts and py only outside: a newly-found
+   cross-runtime divergence); hyphenated `run map.x-y` dep names
+   (ts-only lenience; ruby rejects).
+2. `\UXXXX` escapes: the grammar decodes them; hand-ts and py both
+   mangle to `U`+digits. Six corpus maps use `\U` — the generated
+   parser mirrors the incumbent for swap-safety; aligning all three
+   runtimes is an owner decision.
+3. Performance: the interpreter runs the full corpus in ~18 s
+   (packrat-memoized; harness timeout 600 s).
+
+**Status: WO17 steps 1-4 complete.** The py parser switch to
+generated output remains the follow-up (the harness judges it; the
+py normalizer stories above are resolved at the root by the same
+move). Open sweep items: Hebraic cluster ruleset, W3 corpus adoption,
+conformance depth, rs ruleset-only lib loading, EOF-spin hardening
+(subsumed by the grammar round). Owner-held set unchanged.
