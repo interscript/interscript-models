@@ -117,3 +117,29 @@ was re-dispatched immediately — **green** (run 42942594684).
 | site catalogue | — | interscript.github.io PR #230 (merged) | 428/428, zero drops, `^5.11.0` |
 
  interscript-py stays PyPI-locked (owner gate). 
+## Ruby release-assets pipeline: dead since ≤ v3.1.0 (owner decision)
+
+The `release-assets` workflow (vis_json.zip + metadata.json.zip per
+release) failed on the v3.4.0 tag with two stacked causes: upstream
+`thedoctor0/zip-release` retagged (v0.7.6 → 0.7.6; fixed in
+interscript-ruby PR #838 with a dispatch tag input), and beneath that
+the job runs the FROZEN interscript/ monorepo's `ruby/` tree — its
+`generate_visualization_json` rake task calls
+`Interscript::Node::Stage#to_visualization_array`, undefined in the
+workflow's load path (and the layout predates the gem split: the
+rake's `../maps` path source isn't even checked out).
+
+History: **no release since at least v3.1.0 carries these assets**
+(v3.1.0/v3.2.x/v3.3.0/v3.4.0 all verified via the releases API) —
+three releases shipped without anyone missing them; the Astro site
+renders rule charts from the catalogue, not this JSON.
+
+OWNER DECISION (retiring a release-asset pipeline): either retire the
+workflow (it ships artifacts nobody has received since 3.1.0), or
+revive it properly — port `generate_visualization_json` to the gem's
+own Rakefile (the gem already carries `visualize/json.rb` and
+`generate_metadata_json`), check out ../maps in the workflow, and
+teach the visualization the ISC-WF-1 nodes (Ruleset / Rule::Use /
+LanguagesDecl / Sub#when_languages). PR #838's dispatch-tag input
+supports either path. The v3.4.0 release is NOT missing anything it
+ever had in the 3.x era.
