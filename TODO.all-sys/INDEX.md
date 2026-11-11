@@ -61,6 +61,10 @@ versions are owner decisions.
       DECISION (urd-g2p license_review gate)
 - [ ] 12-owner-gates.md — Hebrew data, PyPI, urd-g2p license, corpus
       duplicates (record; owner decides)
+- [ ] 17-improvement-backlog.md — the post-WF-1 improvement round
+      (grammar single-sourcing, ruby parity closure, additivity in
+      maps CI, WF-1 adoption sweep, conformance depth) — ranked,
+      evidence-linked, next /goal executes it
 
 
 ## Corpus quality state (2026-11-09)
