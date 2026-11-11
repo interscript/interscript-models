@@ -71,3 +71,22 @@ ruby #839); Hebrew vocalization data; urd-g2p license_review; B3
 stage-2 ship (MIXED verdict); ISO 259/7098/15919 source acquisition;
 release-assets pipeline retire-or-revive (#429); monorepo vestigial
 disposition.
+
+## Execution log (2026-11-11)
+
+| # | Item | Status | Evidence |
+|---|------|--------|----------|
+| 2 | Ruby parity closure | DONE | interscript-ruby PR #840 MERGED: `Item::Alias#max_length` counts 1 for any alias (rs parity, the golden source). Ruby golden gate: `rows: 12337 ... delta vs golden (cross-runtime): 0` — was 33 (un-ara-Arab-Latn-1971/1972, odni-rus Arabic variants). TDD: both new specs watched failing first; suite 409 examples 0 failures. The standing cross-runtime exemption is retired. |
+| 3 | Additivity as infrastructure | DONE | (a) PERMANENT py golden test: interscript-ruby PR #841 MERGED — `interscript-py/tests/test_golden_capture.py` replays 12,337 rows byte-identically through the in-process py runtime (83 s); harness detection proven against a doctored golden (one flipped row → failure names exactly that map). (b) The py port of the ts #124 constraint class-context fix rode in the same PR — the in-process path diverged on exactly 5 rows pre-fix (all alalc-ell-Grek-Latn-2010), 4 regression specs watched failing first. (c) MAPS-CI GATES: maps PR #268 MERGED — `.github/workflows/additivity-gates.yml`, four parallel jobs (rs/ts/ruby/py) replaying the golden on every PR + main push; first run surfaced two workflow bugs (ruby gate needed `bundle exec`; rs gate hits the parsanol dev path dep — rewritten to the version requirement, mirroring rs publish.yml) and a merge race on the py test file; all four gates green on the fixed run. |
+| 4a | WF-1 adoption sweep: Malay/Jawi pilot | DONE | maps PR #269: `libs/jawi-latn.isc` carries the two shared runs of alalc-zsm-Arab-Latn-2011 / alalc-jav-Arab-Latn-2012 (`malay_jawi_common_a` 50 rules, `malay_jawi_common_b` 10 rules — 60 of zsm's 61 rules are byte-identical to jav's; jav inserts 3 Javanese consonants ڎ/ڟ/ۏ between the runs). Per-pass proof: compiled IR before/after IDENTICAL once sequential composition is flattened (60/63 ordered rules byte-equal; the `sequence` wrapper flattens away). rs sweep 12,337/0; ruby golden gate 0 delta, 0 exempt. |
+| 4b | WF-1 sweep: remaining clusters | OPEN | Hebraic pair (alalc-lad-Hebr-Latn-2025 ∩ alalc-jba-Hebr-Latn-2011: 27 identical plain rows) is the next candidate; the Arab-script maps share only ~12 rows each — low value. Use `use` at STAGE level only: splicing inside a `sequence` block silently emits zero rules (the converter expands stage-level items only; §2 makes `use` a stage_item) — a spec question for the grammar round. |
+| 4c | W3 adoption | OPEN | No corpus adoption; ICAO 9303's split multi-language map (#168) remains the candidate to re-examine — document evidence required. |
+| 1 | Grammar single-sourcing | IN PROGRESS | Step 4a: the cross-grammar parity harness (maps `scripts/parse-parity.mjs`, ts+py normalizers, 434-file corpus) — agent campaign in flight. The generated-parser switch follows behind its audit. |
+| 5 | Conformance depth | OPEN | Exhaustive per-row test generation from source text layers (batch-3's chu/rue did it by hand, 176 rows). |
+| 6 | rs loader ruleset-only libs | OPEN | `iscrs capture` skips the ruleset-only `thai-latn` lib at direct load (no stages); the loader should accept ruleset-only documents. |
+
+Owner-held (unchanged): PyPI publisher registration + first py version
+(workflow in place, ruby #839); Hebrew vocalization data; urd-g2p
+license_review; B3 stage-2 ship; ISO 259/7098/15919 source
+acquisition; release-assets pipeline retire-or-revive (#429); monorepo
+vestigial disposition.
