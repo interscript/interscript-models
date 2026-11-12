@@ -204,3 +204,18 @@ remain owner alignment decisions.
 **WO17 COMPLETE: all four steps landed. The .parg grammar is now the
 single semantic source for the ts and py parsers, judged continuously
 by the parity harness and the maps-CI four-runtime additivity gates.**
+
+## Follow-ups landed (2026-11-12)
+
+| Item | Status | Evidence |
+|------|--------|----------|
+| rs loader ruleset-only libs | RESOLVED-AS-WORKING | thai-latn loads fine in rs (transliterate probe reaches stage execution; only a missing-main stage errors, like any map). The capture "1 load error" was always var-ara-Arab-Arab-rababa (the ML-funcall map rs slice 1 rejects — consistent with the other runtimes). interscript-rs PR #15 MERGED: capture now reports load errors by map + cause instead of a silent count. |
+| EOF-spin hardening | RESOLVED by 4b | The malformed-input repro that hung both hand parsers at 100% CPU now rejects cleanly on the generated parsers: ts `IscParseError ... Failed to match isc_source` (line 4:0); py rejected in 0.01 s (line 4:18). The hand parsers carrying the bug no longer exist. |
+| Hebraic cluster sweep | DONE by the OWNER | maps PR #273 (ronaldtse) MERGED: `libs/hebr-latn.isc` + alalc-lad-Hebr-Latn-2025 / alalc-jba-Hebr-Latn-2011 refactored to the shared rulesets — 12 CI checks green incl. the four additivity gates. (The coordinator's agent was stopped before opening a competing PR; the owner landed their own version.) Corpus sweep on the merged corpus: 12,337/0. |
+| Conformance depth (tool + first map) | DONE | maps PR #272 MERGED: `scripts/gen-row-tests.mjs` (rows JSON → provenance-marked ISC tests block; duplicate/empty validation; generated-by marker) + `scripts/row-sources/alalc-vai-Vaii-Latn-2010.json` + alalc-vai-Vaii-Latn-2010 extended 11 → 251 tests (240/240 rule froms covered, ZERO transcribe-vs-map divergences — the map proven a complete faithful transcription; 251/251 pass through the ts runtime; all 12 gates green). |
+
+Remaining (unchanged): W3 corpus adoption (document evidence required);
+py generated-parser perf (closure compilation); grammar alignment
+decisions (when-position, U-escapes, the four documented extensions) —
+owner-held. The conformance-depth tool is now available for the other
+thin-test maps (hye 134/12, zgh 43/14, chr 85/18) as future work.
