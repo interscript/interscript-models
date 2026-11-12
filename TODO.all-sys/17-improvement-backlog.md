@@ -272,3 +272,28 @@ channel verified live against its registry API:
 current Ruby surface — the legacy secryst gem path superseded —
 289→428 systems, the grammar single-sourcing note), interscript dep
 ^5.12.0, catalogue regenerated 428/428 (PR #234).
+
+## ts #111 closed (2026-11-12): root cause + runtime defense
+
+interscript-ts PR #134 MERGED; issue #111 closed. Root cause
+(re-established from live evidence): fp16 graph I/O meeting the
+onnxruntime-node binding — the issue-era fp16 exports shipped
+encoder/logits tensors as float16; ORT's JS Tensor constructor
+converts float16 feeds to a native Float16Array view on Node >= 24,
+and the N-API binding reads that buffer as 0 bytes (`expected N, got
+0`, size-independently; the issue's own arithmetic proves it: 288512
+= 98x1472x2 fp16 elements). Node-version dependence verified live
+(20/22 decode; 24/26 break). The windows.ts suspicion in the issue
+body is exonerated.
+
+The shipped artifacts were repacked to fp32-IO in place (WO79,
+2026-10-21), so both conformance legs pass today — but the runtime
+had zero defense. The fix: reject fp16 feeds with a named
+artifact-contract error pointing at normalize_fp16_io.py, locked by
+a 1KB fp16-IO regression fixture on both runtime branches (red
+before the fix). Full suite 352 green; fp16 conformance leg green
+post-fix; PR CI all green (rebased onto main post-dependabot).
+
+**Artifact-side follow-up for the owner**: SPEC.md does not yet
+mandate fp32 graph I/O — a SPEC line would make the runtime guard's
+contract normative.
