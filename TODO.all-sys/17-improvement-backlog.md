@@ -219,3 +219,56 @@ py generated-parser perf (closure compilation); grammar alignment
 decisions (when-position, U-escapes, the four documented extensions) —
 owner-held. The conformance-depth tool is now available for the other
 thin-test maps (hye 134/12, zgh 43/14, chr 85/18) as future work.
+
+## Full close-out (2026-11-12): releases + issue triage
+
+**Release round ("fully release all engine and runtimes")** — every
+channel verified live against its registry API:
+- interscript-maps **3.2.0** — rubygems + IR/isc artifacts with
+  sha256 sidecars. First attempt pushed the gem from a STALE local
+  origin/main ref (tag landed on the pre-bump commit, built 3.1.0,
+  rubygems rejected the duplicate — registry safe, nothing wrong
+  shipped); tag deleted and re-pushed at the true 3.2.0 commit.
+  Lesson: `git tag <v> origin/main` AFTER re-fetching, and verify the
+  tagged tree's version file before pushing.
+- interscript (npm) **5.12.0** — the generated-parser release
+  (lint/build/test/publish, provenance), verified via dist-tag.
+- interscript (rubygems) **3.5.0** — parity closure + py generated
+  parser + override-placement parity; full suite green.
+- interscript (crates.io) **0.2.1** — capture load-error visibility;
+  dispatch green on the first try (the publish.yml fixes held).
+- interscript-py: PyPI remains owner-gated (publisher registration);
+  the dispatch-ready workflow is in place (ruby #839).
+
+**GH issue triage (68 open → 24 closed with evidence, rest triaged):**
+- maps: 17 closed — every implementable system request verified at
+  its exact requested id in the corpus (ava/sah/udm/syr+syc/oss/krc/
+  kbd/chv BGN-PCGN Cyrillic set, odni-kur-2011, odni-bel as the 2015
+  edition, bgnpcgn-prs-2007 + yaghoubi, bgnpcgn-pus-1968, iu-Cans-
+  2013 with the itk-1976 source-gate noted), GHA currency (#177),
+  the OGC 11-122r1 mapping fix (#50), the Arabic diacritic-drop
+  stage (#4, var-ara-Arab-Arab-rababa), the superseded GNDB
+  analysis (#7). Left open honestly: #10 (tir tests — Tigrinya
+  ፀ-rows still missing; gen-row-tests applies), #24/#28/#29/#30/#31/
+  #32/#37/#43/#44/#47/#48/#49 (source-gated systems), #51-54
+  (pinyin-IPA variants), #162/#172/#173 (source-gated).
+- ruby: 5 closed — the Rust runtime (#325: the shipped crate), ML
+  integration (#351, #528: the in-gem IMF runtime + published
+  models), Khmer (#717: alalc-khm + khm-phonemic-1.0), title_case
+  docs (#205: the site reference). Roadmap/design items stay open.
+- ts: #10 closed (browser support matrix documented, PR #133);
+  #111 (the zero-size-tensor conformance failure on real artifacts)
+  under active root-cause investigation (agent campaign).
+- site: 3 closed — architecture alignment (#214: Astro 7/Tailwind 4/
+  Vue islands shipped), Web API docs (#103: api.astro + api-docs
+  pages), ICL documentation (#85: the ISC language reference +
+  Workflow_Extension). #215 (ICS distribution page) stays open as
+  content-roadmap.
+- interscript org (#2/#4) and the ruby roadmap/design set (#713-709,
+  #633, #687, #541, #342, #335, #334, #329, #309, #253, #204, #200,
+  #45, #31, #743, #740): roadmap/owner-domain, open.
+
+**Site**: Libraries page rewritten (the Rust runtime section, the
+current Ruby surface — the legacy secryst gem path superseded —
+289→428 systems, the grammar single-sourcing note), interscript dep
+^5.12.0, catalogue regenerated 428/428 (PR #234).
