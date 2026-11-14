@@ -73,9 +73,18 @@ is the manifest's job.
       encoder.onnx: <hex>
       decoder.onnx: <hex>
 
+Graph I/O dtype: every ONNX graph's inputs and outputs MUST be fp32.
+Weight tensors MAY pack to any precision, but the runtime contract is
+fp32 edges — fp16 graph I/O is nonconforming (interscript-ts #111:
+fp16 edges surface as 0-byte feeds through the Node >= 24 N-API
+binding; the repack tool is normalize_fp16_io.py). A conforming
+runtime MUST reject fp16-IO artifacts with a named artifact-contract
+error, not silently misfeed.
+
 A conforming loader MUST reject: any other `format`, any `tokenizer`
-other than `bytes`, missing required members, and uncovered or
-mismatched member digests.
+other than `bytes`, missing required members, uncovered or mismatched
+member digests, and any artifact whose graph inputs or outputs are not
+fp32.
 
 ## §4 Byte tokenizer
 
