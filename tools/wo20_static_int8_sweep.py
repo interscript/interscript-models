@@ -86,25 +86,50 @@ def sha256_file(path: Path) -> str:
 
 
 def load_slice(name: str) -> list[dict]:
-    path = MM / "conformance" / "wo20" / f"{name}_eval_slice.jsonl"
+    path = MM / "conformance" / "wo20" / f"{name}_eval_400.jsonl"
     rows = [json.loads(l) for l in
             path.read_text(encoding="utf-8").splitlines() if l.strip()]
     return rows[:EVAL_N]
 
 
 def fetch_fp32_zip(model_id: str, entry: dict, work: Path) -> Path:
-    url = entry["url"]
-    dest = work / Path(url).name
-    if dest.exists() and dest.stat().st_size > 0:
-        return dest
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    log(f"GET {url}")
-    with urllib.request.urlopen(url) as r, dest.open("wb") as f:
-        while True:
-            chunk = r.read(1 << 20)
-            if not chunk:
-                break
-            f.write(chunk)
+    """models.yaml pins either a single url+sha256 or split parts with
+    per-part digests plus the whole-file digest — support both."""
+    dest = work / (entry.get("filename") or "model.zip")
+    if "parts" in entry:
+        if dest.exists() and dest.stat().st_size == entry.get("size"):
+            return dest
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        with dest.open("wb") as out:
+            for part in entry["parts"]:
+                ppath = work / Path(part["url"]).name
+                if not ppath.exists() or ppath.stat().st_size == 0:
+                    log(f"GET {part['url']}")
+                    with urllib.request.urlopen(part["url"]) as r, \
+                            ppath.open("wb") as f:
+                        while True:
+                            chunk = r.read(1 << 20)
+                            if not chunk:
+                                break
+                            f.write(chunk)
+                got = sha256_file(ppath)
+                if got != part["sha256"]:
+                    raise SystemExit(f"part sha mismatch: {ppath.name}")
+                log(f"verified part {ppath.name}")
+                out.write(ppath.read_bytes())
+    else:
+        url = entry["url"]
+        dest = work / Path(url).name
+        if dest.exists() and dest.stat().st_size > 0:
+            return dest
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        log(f"GET {url}")
+        with urllib.request.urlopen(url) as r, dest.open("wb") as f:
+            while True:
+                chunk = r.read(1 << 20)
+                if not chunk:
+                    break
+                f.write(chunk)
     got = sha256_file(dest)
     if got != entry["sha256"]:
         raise SystemExit(f"sha mismatch for {model_id}: {got}")
