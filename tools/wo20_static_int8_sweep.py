@@ -87,8 +87,15 @@ def sha256_file(path: Path) -> str:
 
 def load_slice(name: str) -> list[dict]:
     path = MM / "conformance" / "wo20" / f"{name}_eval_400.jsonl"
-    rows = [json.loads(l) for l in
-            path.read_text(encoding="utf-8").splitlines() if l.strip()]
+    rows = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        r = json.loads(line)
+        # the tha-phonemic corpora store (word, phonemic); diacritization
+        # slices store (src, tgt) — normalize to the sweep's keys
+        rows.append({"src": r.get("src") or r.get("word") or "",
+                     "tgt": r.get("tgt") or r.get("phonemic") or ""})
     return rows[:EVAL_N]
 
 
