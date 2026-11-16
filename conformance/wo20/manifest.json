@@ -1,0 +1,27 @@
+{
+  "purpose": "WO20 campaign B static-int8 sweep eval slices (issue #441)",
+  "note": "First 400 rows of each source's test split; decode input = src, scoring reference = tgt. NOT training data, never used for fitting.",
+  "slices": [
+    {
+      "file": "urd_eval_400.jsonl",
+      "rows": 400,
+      "sha256": "f6811a6c3fe216ec443ad57e64502555ddfca915441da03ac918139a1dd20698",
+      "source": "urd-dia#test (corpora/urd-dia.yaml), full-file sha256 6d822ae70a383e5547ee82e841a65e83fac81ae47ff320999b8e6b101b1790bb verified before slicing",
+      "channel": "hf://buckets/rhtse/jobs-artifacts/rababa-urdu-cc174b96/data-diacrit/test.jsonl"
+    },
+    {
+      "file": "tha_eval_400.jsonl",
+      "rows": 400,
+      "sha256": "3bee670728d928fec872e585e77231356458430c2b1a7b41b9638d4212b26850",
+      "source": "tha-phonemic test split (corpora/tha-phonemic.yaml), full-file sha256 a5abe80b9c9f119fa8bdeb51ca22a931b2c5b2d2e946d9ea190161f937b53966 verified before slicing",
+      "channel": "hf://buckets/Interscript/isx-training/run-080-thai-lexicon/tha-phonemic-test.jsonl"
+    },
+    {
+      "file": "heb_eval_400.jsonl",
+      "rows": 400,
+      "sha256": "e71d30a832b35cc0595e546a2bd609b6026a61f0d0591a162cf1655a1a1545ab",
+      "source": "Interscript/hebrew-v4 dataset, file test.jsonl (the 1,864-pair nakdimon split), first 400 rows",
+      "channel": "hf://datasets/Interscript/hebrew-v4/test.jsonl"
+    }
+  ]
+}
