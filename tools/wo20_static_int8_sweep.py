@@ -252,6 +252,22 @@ def sweep_one(target: dict, models_yaml: dict, work: Path) -> dict:
 
     # phase B: build the int8static variant (transient sessions inside)
     out_zip = work / f"{model_id}-int8static.zip"
+    with zipfile.ZipFile(fp32_zip) as zf:
+        has_kv = "decoder-kv.onnx" in zf.namelist()
+    if not has_kv:
+        log(f"{model_id}: no decoder-kv.onnx — the static recipe "
+            "re-quantizes the KV decode path; recording N/A")
+        report = {
+            "model": model_id,
+            "base_id": entry.get("id"),
+            "fp32_zip": entry.get("filename"),
+            "fp32_sha256_verified": True,
+            "verdict": ("N/A — artifact has no decoder-kv graph; the "
+                        "static-int8 recipe applies to KV artifacts; "
+                        "keeps its fp32 artifact"),
+        }
+        done.write_text(json.dumps(report, indent=1))
+        return report
     log(f"{model_id}: building int8static (calibration {len(calib_texts)})")
     build_int8_static_zip(None, fp32_zip, calib_texts, out_zip)
     gc.collect()
