@@ -144,20 +144,14 @@ def fetch_fp32_zip(model_id: str, entry: dict, work: Path) -> Path:
     return dest
 
 
-def make_model(zip_path: Path, cuda: bool):
-    """The runtime reference loader; `cuda` rebinds the provider
-    preference for the throughput measurements. The conformance rows
-    always run on the contract framing (CPU single-row greedy)."""
+def make_model(zip_path: Path):
+    """The runtime reference loader, untouched: the CPU single-row-greedy
+    contract framing. (The job image's onnxruntime-gpu cannot load the
+    CUDA EP — onnxruntime-gpu 1.23 requires CUDA 13 libs — so there is
+    exactly one framing in every measurement, both precisions.)"""
     import interscript_ml.model as im_model
 
-    saved = im_model._providers
-    if cuda:
-        im_model._providers = lambda: ["CUDAExecutionProvider",
-                                       "CPUExecutionProvider"]
-    try:
-        return im_model.Model(str(zip_path))
-    finally:
-        im_model._providers = saved
+    return im_model.Model(str(zip_path))
 
 
 def translate_all(model, texts: list[str]) -> list[str]:
@@ -226,6 +220,7 @@ def latency(model, texts: list[str]) -> dict:
 
 
 def sweep_one(target: dict, models_yaml: dict, work: Path) -> dict:
+    import gc
     import yaml
     from imf.export import build_int8_static_zip
     from imf.text_metrics import char_error_rate
@@ -241,19 +236,37 @@ def sweep_one(target: dict, models_yaml: dict, work: Path) -> dict:
     slice_rows = load_slice(target["slice"])
     srcs = [r["src"] for r in slice_rows]
     tgts = [r["tgt"] for r in slice_rows]
-
-    fp32_cpu = make_model(fp32_zip, cuda=False)
-    fp32 = make_model(fp32_zip, cuda=True)
-    log(f"{model_id}: fp32 reference decode over {len(srcs)} rows (cuda)")
-    fp32_out = translate_all(fp32, srcs)
     calib_texts = srcs[:CALIB_N]
 
+    # phase A: fp32 reference decode (CPU contract framing)
+    fp32 = make_model(fp32_zip)
+    log(f"{model_id}: fp32 reference decode over {len(srcs)} rows (cpu)")
+    fp32_out = translate_all(fp32, srcs)
+    kit_fp32_out = None
+    if target.get("kit"):
+        kit = json.loads((MM / target["kit"]).read_text())
+        kit_fp32_out = translate_all(fp32, [v["src"] for v in kit["vectors"]])
+    lat_fp32 = latency(fp32, srcs[:LATENCY_ROWS])
+    del fp32
+    gc.collect()
+
+    # phase B: build the int8static variant (transient sessions inside)
     out_zip = work / f"{model_id}-int8static.zip"
     log(f"{model_id}: building int8static (calibration {len(calib_texts)})")
     build_int8_static_zip(None, fp32_zip, calib_texts, out_zip)
-    int8 = make_model(out_zip, cuda=True)
-    log(f"{model_id}: int8static decode over {len(srcs)} rows (cuda)")
+    gc.collect()
+
+    # phase C: int8 decode + kit rows + cpu latency
+    int8 = make_model(out_zip)
+    log(f"{model_id}: int8static decode over {len(srcs)} rows (cpu)")
     int8_out = translate_all(int8, srcs)
+    conf = None
+    if target.get("kit"):
+        kit = json.loads((MM / target["kit"]).read_text())
+        kout_int8 = translate_all(int8, [v["src"] for v in kit["vectors"]])
+    lat_int8 = latency(int8, srcs[:LATENCY_ROWS])
+    del int8
+    gc.collect()
 
     cer_ref = 100.0 * sum(char_error_rate(t, o) or 0.0
                           for t, o in zip(tgts, fp32_out)) / len(srcs)
@@ -262,32 +275,28 @@ def sweep_one(target: dict, models_yaml: dict, work: Path) -> dict:
     cer_delta = abs(cer_int8 - cer_ref)
     exact = sum(a == b for a, b in zip(fp32_out, int8_out))
 
-    log(f"{model_id}: margin analysis (fp32 reference)")
+    log(f"{model_id}: margin analysis (fp32 reference, cpu)")
     margins = margin_pair(fp32_zip, out_zip, list(zip(srcs, tgts)))
+    gc.collect()
 
-    # conformance rows: pinned kit or emitted fixtures — always the
-    # contract framing (CPU single-row greedy) on both precisions
-    conf = None
+    # conformance rows: pinned kit or emitted fixtures
     if target.get("kit"):
         kit = json.loads((MM / target["kit"]).read_text())
-        kout_fp32 = translate_all(fp32_cpu, [v["src"] for v in kit["vectors"]])
-        int8_cpu = make_model(out_zip, cuda=False)
-        kout_int8 = translate_all(int8_cpu, [v["src"] for v in kit["vectors"]])
         conf = {
             "kit": target["kit"],
             "pinned_rows": len(kit["vectors"]),
             "fp32_byte_exact_vs_pinned": sum(
-                a == v["out"] for a, v in zip(kout_fp32, kit["vectors"])),
+                a == v["out"] for a, v in zip(kit_fp32_out, kit["vectors"])),
             "int8_byte_exact_vs_pinned": sum(
                 a == v["out"] for a, v in zip(kout_int8, kit["vectors"])),
             "int8_vs_fp32_row_exact": sum(
-                a == b for a, b in zip(kout_fp32, kout_int8)),
+                a == b for a, b in zip(kit_fp32_out, kout_int8)),
             "int8_vs_fp32_cer_delta_pp": round(abs(
                 100.0 * sum(char_error_rate(v["out"], b) or 0.0
                             for v, b in zip(kit["vectors"], kout_int8))
                 / len(kit["vectors"])
                 - 100.0 * sum(char_error_rate(v["out"], a) or 0.0
-                              for v, a in zip(kit["vectors"], kout_fp32))
+                              for v, a in zip(kit["vectors"], kit_fp32_out))
                 / len(kit["vectors"])), 4),
         }
     else:
@@ -306,11 +315,6 @@ def sweep_one(target: dict, models_yaml: dict, work: Path) -> dict:
                 "int8_vs_fp32_row_exact": sum(
                     a == b for a, b in zip(fp32_out[:12], int8_out[:12]))}
 
-    lat_fp32_cpu = latency(fp32_cpu, srcs[:LATENCY_ROWS])
-    int8_cpu = make_model(out_zip, cuda=False)
-    lat_int8_cpu = latency(int8_cpu, srcs[:LATENCY_ROWS])
-    lat_fp32_gpu = latency(fp32, srcs[:LATENCY_ROWS])
-    lat_int8_gpu = latency(int8, srcs[:LATENCY_ROWS])
     size_fp32 = fp32_zip.stat().st_size
     size_int8 = out_zip.stat().st_size
 
@@ -319,7 +323,8 @@ def sweep_one(target: dict, models_yaml: dict, work: Path) -> dict:
     report = {
         "model": model_id,
         "base_id": entry.get("id"),
-        "fp32_zip": Path(entry["url"]).name,
+        "fp32_zip": Path(entry["url"]).name if "url" in entry
+                    else entry.get("filename"),
         "fp32_sha256_verified": True,
         "eval_rows": len(srcs),
         "calibration_rows": len(calib_texts),
@@ -334,16 +339,15 @@ def sweep_one(target: dict, models_yaml: dict, work: Path) -> dict:
         "size_fp32_bytes": size_fp32,
         "size_int8static_bytes": size_int8,
         "size_ratio": round(size_int8 / max(size_fp32, 1), 4),
-        "latency_fp32": {"cpu": lat_fp32_cpu, "cuda": lat_fp32_gpu},
-        "latency_int8static": {"cpu": lat_int8_cpu, "cuda": lat_int8_gpu},
+        "latency_fp32": lat_fp32,
+        "latency_int8static": lat_int8,
         "cpu_speedup": round(
-            lat_int8_cpu["tokens_per_sec"] / max(lat_fp32_cpu["tokens_per_sec"], 1e-9), 4),
-        "cuda_speedup": round(
-            lat_int8_gpu["tokens_per_sec"] / max(lat_fp32_gpu["tokens_per_sec"], 1e-9), 4),
-        "framing": ("parity decode: CUDA EP both sides, single-row "
-                    "greedy; margins: CPU EP both sides (full-seq "
-                    "teacher-forced); conformance rows + cpu latency: "
-                    "CPU EP (the runtime contract framing)"),
+            lat_int8["tokens_per_sec"] / max(lat_fp32["tokens_per_sec"], 1e-9), 4),
+        "framing": ("everything on the CPU contract framing (single-row "
+                    "greedy; onnxruntime default providers): the CUDA EP "
+                    "is unavailable in the job image (onnxruntime-gpu "
+                    "1.23 needs CUDA 13 libs), so decode, margins, kit "
+                    "rows and latency are one framing, both precisions"),
         "verdict": "PASS — int8static viable" if passed
                    else "FAIL — keeps fp32 artifact",
     }
