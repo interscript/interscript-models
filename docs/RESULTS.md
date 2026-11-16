@@ -2366,3 +2366,101 @@ Gate: full 12,699-row test split, raw char CER, row-mean — **15.65**
 sha256-pinned in the urd-g2p-dict registry). Training data is
 non-commercial: weights ship RESEARCH-ONLY (owner decision
 2026-10-18).
+
+## WO20 campaign A — scan-first microkimi bridges move the student frontier (2026-11-17)
+
+Issue #441, pre-registration TODO.sota-2026/06 (written before any GPU
+spend). Teacher r7 (`run-007-news`, release `teachers-arabic-v1`,
+in-run full-set DER-CE 2.2093 vs published 2.2864 — inside the
+reproduction band); student `google/byt5-small`; base recipe the 2.0
+rung verbatim (Muon 0.01 + AdamW 1e-4, sequence KD α 0.5 T 2.0, BS 8,
+3 epochs, 29,322 canonical r7-label pairs sha `e70ce991…` = 10,995
+steps, exactly the published rung); the single pre-registered delta:
+β 0.1 · MSE through FROZEN rank-256 bridges at scan-selected
+(student, teacher) decoder-layer pairs.
+
+**Stage 1 — the scan (kill-gated).** Closed-form directional ridge R²
+over every (student layer, teacher layer) pairing on 30k captured
+teacher-forced positions with row-permuted controls: best R² 1.0000
+(student L0 → teacher L0) vs scrambled control 0.2539 — ARMED (rule:
+≥ 0.30 and ≥ 2× control). All five per-student-layer best pairings
+bridged: L0→L0 (1.0000), L1→L0 (0.9985), L2→L2 (0.9939), L3→L2
+(0.9928), L4→L2 (0.9906). Recorded caveat: near-1.0 R² across nearly
+all pairs is the microkimi scan's documented "early states align with
+everything" inflation (shared token-identity structure in
+teacher-forced decoder streams) — the binding test is the downstream
+gate, not the scan.
+
+**Stage 2 — full-set verdict (1,200 paragraphs, windowed zero-skip,
+paired bootstrap, documents = resampling unit).**
+
+| arm | full-set DER-CE | note |
+|---|---|---|
+| teacher r7 (in-run) | 2.2093 | protocol reproduction ✓ |
+| **WO20 bridge arm (3ep)** | **4.0545** | paired Δ vs teacher +1.81pp CI95 [1.66, 1.95], p=1.0 |
+| G2a (r7+Muon, 6ep) — rescored | 4.4929 | published 4.5701 |
+| 2.0 rung (r7+Muon, 3ep) | 4.8218 | the matched base |
+
+- **Strict gate (teacher + 0.5pp = 2.7093): FAIL** — 4.0545 > 2.7093.
+  No student has ever cleared it; the arm does not either.
+- **SEPARATED-IMPROVEMENT over the published frontier: the bridge arm
+  beats G2a by −0.4385pp, CI95 [−0.6463, −0.2767], p = 0.0** (paired
+  on 1,141 common scorable pairs; G2a's released predictions from
+  `frontier-predictions-v1` re-scored under the identical evaluator),
+  and beats the matched 3-epoch 2.0 rung by ~−0.77pp AT HALF G2A'S
+  EPOCHS. This is the FIRST student-side lever on record that moves
+  the frontier — the lever ledger ("no student-side method moved the
+  frontier") gains its first separated-positive: scan-first frozen
+  bridges (the microkimi applied-plan operator: ridge-solved,
+  SVD-truncated, bias-refit, frozen FitNets projector).
+- Provenance: per-window predictions banked on
+  `isx-training:/wo20-tiny-g2w/{student,teacher}_preds.jsonl`;
+  `final_eval.json` alongside. Training crossed four `--timeout 4h`
+  windows resuming from labels.sha-pinned 500-step checkpoints
+  ("resume from step-8500"); the eval epilogue was 4h-killed mid
+  teacher decode and scored from the banked predictions with the
+  identical evaluator + bootstrap math (word-count-mismatch
+  paragraphs skipped pairwise — the evaluator's own aggregate
+  behavior; 59 pairs skipped of 1,200).
+- Single-seed caveat from the ledger still applies.
+
+## WO20 campaign B — static-int8 sweep on released artifacts: 2 PASS, 3 FAIL, 1 N/A (2026-11-17)
+
+Issue #441. The DeepSeek round's one positive quantization lever
+(static-calibrated decoder + dynamic-int8 encoder via the shipped
+`build_int8_static_zip`) applied to the six released fp32 artifacts
+outside the ara line. Judge: fp32-vs-int8static under ONE framing —
+the CPU single-row-greedy runtime contract (the job image's
+onnxruntime cannot load the CUDA EP; declared, not silent) — with the
+WO03 int8 CER-delta gate (≤ 2.0pp on a 120-row eval slice) AND the
+teacher-forced margin gate (confident flips = flips at fp32-margin
+≥ p10, ≤ 1% of tokens), conformance-kit rows where pinned, size and
+CPU-latency deltas. Eval slices (first 400 rows of each model's test
+split, provenance in `conformance/wo20/manifest.json`) used ONLY for
+gating, never training.
+
+| model | CER-Δ pp (gate 2.0) | confident flips (gate 1%) | size | CPU speed | verdict |
+|---|---|---|---|---|---|
+| urd-vocalized-1.0 | **0.0902** | **0.000000** | ×0.359 | ×1.91 | **PASS** |
+| tha-phonemic-base-1.0 | 0.6583 ✓ | **11.01% ✗** | ×0.368 | ×1.87 | **FAIL** |
+| tha-phonemic-1.0 | — | — | — | — | **N/A** (plain-decoder artifact; the static recipe is KV-only) |
+| heb-vocalized-1.0 | **3.2769 ✗** | **1.46% ✗** | ×0.368 | ×1.35 | **FAIL** |
+| heb-vocalized-small-1.0 | **7.9907 ✗** | 0.16% ✓ | ×0.359 | ×1.35 | **FAIL** |
+| heb-vocalized-1.1 | **0.2907 ✓** | **0.12% ✓** | ×0.368 | ×1.59 | **PASS** |
+
+Findings, recorded as measured:
+- **The recipe is NOT portable by model family.** Both urd and the
+  heb-1.1 lineage hold both gates; the tha-base and both heb-1.0-line
+  artifacts fail — through two DIFFERENT mechanisms (tha-base:
+  margins-dominated, 11% confident flips with quiet surface CER;
+  heb-small: CER-dominated, 7.99pp with clean margins — the MarginReport
+  lesson that CER and fragility are independent gates, vindicated).
+- **The CER gate alone would have shipped two bad artifacts** (tha-base
+  and heb-1.0 both pass CER-Δ while failing margins). Confident-flip
+  gating stays mandatory for every future quantization.
+- Every failing model keeps its fp32 artifact; nothing was published.
+  Full per-model reports + the built int8static variants for owner
+  inspection sit on `isx-training:/wo20-quant/`.
+- urd-g2p remains owner-gated (license), untouched. No version numbers
+  were picked; publication of the two PASS variants is an owner
+  decision.
