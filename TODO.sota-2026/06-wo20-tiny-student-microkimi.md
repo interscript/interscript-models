@@ -82,4 +82,23 @@ from the `Interscript/arabic-r8` mount. No corpora on the laptop.
 
 ## Result
 
-(to be written only after the run lands)
+RECORDED 2026-11-17 (see docs/RESULTS.md for the full entry).
+
+- Scan: ARMED (best directional R² 1.0000 L0→L0 vs control 0.2539;
+  caveat recorded — the inflation is the scan's documented
+  "early states align with everything" effect).
+- Bridge arm (2.0 rung + β 0.1 frozen-bridge MSE): full-set DER-CE
+  **4.0545** (teacher in-run 2.2093 ✓ reproduction).
+- Strict gate teacher+0.5pp = 2.7093: **FAIL** — as with every student
+  to date.
+- BUT: **SEPARATED-IMPROVEMENT over the published frontier** — paired
+  Δ vs G2a (4.5701 published; 4.4929 re-scored) = **−0.4385pp, CI95
+  [−0.6463, −0.2767], p = 0.0**, at HALF G2a's epochs (3 vs 6); vs the
+  matched 3-epoch 2.0 rung (4.8218): ~−0.77pp.
+- The lever ledger's standing rule ("no further GPU spend on
+  student-side levers without a pre-registered mechanism novel to the
+  ledger") is satisfied by exactly this mechanism — scan-first
+  directional ridge pairing + frozen low-rank bridges is now the ONE
+  separated-positive student-side result on record. Natural next arm
+  (owner-gated): the bridge recipe at 6 epochs against G2a directly.
+- Single-seed caveat applies.
