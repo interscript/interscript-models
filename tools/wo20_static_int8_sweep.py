@@ -157,30 +157,24 @@ def translate_all(model, texts: list[str]) -> list[str]:
     return [model.translate(t, max_len=MAX_LEN) for t in texts]
 
 
-def forced_logits_sessions(zip_path: Path, source: str, target_ids):
-    """Teacher-forced logits from a zip's graphs (fp32 reference OR the
-    int8static candidate — same helper, same framing)."""
-    import numpy as np
-    from imf.parity import _onnx_forced_logits, _sessions_from_zip
-
-    enc, dec = _sessions_from_zip(zip_path)
-    return np.asarray(
-        _onnx_forced_logits(enc, dec, source, target_ids), dtype="float64")
-
-
 def margin_pair(fp32_zip: Path, int8_zip: Path, pairs):
     """fp32-as-reference margin analysis: per-position fp32 top1-top2
-    margins, int8 argmax flips, KL. Returns the stats dict."""
+    margins, int8 argmax flips, KL. Sessions built once per zip."""
     import numpy as np
     from imf.export import encode_bytes
+    from imf.parity import _onnx_forced_logits, _sessions_from_zip
 
+    enc32, dec32 = _sessions_from_zip(fp32_zip)
+    enc8, dec8 = _sessions_from_zip(int8_zip)
     margins_c, flips_c, kld_sum, tokens = [], [], 0.0, 0
     for source, target in pairs:
         target_ids = encode_bytes(target)[:MAX_LEN]
         if len(target_ids) < 2:
             continue
-        ref = forced_logits_sessions(fp32_zip, source, target_ids)
-        got = forced_logits_sessions(int8_zip, source, target_ids)
+        ref = np.asarray(_onnx_forced_logits(enc32, dec32, source,
+                                             target_ids), dtype="float64")
+        got = np.asarray(_onnx_forced_logits(enc8, dec8, source,
+                                             target_ids), dtype="float64")
         n = min(len(ref), len(got))
         ref, got = ref[:n], got[:n]
         top2 = np.sort(ref, axis=-1)[:, -2:]
