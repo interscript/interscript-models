@@ -2464,3 +2464,46 @@ Findings, recorded as measured:
 - urd-g2p remains owner-gated (license), untouched. No version numbers
   were picked; publication of the two PASS variants is an owner
   decision.
+
+## WO20u M2 — the two PASS static-int8 variants staged as release candidates (2026-11-17)
+
+The gated bytes ARE the candidates: `wo20u_stage_rc.py` stages the exact
+sweep outputs (no rebuild, no re-quantization) from
+`isx-training:/wo20-quant/` into **`isx-training:/wo20u-rc/`** with
+copy-integrity verification (source and staged sha256 asserted equal),
+the IMF internal digest check via the reference loader, and a smoke
+decode row per artifact (both byte-exact vs the sweep's fp32 fixture
+rows). Staged contents:
+
+| candidate | sha256 | size | CER-Δ (≤2.0) | confident flips (≤1%) | size | CPU |
+|---|---|---|---|---|---|---|
+| `urd-vocalized-1.0-int8static.zip` | `9f3fa0345982…` | 509,376,953 B | 0.0902 | 0.000000 | ×0.359 | ×1.91 |
+| `heb-vocalized-1.1-int8static.zip` | `cf9ccdc6e340…` | 1,024,275,400 B | 0.2907 | 0.0012 | ×0.368 | ×1.59 |
+
+Sidecars: `SHA256SUMS` (the release-channel convention) and
+`manifest.json` (gate values, provenance, loader-smoke results, and the
+status banner). **STAGED — NOT PUBLISHED**: no Release, no index entry,
+no version number; publication and version selection are owner calls
+(publish guard). urd-g2p remains owner-gated (license), untouched.
+
+## WO20u M1 — multi-seed confirmation of the bridge arm: PRE-REGISTERED, seeds 2–3 in flight (2026-11-17)
+
+Pre-registration committed before any seed-2/3 GPU spend
+(TODO.sota-2026/06, branch `wo20u-m1-m2`): **the bridge lever CONFIRMS
+iff ≥ 2 of 3 seeds show separated-improvement vs G2a with
+non-overlapping CIs** — per-seed count-weighted paired bootstrap
+CI95 (documents = resampling unit, 10k, seed 7) entirely below zero;
+1-of-3 or 0-of-3 downgrades seed 1's −0.4385pp to an unreplicated
+observation. Identical recipe arms (same `wo20-tiny-scan` bridges,
+β 0.1, the 2.0 rung base, canonical r7 labels `e70ce991…`), explicit
+`WO20_SEED=2/3` (the trainer gained the seed knob; seed 1 ran unseeded
+and is recorded as an uncontrolled draw). The confirmation scorer
+(`wo20_seed_confirm.py`, interscript-train) scores each seed's banked
+student preds against G2a's released predictions
+(`frontier-predictions-v1`, sha-verified) under the identical evaluator;
+its seed-1 calibration must reproduce −0.4385pp CI [−0.6463, −0.2767]
+before the seeds-2/3 numbers are read. HF discipline as always:
+`--detach`, `--timeout 4h`, `--attempts 3`, labels.sha-pinned 500-step
+checkpoints + resume, ≤ 2 concurrent big-GPU apps (seed jobs:
+`wo20u-m1-s2` / `wo20u-m1-s3`, run dirs `wo20-tiny-g2w-s2/s3`).
+Verdict lands in this ledger either way.
