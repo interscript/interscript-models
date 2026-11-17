@@ -102,3 +102,61 @@ RECORDED 2026-11-17 (see docs/RESULTS.md for the full entry).
   separated-positive student-side result on record. Natural next arm
   (owner-gated): the bridge recipe at 6 epochs against G2a directly.
 - Single-seed caveat applies.
+
+## WO20u M1 — multi-seed confirmation — PRE-REGISTRATION
+
+Status: PRE-REGISTERED (2026-11-17, before the seed-2/3 GPU spend).
+Branch `wo20u-m1-m2` (interscript-models + interscript-train). The
+single-seed caveat on the −0.4385pp separated-improvement is the
+ledger's known blind axis (per arXiv 2608.27729, single-seed KD gains
+below ~5pp are unresolvable); this run measures it.
+
+### The judgment (fixed before launch)
+
+**The bridge lever CONFIRMS iff ≥ 2 of 3 seeds show
+separated-improvement vs G2a with non-overlapping CIs.** Operational:
+
+- per seed: paired bootstrap delta (seed − G2a) on the full
+  1,200-paragraph SadeedDiac-25, count-weighted, documents =
+  resampling unit, 10k resamples, seed 7 — the identical math the
+  seed-1 verdict used;
+- a seed "shows separated-improvement" iff its CI95 upper bound is
+  below zero (the interval excludes zero on the improvement side);
+- "non-overlapping CIs" is the interval-vs-zero test above — the
+  pre-registered bar; cross-seed interval agreement is reported
+  alongside but is NOT the gate;
+- 2-of-3 or 3-of-3 → CONFIRMED; 1-of-3 or 0-of-3 → NOT CONFIRMED
+  (the single-seed result is downgraded to an unreplicated
+  observation; recorded either way, no rescue runs).
+
+### The arms (identical recipe, different draws)
+
+- Same scan (`wo20-tiny-scan` bridges.npz + scan.json, ARMED,
+  rank-256, pairs L0→L0 L1→L0 L2→L2 L3→L2 L4→L2), same bridge
+  config (β 0.1 frozen MSE), same base recipe (the 2.0 rung
+  verbatim: Muon 0.01 + AdamW 1e-4, sequence KD α 0.5 T 2.0, BS 8,
+  3 epochs, canonical r7 labels sha `e70ce991…`, 10,995 steps),
+  same eval epilogue + gate.
+- Seed 2: `WO20_SEED=2`, run dir `wo20-tiny-g2w-s2`; Seed 3:
+  `WO20_SEED=3`, run dir `wo20-tiny-g2w-s3` (explicit
+  torch/numpy/python/DataLoader seeding — the trainer gained the
+  `WO20_SEED` knob for this; seed 1 ran unseeded and is recorded as
+  an uncontrolled draw, not re-run).
+- Comparison baseline for every seed: G2a released predictions
+  (`frontier-predictions-v1` / `run-007-r7-muon-6ep-final_preds.jsonl`,
+  sha `f6f60619…` verified in-job), scored by the confirmation scorer
+  (`wo20_seed_confirm.py`) under the identical evaluator, word-count
+  mismatches skipped pairwise. Calibration: the scorer is first run
+  on the seed-1 banked preds and must reproduce ≈ −0.4385pp
+  CI [−0.6463, −0.2767] before the seed-2/3 numbers are read.
+
+### Infra
+
+HF Jobs only (`--detach`, `--timeout 4h`, 500-step labels.sha-pinned
+checkpoints + auto-resume, retry loops, ≤ 2 concurrent big-GPU apps,
+SadeedDiac-25 parquet from the `Interscript/arabic-r8` mount). No
+corpora on the laptop. Verdict recorded in docs/RESULTS.md either way.
+
+### Result
+
+PENDING (seeds 2–3 in flight at pre-registration time).
