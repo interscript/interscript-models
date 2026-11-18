@@ -250,4 +250,19 @@ laptop. Verdict lands in docs/RESULTS.md either way.
 
 ### Result
 
-PENDING (run in flight at pre-registration time).
+**CONFIRMED AT FULL BUDGET — separated, effect ~doubled (2026-11-19;**
+full entry in docs/RESULTS.md**).** Paired Δ vs G2a **−0.7440pp,
+CI95 [−0.9448, −0.5884], p = 0.0** (n 1,170 scorable pairs, 32
+pairwise skips; G2a re-scored 4.5156 on the shared set). Full-set
+DER-CE **3.7260** (3ep arm: 4.0545–4.0882; G2a 4.5701 published /
+4.4929 re-scored) — doubling the bridge arm's own budget took −0.35pp
+and the G2a gap from −0.38pp (3ep, seed 2) to **−0.74pp**. The
+pre-registered bar (CI95 entirely below zero) is met. The strict
+teacher+0.5pp gate (2.7082 vs teacher in-run 2.2082, Δ +1.52pp
+[1.39, 1.65] p=1.0) stays **FAILED** — no crossing; the r7
+teacher-tier SOTA claim is untouched. Single explicit seed (2) as
+labelled. Provenance:
+`isx-training:/wo20u-m1-6ep/wo20-tiny-g2w-6ep.confirm.json`,
+`wo20-tiny-g2w-6ep/final_eval.json` + banked preds; trajectory loss
+0.341@8.5k → 0.289@21.95k across three 4h windows (resume-continuous
+loss values).
