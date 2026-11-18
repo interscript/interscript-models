@@ -159,4 +159,25 @@ corpora on the laptop. Verdict recorded in docs/RESULTS.md either way.
 
 ### Result
 
-PENDING (seeds 2–3 in flight at pre-registration time).
+**CONFIRMED — 3 of 3 seeds (2026-11-18; full entry in
+docs/RESULTS.md).** The scorer's seed-1 calibration reproduced the
+published seed-1 verdict exactly (−0.4385pp CI [−0.6463, −0.2767]
+p=0, aggregates 4.0545/4.493 to the fourth decimal), then:
+
+- seed 2: Δ vs G2a **−0.3806pp, CI95 [−0.5876, −0.2168], p=0** —
+  separated (full-set DER-CE 4.0882)
+- seed 3: Δ vs G2a **−0.4140pp, CI95 [−0.6173, −0.2532], p=0** —
+  separated (full-set DER-CE 4.0397)
+
+Every seed's CI is entirely below zero and the three agree in
+magnitude (−0.38 to −0.44pp) — the pre-registered ≥2-of-3 bar is met
+by all three. Scan-first frozen bridges stand as the first
+REPRODUCED separated-positive student-side lever on record (~−0.4pp
+vs G2a at half its epochs). The strict teacher+0.5pp gate remains
+FAILED for every seed (teacher reproductions 2.2231 / 2.2039),
+unchanged. Provenance: `isx-training:/wo20u-m1/*.confirm.json` +
+per-run final_eval.json; G2a preds sha `f6f60619…` verified in-job.
+Infra lessons recorded with the ledger entry (epilogue pairwise-skip
+fix, final_eval ×100 aggregate scale fix, wedged orchestrator
+threads — both seeds crossed four 4h windows on checkpoint resume
+exactly as designed).
