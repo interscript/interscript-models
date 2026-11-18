@@ -1,0 +1,33 @@
+{
+ "stage": "wo20u-m2-parity600",
+ "status": "EVAL SLICES for the publication parity gate (>=500 samples) of the two WO20 campaign B PASS candidates. Gating data only, never training data.",
+ "date": "2026-11-18",
+ "provenance": {
+  "method": "first 600 rows of each model's test-split channel; rows 0..399 verified byte-identical to the committed WO20 sweep slices (conformance/wo20/*_eval_400.jsonl) before slicing - the 600-row slices are strict supersets of the M2 gate slices",
+  "built_by": "publication round for urd-vocalized-int8static-1.0 + heb-vocalized-int8static-1.1 (owner go: int8 RC publication, 2026-11-18)",
+  "decode_input": "src",
+  "scoring_reference": "tgt"
+ },
+ "slices": [
+  {
+   "file": "urd_eval_600.jsonl",
+   "rows": 600,
+   "sha256": "a06c8a2dcacec88bec0ad85b4e851a78c72429102e4051d2705b994c48108ca0",
+   "source": "urd-dia#test (corpora/urd-dia.yaml), first 600 rows",
+   "channel": "hf://buckets/rhtse/jobs-artifacts/rababa-urdu-cc174b96/data-diacrit/test.jsonl",
+   "channel_full_sha256": "6d822ae70a383e5547ee82e841a65e83fac81ae47ff320999b8e6b101b1790bb",
+   "channel_full_rows": 11940,
+   "prefix_verified": "conformance/wo20/urd_eval_400.jsonl"
+  },
+  {
+   "file": "heb_eval_600.jsonl",
+   "rows": 600,
+   "sha256": "993581cc411b73f3196e6441d0e4f8ae2a01810c2e2e7974a2651b179cdce5c3",
+   "source": "Interscript/hebrew-v4 dataset, file test.jsonl (the 1,864-pair nakdimon split), first 600 rows",
+   "channel": "hf://datasets/Interscript/hebrew-v4/test.jsonl",
+   "channel_full_sha256": "77e9b5dc3a3b9e7d70924e670f7361455b714ec8212e046662ea04187b153ccc",
+   "channel_full_rows": 1864,
+   "prefix_verified": "conformance/wo20/heb_eval_400.jsonl"
+  }
+ ]
+}
