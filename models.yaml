@@ -850,3 +850,15 @@ models:
       samples: 500
       cer_delta: 0.0
     license: BSD-3-Clause
+  urd-vocalized-int8static-1.0:
+    task: diacritization
+    scripts: [Arab, Arab]
+    precision: int8
+    filename: urd-vocalized-int8static-1.0-int8.zip
+    url: https://github.com/interscript/interscript-models/releases/download/urd-vocalized-int8static-1.0/urd-vocalized-int8static-1.0-int8.zip
+    sha256: ec9f7ba71a1f46ae8a676c49b2372e99e5edf7b0e5d5831702be3deee29d42a3
+    size: 509376958
+    metrics:
+      - {name: cer, value: 3.74, source: rababa-urdu/docs/RESULTS.md#diacritization-urdu-text--text--haraqat}
+    parity: {samples: 600, cer_delta: 0.0046}
+    license: BSD-3-Clause
