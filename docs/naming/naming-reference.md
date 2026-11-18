@@ -27,6 +27,7 @@ Machine-readable twin: `naming-reference.json`.
 | `fas-vocalized-base-1.0` | vocalized | base | fp16 | shipped | `—` | ← fas-diac-base-1.0 |
 | `heb-vocalized-1.0` | vocalized | — | fp32 | shipped | `—` | ← heb-diac-1.0 |
 | `heb-vocalized-1.1` | vocalized | — | fp32 | shipped | `—` | ← heb-diac-1.1 |
+| `heb-vocalized-int8static-1.1` | vocalized | int8-static | int8 | shipped | `—` | — |
 | `heb-vocalized-plane-1.0` | vocalized | plane | int8 | shipped | `—` | ← heb-diac-plane-1.0 |
 | `heb-vocalized-plane-2.0` | vocalized | plane | int8 | shipped | `—` | ← heb-diac-plane-2.0 |
 | `heb-vocalized-small-1.0` | vocalized | small | fp32 | shipped | `—` | ← heb-diac-small-1.0 |
@@ -39,3 +40,4 @@ Machine-readable twin: `naming-reference.json`.
 | `urd-ipa-base-1.0` | ipa | base | fp32 | research-only | `—` | ← urd-g2p-base-1.0 |
 | `urd-vocalized-1.0` | vocalized | — | fp32 | shipped | `—` | ← urd-diac-1.0 |
 | `urd-vocalized-base-1.0` | vocalized | base | fp16 | shipped | `—` | ← urd-diac-base-1.0 |
+| `urd-vocalized-int8static-1.0` | vocalized | int8-static | int8 | shipped | `—` | — |

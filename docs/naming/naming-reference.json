@@ -213,6 +213,15 @@
       "was": "heb-diac-1.1"
     },
     {
+      "id": "heb-vocalized-int8static-1.1",
+      "target": "vocalized",
+      "tier": "int8-static",
+      "precision": "int8",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": null
+    },
+    {
       "id": "heb-vocalized-plane-1.0",
       "target": "vocalized",
       "tier": "plane",
@@ -319,6 +328,15 @@
       "status": "shipped",
       "evidence_output": "—",
       "was": "urd-diac-base-1.0"
+    },
+    {
+      "id": "urd-vocalized-int8static-1.0",
+      "target": "vocalized",
+      "tier": "int8-static",
+      "precision": "int8",
+      "status": "shipped",
+      "evidence_output": "—",
+      "was": null
     }
   ]
 }
