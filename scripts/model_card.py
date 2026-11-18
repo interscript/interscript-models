@@ -1,5 +1,5 @@
 """HF model-card generator: a models.yaml entry becomes the README.md
-model card for riboseinc/<id> (the org mirror of the index id).
+model card for Interscript/<id> (the org mirror of the index id).
 
 Curated benchmark/prose blocks live in cards/<id>.md and are wrapped
 by render_card; entries without a curated block get the metrics table
@@ -8,7 +8,7 @@ alone. The index remains the single source of truth for numbers.
 
 from __future__ import annotations
 
-HF_ORG = "interscript"
+HF_ORG = "Interscript"
 
 _LANG_BY_PREFIX = {
     "ara": "ar", "heb": "he", "fas": "fa", "tha": "th", "urd": "ur",
