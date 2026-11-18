@@ -2579,3 +2579,43 @@ all to the fourth decimal), making the three seeds directly comparable.
   (log silence, no traceback) — the remaining two CPU scorer launches
   were run directly; the seeds themselves crossed four 4h windows each
   on checkpoint resume exactly as designed.
+
+## WO20u M1-6ep — the bridge arm at G2a's full budget: separated, effect ~doubled; strict teacher gate still FAILED (2026-11-19)
+
+Pre-registered before any GPU spend (TODO.sota-2026/06, branch
+`wo20u-6ep`; smoke-before-GPU per the training directive — the smoke
+caught one real bug pre-GPU and ran green). Single variable: epochs
+3 → 6 on the confirmed bridge recipe (frozen `wo20-tiny-scan`
+bridges, β 0.1, canonical r7 labels `e70ce991…`, `WO20_SEED=2`,
+29,322 pairs → 21,990 steps). The run crossed three `--timeout 4h`
+windows on checkpoint resume (loss values resume-continuous:
+0.341@8.5k → 0.312@17.1k → 0.289@21.95k; final CE 0.066, KD 0.030,
+bridge MSE 2.41).
+
+| arm | full-set DER-CE | paired Δ vs G2a | CI95 | p | separated |
+|---|---|---|---|---|---|
+| bridge arm 3ep (seed 2, M1) | 4.0882 | −0.3806pp | [−0.5876, −0.2168] | 0.0 | ✓ |
+| **bridge arm 6ep (seed 2, this run)** | **3.7260** | **−0.7440pp** | **[−0.9448, −0.5884]** | 0.0 | ✓ |
+| G2a (reference) | 4.5701 (published) / 4.4929 (re-scored) | — | — | — | — |
+
+- **The pre-registered judgment is met: the bridge lever CONFIRMS at
+  full budget, and the effect ~doubled** (−0.38pp at half G2a's
+  epochs → −0.74pp at G2a's own budget; CIs do not overlap between
+  the two arms). Doubling the arm's own budget bought −0.35pp
+  (4.0882 → 3.7260) — the opposite of the epochs-collapse the
+  seq2seq lineage saw WITHOUT bridges at this rung (cf. the
+  layerdrop/2.0-rung epoch deltas). Scan-first frozen bridges are
+  now the strongest student-side lever on record, reproduced across
+  seeds (3-of-3 at 3ep) and budgets (3ep and 6ep).
+- **The strict teacher+0.5pp gate remains FAILED — explicit
+  statement:** student 3.7260 vs gate 2.7082 (teacher in-run 2.2082,
+  reproduction ✓; paired Δ vs teacher +1.52pp [1.39, 1.65], p=1.0).
+  No crossing; the r7 teacher-tier SOTA claim (2.2864) is untouched.
+  The student-tier frontier moves; the teacher tier does not.
+- Single explicit seed (2) as labelled in the pre-registration; the
+  seed axis for the 6ep point is unmeasured (the 3-of-3 replication
+  was at the 3ep rung).
+- Provenance: `isx-training:/wo20u-m1-6ep/wo20-tiny-g2w-6ep.confirm.json`
+  (n 1,170 scorable pairs, 32 pairwise skips), `wo20-tiny-g2w-6ep/`
+  final_eval + banked preds; G2a preds sha `f6f60619…` verified
+  in-job. Artifacts staged, nothing published; versions owner calls.
