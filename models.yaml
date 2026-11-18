@@ -862,3 +862,16 @@ models:
       - {name: cer, value: 3.74, source: rababa-urdu/docs/RESULTS.md#diacritization-urdu-text--text--haraqat}
     parity: {samples: 600, cer_delta: 0.0046}
     license: BSD-3-Clause
+  heb-vocalized-int8static-1.1:
+    task: diacritization
+    scripts: [Hebr, Hebr]
+    precision: int8
+    filename: heb-vocalized-int8static-1.1-int8.zip
+    url: https://github.com/interscript/interscript-models/releases/download/heb-vocalized-int8static-1.1/heb-vocalized-int8static-1.1-int8.zip
+    sha256: 6de2af11fd1c178844ad42d017003085369c197af9b03e39ee968b2775249178
+    size: 1024275398
+    metrics:
+      - {name: der_greedy, value: 16.44, source: rababa/docs/RESULTS.md#hebrew-diacritization}
+      - {name: der_beam4, value: 16.43, source: rababa/docs/RESULTS.md#hebrew-diacritization}
+    parity: {samples: 600, cer_delta: 0.4796}
+    license: BSD-3-Clause

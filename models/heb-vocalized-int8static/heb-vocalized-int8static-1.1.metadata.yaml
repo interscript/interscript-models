@@ -1,0 +1,31 @@
+format: imf-v1
+id: heb-vocalized-int8static-1.1
+task: diacritization
+source_script: Hebr
+target: Hebr
+tokenizer: bytes
+opset: 14
+decoder: kv
+precision: int8
+license: BSD-3-Clause
+trained_from: rababa train_hebrew_s46.py — phonikud curriculum (1.5M knesset weak-pretrain
+  + 73.8K hewiki garnish, then gold FT); checkpoint rababa-checkpoints:/rababa_hebrew/run-s46-phonikud-plus/run-002-gold-ft/best
+metrics:
+- name: der_greedy
+  value: 16.44
+  protocol: greedy decode (the v1 runtime path); Nakdimon test split, 5,095 examples;
+    ByT5-base s46
+  source: rababa/docs/RESULTS.md#hebrew-diacritization
+- name: der_beam4
+  value: 16.43
+  protocol: beam=4 standard decode (reference quality); Nakdimon test split, 5,095
+    examples; ByT5-base s46. Greedy ≈ beam-4 for this model — the runtime path loses
+    nothing.
+  source: rababa/docs/RESULTS.md#hebrew-diacritization
+parity:
+  samples: 600
+  cer_delta: 0.4796
+sha256:
+  decoder-kv.onnx: b29a854f11c8a3735e8265347095a24ea98779504eedbbd7c12a9b94fd321157
+  decoder.onnx: 6665ab15d65808d0ebd9ae569713457737cebb4c6ca39cc4953ecc7231f3b1c8
+  encoder.onnx: f04884b38436583db57460ccb2823335a639a85c96efb18c855ab726872f155e
