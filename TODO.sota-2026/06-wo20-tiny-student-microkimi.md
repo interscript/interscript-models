@@ -181,3 +181,73 @@ Infra lessons recorded with the ledger entry (epilogue pairwise-skip
 fix, final_eval ×100 aggregate scale fix, wedged orchestrator
 threads — both seeds crossed four 4h windows on checkpoint resume
 exactly as designed).
+
+## WO20u M1-6ep — the full-length bridge arm vs G2a — PRE-REGISTRATION
+
+Status: PRE-REGISTERED (2026-11-18, before any GPU spend of this arm).
+Branch `wo20u-6ep` (interscript-models + interscript-train). The
+confirmed-at-half-epochs lever (M1: −0.38..−0.44pp separated vs G2a,
+3-of-3 seeds at 3 epochs vs G2a's 6) meets its full budget.
+
+### Hypothesis (single variable: epochs 3 -> 6)
+
+The bridge lever's separated improvement over G2a is not a
+short-training artifact: with G2a's full budget under the identical
+recipe + bridges, the student's frontier move holds or grows. If the
+gain was carried by under-trained-baseline slack, it vanishes — that
+is the drop verdict, recorded plainly.
+
+### The arm
+
+- Teacher r7 (`run-007-news`, release `teachers-arabic-v1`, per-part
+  sha256 verified in-job); student `google/byt5-small`.
+- The confirmed bridge arm verbatim (Muon 0.01 + AdamW 1e-4 hybrid,
+  sequence KD α 0.5 T 2.0, BS 8, β 0.1 FROZEN rank-256 bridges at the
+  `wo20-tiny-scan` pairs L0→L0 L1→L0 L2→L2 L3→L2 L4→L2, canonical r7
+  labels sha `e70ce991…`) at **WO20_EPOCHS=6** (29,322 pairs → 21,990
+  steps), `WO20_SEED=2` (explicit, recorded), run dir
+  `wo20-tiny-g2w-6ep`. Same data plane (arabic-r8 mount + GH-release
+  digests); the scan is NOT re-run (frozen provenance).
+
+### Primary metric + gate (fixed before launch)
+
+- Primary: full-set DER-CE (1,200-paragraph SadeedDiac-25, windowed
+  zero-skip, identical evaluator, both surfaces in-job).
+- **The arm CONFIRMS-AT-FULL-BUDGET iff paired Δ vs G2a
+  (count-weighted bootstrap, documents = resampling unit, 10k,
+  seed 7, word-count mismatches skipped pairwise) has CI95 entirely
+  below zero** — the same separated-improvement bar as the 3-seed
+  round, via the same validated scorer (`wo20_seed_confirm.py`;
+  its calibration already reproduced the published seed-1 verdict to
+  the fourth decimal, no recalibration required). Confirm marker:
+  `isx-training:/wo20u-m1-6ep/wo20-tiny-g2w-6ep.confirm.json`.
+- Secondary (explicit statement required in the report): the strict
+  teacher+0.5pp gate (2.7864 vs the published teacher 2.2864; in-run
+  reproduction expected ~2.2–2.3). Only a real crossing changes the
+  SOTA claim; failure is recorded as the standing pattern.
+- Negative = no separation → recorded plainly as the negative verdict
+  and CLOSES the 6-epoch direction (drop) with an evidence-based
+  answer.
+- Trajectory: the per-checkpoint training-loss trajectory (500-step
+  labels.sha-pinned saves) from the run logs, reported with the
+  verdict. Any mid-checkpoint DER diagnostic is declared NON-GATED
+  before it runs and never substitutes for the full-set verdict.
+
+### Seed caveat
+
+This is a single explicit seed (2). The multi-seed replication was
+done at the 3-epoch rung; the full-budget read inherits the ledger's
+single-seed caveat discipline and is labelled as such in the report.
+
+### Infra
+
+Smoke job FIRST (cpu: release + labels digest verification, bridges +
+scan load, label-pair count — validates mounts/clone/data before GPU),
+then a100-large `--detach` `--timeout 4h` `--attempts 3`, 500-step
+labels.sha-pinned checkpoints + auto-resume, `hf jobs ps` before
+launch, ≤ 2 concurrent big-GPU apps account-wide. No corpora on the
+laptop. Verdict lands in docs/RESULTS.md either way.
+
+### Result
+
+PENDING (run in flight at pre-registration time).
