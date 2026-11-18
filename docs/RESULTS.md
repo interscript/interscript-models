@@ -2486,7 +2486,7 @@ status banner). **STAGED — NOT PUBLISHED**: no Release, no index entry,
 no version number; publication and version selection are owner calls
 (publish guard). urd-g2p remains owner-gated (license), untouched.
 
-## WO20u M1 — multi-seed confirmation of the bridge arm: PRE-REGISTERED, seeds 2–3 in flight (2026-11-17)
+## WO20u M1 — multi-seed confirmation: the bridge lever CONFIRMS, 3-of-3 (2026-11-18)
 
 Pre-registration committed before any seed-2/3 GPU spend
 (TODO.sota-2026/06, branch `wo20u-m1-m2`): **the bridge lever CONFIRMS
@@ -2501,9 +2501,41 @@ and is recorded as an uncontrolled draw). The confirmation scorer
 (`wo20_seed_confirm.py`, interscript-train) scores each seed's banked
 student preds against G2a's released predictions
 (`frontier-predictions-v1`, sha-verified) under the identical evaluator;
-its seed-1 calibration must reproduce −0.4385pp CI [−0.6463, −0.2767]
-before the seeds-2/3 numbers are read. HF discipline as always:
-`--detach`, `--timeout 4h`, `--attempts 3`, labels.sha-pinned 500-step
-checkpoints + resume, ≤ 2 concurrent big-GPU apps (seed jobs:
-`wo20u-m1-s2` / `wo20u-m1-s3`, run dirs `wo20-tiny-g2w-s2/s3`).
-Verdict lands in this ledger either way.
+its seed-1 calibration was required to reproduce −0.4385pp
+CI [−0.6463, −0.2767] before the seeds-2/3 numbers were read — it
+reproduced EXACTLY (delta, CI, p, and the 4.0545 / 4.493 aggregates
+all to the fourth decimal), making the three seeds directly comparable.
+
+**Verdict (the pre-registered bar: ≥ 2 of 3 → 3 of 3 CLEARED):**
+
+| seed | full-set DER-CE | paired Δ vs G2a | CI95 | p | separated |
+|---|---|---|---|---|---|
+| 1 (unseeded) | 4.0545 | −0.4385pp | [−0.6463, −0.2767] | 0.0 | ✓ |
+| **2 (`WO20_SEED=2`)** | **4.0882** | **−0.3806pp** | **[−0.5876, −0.2168]** | 0.0 | ✓ |
+| **3 (`WO20_SEED=3`)** | **4.0397** | **−0.4140pp** | **[−0.6173, −0.2532]** | 0.0 | ✓ |
+
+- Every seed's CI sits entirely below zero; the three intervals overlap
+  heavily and agree in magnitude (−0.38 to −0.44pp at half G2a's
+  epochs) — the effect is reproducible, not a seed lottery. The strict
+  teacher+0.5pp gate stays FAILED for every seed (teacher reproductions
+  2.2231 / 2.2039 in-run; students 4.05–4.14), unchanged from the
+  lineage's standing record.
+- **Ledger consequence:** scan-first frozen bridges are the first
+  student-side lever with a REPRODUCED separated-positive effect
+  (~−0.4pp vs G2a at 3 epochs vs 6). The single-seed caveat that
+  guarded every student-side verdict is discharged for THIS lever; the
+  seed-variance caveat remains attached to every other single-seed arm
+  in the ledger. Natural next arm (owner-gated, unchanged): the bridge
+  recipe at 6 epochs against G2a directly.
+- Provenance: per-seed confirm JSONs on
+  `isx-training:/wo20u-m1/{wo20-tiny-g2w-s2,s3}.confirm.json`; final
+  evals in the run dirs; G2a preds sha `f6f60619…` verified in-job.
+- Infra notes, recorded: (1) the trainer's eval epilogue crashed on the
+  evaluator's word-count-mismatch `RuntimeError` on BOTH seeds
+  (seed 1 never reached the loop in-job) — fixed to skip pairwise,
+  skip counts now recorded (42 / 64); (2) the trainer's final_eval
+  totals carried a ×100 aggregate scale (paired stats unaffected);
+  fixed; (3) the detached orchestrator job's threads wedged mid-campaign
+  (log silence, no traceback) — the remaining two CPU scorer launches
+  were run directly; the seeds themselves crossed four 4h windows each
+  on checkpoint resume exactly as designed.
