@@ -2465,6 +2465,46 @@ Findings, recorded as measured:
   were picked; publication of the two PASS variants is an owner
   decision.
 
+## WO20 campaign B PASS candidates PUBLISH: urd-vocalized-int8static-1.0 + heb-vocalized-int8static-1.1 (2026-11-18)
+
+Owner go for the int8static RC publication (versions delegated per the
+standing directive; ids align with each fp32 lineage under the WO87
+law). The wo20u-rc staged bytes ship as metadata-corrected artifacts:
+WO87 ids (the staged internal ids carried pre-rename
+`urd-diac-int8static-1.0` / `heb-diac-int8static-1.1`), the
+fp32-inherited parity blocks replaced by measured-on-int8 ones, strict
+validator green — ONNX members byte-identical to the staged gated
+bytes, member digests re-verified at every step (the
+tha-phonemic-1.0 metadata-swap precedent).
+
+Publication parity gate — the campaign's own machinery (fp32-zip
+reference, CPU single-row greedy, ONE framing, teacher-forced margin
+analysis) at 600 rows; slices are prefix-verified strict supersets of
+the M2 sweep slices (`conformance/wo20/eval600/`, channel full-file
+sha256s pinned; `tools/wo20u_parity600.py`). urd ran on an HF Job
+(a10g-small CPU); heb on an HF Job cpu-xl after the a10g-small leg
+proved it could not fit ByT5-base fp32 decode in the 4h window —
+both on HF Jobs per house law, never locally:
+
+| publish id | CER-Δ pp vs fp32 (gate 2.0) | confident flips (gate 1%) | row exact vs fp32 | staged sha256 | artifact sha256 |
+|---|---|---|---|---|---|
+| `urd-vocalized-int8static-1.0` | **0.0046** (600 rows) | **0.000000** | 537/600 | `9f3fa034…` | `ec9f7ba7…` |
+| `heb-vocalized-int8static-1.1` | **0.4796** (600 rows) | **0.14%** (0.001446) | 300/600 | `cf9ccdc6…` | `6de2af11…` |
+
+Provenance chain: M2 sweep verdicts (the 2026-11-17 section above;
+note its gates ran on EVAL_N=120-row windows of the committed 400-row
+slices per the DONE.json files — below the 500-sample publication bar,
+hence the fresh 600-row runs) → staged candidates
+(`isx-training:/wo20u-rc/`, SHA256SUMS-verified at download) → the
+600-row publication gate (reports on
+`isx-training:/wo20u-rc/parity600/`) → release tags
+`urd-vocalized-int8static-1.0` / `heb-vocalized-int8static-1.1` +
+models.yaml entries + HF mirror (`Interscript/<id>`, LFS sha256
+re-verified) → indexed on **index-v15**. The STAGED banner on
+`wo20u-rc/manifest.json` is superseded by this record and the release
+tags. The failing sweep siblings keep their fp32 artifacts (unchanged);
+urd-g2p stays owner-gated (license).
+
 ## WO20u M2 — the two PASS static-int8 variants staged as release candidates (2026-11-17)
 
 The gated bytes ARE the candidates: `wo20u_stage_rc.py` stages the exact
