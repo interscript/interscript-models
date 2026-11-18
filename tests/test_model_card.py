@@ -26,11 +26,11 @@ VARIANTS = ["ara-vocalized-2.0-int8"]
 
 class TestHfRepo(unittest.TestCase):
     def test_repo_is_org_plus_index_id(self):
-        self.assertEqual(hf_repo_for("ara-vocalized-2.0"), "interscript/ara-vocalized-2.0")
+        self.assertEqual(hf_repo_for("ara-vocalized-2.0"), "Interscript/ara-vocalized-2.0")
 
     def test_variant_ids_keep_their_own_repo(self):
         self.assertEqual(hf_repo_for("ara-vocalized-small-2.1-int8"),
-                         "interscript/ara-vocalized-small-2.1-int8")
+                         "Interscript/ara-vocalized-small-2.1-int8")
 
 
 class TestRenderCard(unittest.TestCase):
