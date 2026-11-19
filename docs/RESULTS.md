@@ -2619,3 +2619,43 @@ bridge MSE 2.41).
   (n 1,170 scorable pairs, 32 pairwise skips), `wo20-tiny-g2w-6ep/`
   final_eval + banked preds; G2a preds sha `f6f60619…` verified
   in-job. Artifacts staged, nothing published; versions owner calls.
+
+## WO92 prep COMPLETE — knesset-v6 weak corpus: 2.67M unique of 5.33M, decontam clean; run-093 weak-pretrain launched (2026-11-19)
+
+Prep job `heb-weakprep-data` (id `6afe91e5e41aae15936d24b1`, cpu-upgrade,
+completed) built the stage-1 corpus in-job from upstream
+`Phonikud/phonikud-data knesset_nikud_v6.txt.7z` (MIT; archive sha256
+`7002aaee131ca54d2…`, size 142,845,067 B — matches the pinned figure).
+Artifact: `hf://datasets/Interscript/he-knesset-v6-weak` (private) —
+8 shards + `manifest.json` + `SHA256SUMS.txt` (sidecar cross-verified
+against a streamed shard). Trainer + prep code: interscript-train
+branch `feat/he-weak-pretrain` (PR #147); work order: models PR #452.
+
+| policy step | count |
+|---|---|
+| source lines scanned | 5,329,211 |
+| kept_unique (skeleton-deduped, decontamed) | **2,667,695** |
+| skeleton dup dropped | 2,661,513 |
+| raw line dup seen | 2,661,077 |
+| decontam drops (40-char windows vs hebrew-v4 test) | 1 |
+| filter drops (s45: len / Hebrew frac / nikud density) | 2 |
+| eval census (re-counted in-job) | test 1,864 / train 50,433 |
+
+- **Prep gate PASS**: unique yield 2,667,695 ≥ 1,000,000; decontam
+  rate 3.7e-7 ≤ 0.1%. GPU spend authorized. The dedupe yield confirms
+  the formulaic-knesset profile (≈50% exact-duplicate lines, first
+  occurrence kept, source order preserved).
+- One v6-format fix vs the s45-era code: the syllable separator is
+  ASCII `|` (phonikud `PREFIX_CHAR`, U+007C) and sits inside the
+  printable band the s45 filter kept — now dropped explicitly; stress
+  U+05AB and teamim drop via the plane mark set.
+- **run-093-heb-weak-pretrain LAUNCHED** (id
+  `6afe93a1e41aae15936d251b`, a100-large, `--detach`, 23h timeout):
+  crown plane recipe verbatim (byt5-base encoder + plane head, bf16
+  autocast + fp32 CE, AdamW 1e-4 cosine warmup 500 clip 1.0, micro 8 ×
+  accum 2), corpus = 1,500,000 deduped weak units (seed-42 sample) +
+  full gold train 50,433 COMBINED, 1 epoch, step-1000 checkpoints with
+  the labels.sha contract to `isx-training:/run-093-heb-weak-pretrain/`.
+  Stage-1 DER eval is INFORMATIONAL (machine labels never gate
+  quality); stage-2 gold SFT stays owner-gated (eval-set decision
+  recorded in the WO: 1,864 human-verified test rows).
