@@ -135,10 +135,17 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   public-lineage replay (ro), CLE gated plane (ro, guard only).
   Validates chain: mount -> teacher load -> guard-index build ->
   decode -> dedupe counts -> .done markers -> manifest.
-- Job 1 full: HELD until the smoke PASSes (2 x 200-row chain check
-  before the 573K-row sweep, issue #5 doctrine). Config: bs 32,
-  MAXLEN 256 src cap (overlong skipped + counted), MAX_NEW 512,
-  GUARD_N 8, SHARD_ROWS 10000, 58 shards, shard-.done resume.
+  (Submitted pre-resume-fix snapshot; the resume path is not
+  exercised on a fresh run dir, and the full job carries the fix.)
+- Job 1 full: `run-093-urd-teacher-relabel` — HF Jobs
+  `rhtse/6afe9451545f95df1c0702bb`, a100-large, detached, 24h timeout,
+  `--attempts 2`, launched with the resume-fixed script (complete-shard
+  resume: jsonl + .done marker). Different run dir from the smoke (no
+  resource race; our big-GPU count = 2, at cap). If the smoke chain
+  exposes a script bug, the full job is stopped by id, fixed,
+  relunched — partial shards are overwritten on retry by design.
+  Config: bs 32, MAXLEN 256 src cap (overlong skipped + counted),
+  MAX_NEW 512, GUARD_N 8, SHARD_ROWS 10000, 58 shards.
 - ETA (full): measured basis — run-092's init eval decoded the same
   model at 11,940 rows / 447 s (~26.7 rows/s, bs 16 greedy bf16,
   a100-large) → 573K rows ≈ 6.0 h decode, +guard-index + shard writes
