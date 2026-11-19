@@ -139,7 +139,10 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   before the 573K-row sweep, issue #5 doctrine). Config: bs 32,
   MAXLEN 256 src cap (overlong skipped + counted), MAX_NEW 512,
   GUARD_N 8, SHARD_ROWS 10000, 58 shards, shard-.done resume.
-- ETA (full): 573K rows / bs 32 greedy bf16 ≈ 6–10 GPU-h.
+- ETA (full): measured basis — run-092's init eval decoded the same
+  model at 11,940 rows / 447 s (~26.7 rows/s, bs 16 greedy bf16,
+  a100-large) → 573K rows ≈ 6.0 h decode, +guard-index + shard writes
+  ≈ 6–8 GPU-h total (24h timeout: ~3x headroom).
 - Next gate after run-093: manifest review (dedupe + guard counts
   disclosed), then run-094 student smoke + full, then the calibrated
   16(e) suite on the student (reference google/byt5-small, self-control
