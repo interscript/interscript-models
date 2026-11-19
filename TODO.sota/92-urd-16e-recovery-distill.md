@@ -129,28 +129,32 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
 
 - Lane code: urdu-dev PR #18 (`training/teacher_distill/`, branch
   `wo92-teacher-distill`).
-- Job 1 smoke: `run-093a-urd-teacher-relabel-smoke` — HF Jobs
-  `rhtse/6afe8ed7e41aae15936d23e1`, a100-large, detached, 24h timeout,
-  `--attempts 2`; mounts teacher ckpt (bucket ro-through-/ckpt),
-  public-lineage replay (ro), CLE gated plane (ro, guard only).
-  Validates chain: mount -> teacher load -> guard-index build ->
-  decode -> dedupe counts -> .done markers -> manifest.
-  (Submitted pre-resume-fix snapshot; the resume path is not
-  exercised on a fresh run dir, and the full job carries the fix.)
 - Job 1 full: `run-093-urd-teacher-relabel` — HF Jobs
-  `rhtse/6afe9451545f95df1c0702bb`, a100-large, detached, 24h timeout,
-  `--attempts 2`, launched with the resume-fixed script (complete-shard
-  resume: jsonl + .done marker). Different run dir from the smoke (no
-  resource race; our big-GPU count = 2, at cap). If the smoke chain
-  exposes a script bug, the full job is stopped by id, fixed,
-  relunched — partial shards are overwritten on retry by design.
-  Config: bs 32, MAXLEN 256 src cap (overlong skipped + counted),
-  MAX_NEW 512, GUARD_N 8, SHARD_ROWS 10000, 58 shards.
-- ETA (full): measured basis — run-092's init eval decoded the same
-  model at 11,940 rows / 447 s (~26.7 rows/s, bs 16 greedy bf16,
-  a100-large) → 573K rows ≈ 6.0 h decode, +guard-index + shard writes
-  ≈ 6–8 GPU-h total (24h timeout: ~3x headroom).
-- Next gate after run-093: manifest review (dedupe + guard counts
-  disclosed), then run-094 student smoke + full, then the calibrated
-  16(e) suite on the student (reference google/byt5-small, self-control
-  0.5 required) + CER ≤ 0.0377 bar.
+  `rhtse/6afeb4b4545f95df1c0716a7`, a100-large, detached, 24h timeout,
+  `--attempts 2`, resume-proof (shard jsonl + `.done` markers carry
+  per-shard dedupe/overlong/drop/rows counts; restarts rebuild
+  truthful totals). Config: bs 32, MAXLEN 256 src cap (overlong
+  skipped + counted), MAX_NEW 512, GUARD_N 8, SHARD_ROWS 10000,
+  58 shards, teacher sha8 6ac0f27c, guard index 554,196 CLE 8-gram
+  shingles (9 files), source 573,130 rows.
+- Earlier attempts, cancelled (negatives recorded verbatim):
+  - `rhtse/6afe8ed7e41aae15936d23e1` (smoke, run-093a): cancelled
+    queued — superseded by the full job exercising the same chain.
+  - `rhtse/6afe9451545f95df1c0702bb`: ran 2h with ZERO script output
+    (no crash, no retry, no run dir). Diagnosis: safetensors mmap
+    loading over the bucket FUSE mount page-faults the model through
+    ranged network reads (~2 s per MB measured). The loader now copies
+    the checkpoint to /dev/shm first (2.33 GB in **10 s** sequential)
+    and logs every stage. Lesson for every bucket-mounted from_pretrained:
+    copy-then-load, never mmap a network mount.
+  - `rhtse/6afeb018e41aae15936d3265`: with logging on, crashed in
+    ~15 min at the source-rows line (`counts` referenced before init) —
+    a bug py_compile cannot catch. Root-caused + fixed + validated by a
+    stubbed local dry-run (fresh chain AND resume over committed shards
+    assert dup/overlong/guard counts and original-index provenance).
+- ETA: at the measured 26.7 rows/s eval decode rate, 573K rows ≈ 6 h;
+  run-092's retention eval is the rate basis (11,940 rows / 447 s).
+- Next gate after run-093: manifest review (hygiene counts disclosed),
+  then run-094 student smoke + full, then the calibrated 16(e) suite
+  on the student (reference google/byt5-small, self-control 0.5
+  required) + CER ≤ 0.0377 bar.
