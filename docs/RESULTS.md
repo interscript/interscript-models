@@ -2659,3 +2659,10 @@ branch `feat/he-weak-pretrain` (PR #147); work order: models PR #452.
   Stage-1 DER eval is INFORMATIONAL (machine labels never gate
   quality); stage-2 gold SFT stays owner-gated (eval-set decision
   recorded in the WO: 1,864 human-verified test rows).
+
+**run-093 RUNNING-verified (2026-11-19 07:05 UTC):** weak=1,500,000 +
+gold=50,303 combined=1,550,303 units, 180-class inventory, 96,768
+steps total, healthy CE (0.06–0.15 at step 2350, no spike signature),
+step-1000/step-2000 checkpoints landed in the bucket (~4 min cadence),
+in-job ETA 6.3h train + greedy eval ≈ 7h wall — inside the 23h timeout
+with wide margin.
