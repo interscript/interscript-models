@@ -125,4 +125,22 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
 
 ## Verdicts
 
-(run-093 / run-094 / gate results recorded here as they land)
+### Launch record (2026-11-19)
+
+- Lane code: urdu-dev PR #18 (`training/teacher_distill/`, branch
+  `wo92-teacher-distill`).
+- Job 1 smoke: `run-093a-urd-teacher-relabel-smoke` — HF Jobs
+  `rhtse/6afe8ed7e41aae15936d23e1`, a100-large, detached, 24h timeout,
+  `--attempts 2`; mounts teacher ckpt (bucket ro-through-/ckpt),
+  public-lineage replay (ro), CLE gated plane (ro, guard only).
+  Validates chain: mount -> teacher load -> guard-index build ->
+  decode -> dedupe counts -> .done markers -> manifest.
+- Job 1 full: HELD until the smoke PASSes (2 x 200-row chain check
+  before the 573K-row sweep, issue #5 doctrine). Config: bs 32,
+  MAXLEN 256 src cap (overlong skipped + counted), MAX_NEW 512,
+  GUARD_N 8, SHARD_ROWS 10000, 58 shards, shard-.done resume.
+- ETA (full): 573K rows / bs 32 greedy bf16 ≈ 6–10 GPU-h.
+- Next gate after run-093: manifest review (dedupe + guard counts
+  disclosed), then run-094 student smoke + full, then the calibrated
+  16(e) suite on the student (reference google/byt5-small, self-control
+  0.5 required) + CER ≤ 0.0377 bar.
