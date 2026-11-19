@@ -2666,3 +2666,29 @@ steps total, healthy CE (0.06–0.15 at step 2350, no spike signature),
 step-1000/step-2000 checkpoints landed in the bucket (~4 min cadence),
 in-job ETA 6.3h train + greedy eval ≈ 7h wall — inside the 23h timeout
 with wide margin.
+
+## WO92 run-093 weak-pretrain COMPLETE — full budget, stage-1 informational DER 9.13; stage-2 owner-gated (2026-11-19)
+
+Job `6afe93a1e41aae15936d251b` (a100-large) completed in 6h 0m: all
+96,768 steps, final CE 0.007–0.015 (mask-predict q-randomized; clean
+descent, no spike signature). Greedy crown-protocol eval on the
+1,864-row human-verified test (1,975 windows, K=3, seq2seq_der,
+original-separator stitching): **DER 9.1316 — INFORMATIONAL ONLY**
+(machine labels never gate quality; this run deliberately skips the
+gold training that produced every shipped Hebrew number).
+
+- vs the crown `heb-vocalized-plane-2.0` 8.18: +0.95pp — the expected
+  stage-1 posture; the s45 lesson is that weak-pretrain pays AFTER the
+  gold fine-tune (s45: stage-1 ungated, curriculum 16.58 vs gold-only
+  17.46, −0.88). For calibration within the Hebrew-text-lever band:
+  noisy student 8.72 (negative), capacity 8.48 (negative), plane-1.0
+  12.48, seq2seq-era 1.1: 16.44.
+- Artifact: `best/model.pt` (1.7 GB, corpus provenance embedded) +
+  96/96 step checkpoints (model.pt + optim.pt + labels.sha each) +
+  `inventory.json` (180 classes) + 1,975-row eval progress + EVAL_DONE
+  + `verdict.json` — all verified in the bucket.
+- Stage 2 (gold SFT from the run-093 best, exact crown recipe) remains
+  OWNER-GATED per WO92: needs (a) the eval-set decision (proceed on the
+  1,864-row crown set vs add a held-out human-verified dev slice),
+  (b) an explicit go, (c) at ship time: version number + the public
+  GH-Release copy of the weak corpus artifact.
