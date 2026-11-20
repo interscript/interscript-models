@@ -158,3 +158,41 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   then run-094 student smoke + full, then the calibrated 16(e) suite
   on the student (reference google/byt5-small, self-control 0.5
   required) + CER ≤ 0.0377 bar.
+
+### run-093 manifest review (2026-11-20) — CLEAN; student lane unblocked
+
+- Completing job: `rhtse/6afebe6ee41aae15936d3e12` COMPLETED, 8 h 41 m
+  (created 2026-11-19 09:16:30 UTC under the final PR #18 config,
+  MAX_NEW 256 / bs 64; `seconds_total` 31,250 agrees). The launch
+  record above lists `rhtse/6afeb4b4545f95df1c0716a7` — that job was
+  CANCELED before start when the config changed; it produced no
+  artifacts and is superseded by the completing job.
+- Artifact set at `isx-training:/run-093-urd-teacher-relabel/`:
+  58 shard jsonl + 58 `.done` markers + `manifest.json` +
+  `verdict.json` + `GATE_DONE` — exactly the expected 119 entries, no
+  orphans. Every `.done` timestamp sits inside the completing job's
+  window (09:34:21–18:03:16), so nothing stale survived from the
+  cancelled old-cap attempt (whose single shard was removed per the
+  PR #18 note).
+- Counts (manifest == verdict, verdict PASS):
+  - rows_source 573,130 → rows_out **483,289** (84.3% yield);
+    exact-dup removed 89,840; skipped_overlong 1;
+    **regurgitation guard (8-word CLE shingle) drops 0** — the
+    pre-registered MUST-be-zero gate HOLDS.
+  - Arithmetic closes exactly: per-shard sums equal the totals; shard
+    balance `rows_in = dup + overlong + guard + rows_out` holds on all
+    58 shards; shard ids contiguous 0..57 (57 × 10,000 + 3,130 tail).
+- Independent spot check: streamed line counts of shard-000000.jsonl
+  (9,951) and shard-000057.jsonl (2,339) match their `.done` markers
+  exactly. Aggregate counts only were read — no corpus text persisted
+  or printed (Clause 19).
+- Manifest decode record: bs 64, maxlen 256, max_new 256, greedy,
+  bfloat16 — matches the final relabel.env; teacher sha8 6ac0f27c
+  matches the launch record.
+- Verdict: **corpus CLEAN → run-094 unblocked** (student smoke, then
+  full). One prerequisite gap surfaced: `student-smoke.env` points at
+  `/ckpt/run-093a-urd-teacher-relabel-smoke`, which never existed —
+  the relabel smoke was cancelled queued yesterday (recorded above as
+  superseded). The script-defined relabel smoke (2 × 200 rows,
+  `relabel-smoke.env` verbatim, no edits) was relaunched to produce
+  that corpus for the student smoke: `rhtse/6afff0d44fdc5ab3c55af879`.
