@@ -127,3 +127,33 @@ to the reference. Renames/aliases per the WO87 map when publishing.
 3. Stage-2 SFT: owner-gated follow-up WO entry once the eval-set
    decision lands.
 4. Negative results recorded with the same care (the ledger's law).
+
+## Stage 2 — LAUNCHED (owner go, 2026-11-19)
+
+Owner decisions recorded: stage-2 gold SFT approved; **eval-set =
+option (a)** — the 1,864-row human-verified crown set as-is.
+
+- Run: **run-094-heb-gold-sft** (a100-large, `--detach`, 6h timeout —
+  above the 4h floor; ≈12.1K steps expected at crown-recipe scale).
+- Init: run-093-heb-weak-pretrain `best/model.pt`; inventory READ from
+  the run-093 dir and copied byte-identical (labels.sha digest
+  unchanged — the vocab path consistency law); the trainer refuses to
+  init if the checkpoint's saved classes diverge from the inventory.
+- Recipe: crown gold recipe VERBATIM — gold-only hebrew-v4 train,
+  4 epochs, AdamW lr 1e-4 wd 0.01, cosine warmup 500, clip 1.0,
+  micro-bs 8 × accum 2, bf16 autocast + fp32 CE, mask-predict q.
+- Gate (pre-registered): crown protocol, single-row greedy K=3,
+  seq2seq_der on the crown test — **DER < 8.18 clears the crown gate**
+  (`heb-vocalized-plane-2.0`); ≥ 8.18 is a recorded negative, the
+  crown stays shipped. Stage-1 informational reference: 9.1316.
+- Checkpoints: step-1000 cadence with the labels.sha contract →
+  `isx-training:/run-094-heb-gold-sft/`.
+- Fleet: 0 concurrent big-GPU runs from this campaign at launch
+  (run-093 COMPLETED 6h 0m).
+- Trainer: interscript-train branch `feat/he-gold-sft` (PR on merge;
+  the WO92 branches were merged, so stage-2 rides fresh branches per
+  the stranded-commits lesson).
+- Ship chain after a cleared gate (owner-gated at each step): parity
+  ≥ 500 samples single-row greedy, export/int8 per the standard chain,
+  explicit owner-stated version, index entry + aliases, HF mirror.
+  NO version numbers are picked by the campaign.
