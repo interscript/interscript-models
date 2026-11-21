@@ -315,3 +315,43 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   candidate directions already pre-registered in the kill criteria
   above (guard tightening, loss-magnitude filtering, logit-level
   distillation) plus the mode-collapse angle are owner's call.
+
+### Decode probe (2026-11-21) — TARGET DEGENERACY confirmed
+
+- Owner-authorized diagnostic (arm decision: "diagnostic first, no
+  re-train yet"). One short job, `rhtse/6b014e61efaf5e14f4b487e3`,
+  a10g-large, detached, 2 h timeout, COMPLETED in 3 m 24 s —
+  `PROBE_DONE ok`, artifact `decode-probe.json` in the run dir.
+  Script: urdu-dev PR #20
+  (`training/teacher_distill/probe_decode_cer_hf.py`) — the EXACT
+  decode path + raw-char CER metric of the training eval, fixed
+  200-row head slice of `data-diacrit/test.jsonl`, aggregate-only
+  output (Clause 19).
+- Trajectory (per-checkpoint free-running greedy decode):
+
+  | step | mean | median | p10 | p90 | hist (≤.0377/.1/.5/1/2/5/>5) |
+  |---|---|---|---|---|---|
+  | 1000 | 3.88534 | 1.0 | 1.0 | 11.2308 | 0/0/0/137/0/6/57 |
+  | 5000 | 3.13578 | 1.0 | 0.9333 | 9.3333 | 0/0/0/144/2/7/47 |
+  | 15000 | 3.22094 | 1.0 | 0.9167 | 9.2667 | 0/0/0/136/3/17/44 |
+  | 30000 | 2.71357 | 1.0 | 0.9091 | 7.9375 | 0/0/0/142/5/16/37 |
+  | 45000 | 2.97611 | 1.0 | 0.9 | 9.0667 | 0/0/0/142/2/8/48 |
+
+- **Read: flat-bad from the first checkpoint → TARGET DEGENERACY
+  confirmed** (owner's pre-stated discrimination rule). Not a single
+  row at ANY checkpoint lands below CER 0.5 — no good phase ever
+  exists to collapse from, which rules out the training-dynamics
+  story (a dynamics failure would pass through a decodable regime
+  before degrading). The slow mean drift (3.89 → 2.71 → 2.98) with
+  teacher-forced loss falling to ~0.01 is the model memorizing
+  degenerate targets it cannot free-run: the constant bimodal shape
+  (median exactly 1.0 = empty predictions, plus a >5 runaway bucket
+  of 37–57 rows per checkpoint at every stage) means termination /
+  length control is never learned from these targets.
+- Implication (owner's pre-stated mapping, NOT yet launched): next
+  arm = regenerate teacher targets — beam-4 decode or logit-level
+  distillation, both pre-registered candidates. Diagnostic data
+  worth carrying into that arm: a tgt-length/termination histogram
+  over the run-093 corpus (the manifest does not record it) to
+  separate empty-truncated target pathology from runaway-target
+  pathology before regenerating.
