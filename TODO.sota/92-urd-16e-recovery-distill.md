@@ -446,3 +446,27 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   5. Eval → calibrated Clause 16(e) (reference google/byt5-small,
      self-control exactly 0.5, AUC ±0.05, success-rate 0.6) →
      ship recommendation → owner version.
+
+### run-095a semantic smoke PASS + run-095b full launch (2026-11-21)
+
+- Semantic smoke `rhtse/6b01705d4fdc5ab3c55cd4d3` COMPLETED 1 m 5 s
+  (a100-large, invariant env active). Verdict PASS (invariant-gated):
+  400/400 rows out, guard drops **0**, **ratio_median_total 1.7**
+  (inside the pre-registered [0.5, 3.0] band — the teacher now
+  vocalizes real text and outputs run ~1.7× source length),
+  **degenerate_share_total 0.0** — the 1–5-char-on-long-src class
+  that invalidated run-093 is gone at the first checkpoint of the
+  chain. `.done` markers carry per-shard ratio_median +
+  degenerate_share.
+- **run-095b full greedy regeneration launched**:
+  `rhtse/6b017837efaf5e14f4b4f8e8`, a100-large, detached, 24 h
+  timeout, `--attempts 2`, CLE mount for the guard. 573,130 rows,
+  58 shards of 10,000, per-shard semantic invariant enforced before
+  each `.done` commit; guard MUST drop 0. ETA 8.7 h at run-093's
+  measured 18.3 rows/s basis — real-length outputs are heavier than
+  run-093's fragments, so the honest window is ~7.5–10 h; the 24 h ×
+  2-attempt resume covers it.
+- Next: corpus review gate (manifest + `target_stats_hf.py` over
+  run-095b asserting the invariant across all shards) BEFORE the
+  `run-095` student launch; then eval → calibrated 16(e) → ship
+  recommendation.
