@@ -235,3 +235,19 @@ sha256 `d6833fc79751ad39ee6a6a7d45632038997ec060955e46f77d39c1fdb848959a`)
 (onnx member byte-identical `40a774d3…`, classes `0c94a937…`); golden
 `golden/heb-vocalized-plane-3.0-int8-dynamic.jsonl` (sha `027f786e…`,
 verified against the bucket sidecar).
+
+## SHIP RECORD — heb-vocalized-plane-3.0 (2026-11-21)
+
+- Owner approval: "Fully approve all, use reasonable recommendations" (2026-11-21) — version
+  heb-vocalized-plane-3.0 stated per recommendation delegation, recorded verbatim here.
+- Arm: int8-dynamic (DER-neutral +0.0549pp vs fp32 on the 600-row slice; crown-consistent mode).
+- Gate law: classification parity (DER-delta ≤ 0.25pp) adopted via #459; generation law untouched.
+- Ship gates: export PASS (fp32/int8-dynamic/int8-static), parity PASS under the amended
+  classification gate, fixtures #458, conformance vectors in conformance/heb-vocalized-plane-3.0-vectors.json,
+  regression PASS, license BSD-3-Clause, Schedule D CLE attribution in the card.
+- Published:
+  - GH release: releases/tag/heb-vocalized-plane-3.0 (heb-vocalized-plane-3.0-int8-dynamic.zip + .sha256)
+  - Index: index-v16 (models-index.yaml serves the entry; metrics anchored to RESULTS.md)
+  - HF mirror: Interscript/heb-vocalized-plane-3.0 (public, zip + card)
+- Chain: run-093 weak-pretrain (DER 9.1316 informational) → run-094 gold SFT (DER 6.6078, crown
+  gate CLEARED vs 8.18, −1.57pp — curriculum verdict confirmed at 2x the s45 effect).
