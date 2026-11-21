@@ -208,3 +208,56 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   timeout, `--attempts 2` — ByT5-small init, 1 epoch over the 400-pair
   smoke corpus, 200-row eval slice, lineage recipe constants. Chain
   validated before the full student launches (issue #5 doctrine).
+
+### Student smoke verdict + run-094 full launch (2026-11-21)
+
+- Student smoke `rhtse/6b00f8c6efaf5e14f4b4419c` COMPLETED in 1 m 33 s.
+  Its verdict VERBATIM (the negative-looking verdict ships with its
+  explanation — ledger law):
+
+  ```json
+  {
+      "run": "run-094a-urd-diac-distill-smoke",
+      "init": "google/byt5-small",
+      "corpus_run": "run-093a-urd-teacher-relabel-smoke",
+      "steps": 13, "epochs": 1, "pairs": 400, "eval_rows": 200,
+      "cer": 9.19363,
+      "quality_gate_cer": 0.0377,
+      "quality_pass": false,
+      "verdict": "MISS"
+  }
+  ```
+
+- Structural analysis: the MISS is predetermined, not a chain failure —
+  the script applied the full-run quality bar (CER ≤ 0.0377) to a
+  13-step run from raw `google/byt5-small` (never task-trained). An
+  untrained model generates long junk against short gold strings, so
+  CER ≫ 1 by construction regardless of chain health; no 13-step smoke
+  could ever pass that bar. The smoke's registered purpose is chain
+  validation.
+- Chain evidence (all green): corpus load (400 pairs; corpus_run +
+  hygiene read from the run-093a manifest), train loop 13/13 steps at
+  3.24 it/s (final loss 3.5523, finite, no NaN skips), checkpoint
+  `step-13/` (model/ + optim.pt 2.4 GB + meta.json with all lineage
+  fields incl. `privacy_gate_reference: google/byt5-small`), eval
+  hookup (200 rows decoded, per-row CER), `verdict.json` +
+  `GATE_DONE ok`.
+- **Owner ruling (2026-11-21): CHAIN PASS confirmed** — the MISS is
+  expected-at-smoke-scale; launch authorized. Semantics gap assigned to
+  an upstream urdu-dev PR: add a chain-verdict field (chain PASS =
+  checkpoint + eval + verdict artifacts written) so future smokes gate
+  on chain and quality stays full-run-only. The full run's gates are
+  UNCHANGED.
+- **run-094 full launched**: `rhtse/6b011020efaf5e14f4b45001`,
+  a100-large, detached, 24 h timeout, `--attempts 2`, `student.env`
+  verbatim — ByT5-small init, 483,289 distill pairs (run-093 corpus,
+  manifest-reviewed CLEAN), 3 epochs, bs 16 × accum 2, lr 3e-4 cosine
+  (200 warmup), bf16 autocast, MAXLEN 256, CKPT_EVERY 1000,
+  cross-job resumable, final full-split eval (11,940 rows, WO37
+  protocol) against the 0.0377 champion bar. 45,309 optimizer steps;
+  ETA ≈ 4.5–5.5 GPU-h + end eval (smoke measured 3.24 it/s → ~4.2 h
+  stepping; run-066 measured scale agrees).
+- Gates ahead (unchanged, pre-registered): full-run quality CER ≤
+  0.0377 → calibrated Clause 16(e) suite (reference google/byt5-small,
+  reference self-control exactly 0.5) → standard ship gates →
+  owner-stated version.
