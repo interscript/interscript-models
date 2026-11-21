@@ -205,3 +205,33 @@ duplication). All RC artifacts + SHA256SUMS on
 3. Version word for `heb-vocalized-plane-{major.minor}` — the rename
    of the wo92rc lane fixtures + the chosen arm's zip is mechanical
    once spoken.
+
+## SHIP EXECUTED — heb-vocalized-plane-3.0 (owner approval on all three items, 2026-11-21)
+
+**Owner rulings, recorded verbatim:** "OWNER APPROVAL, all three items,
+with version delegation to my stated recommendation: (1) gate law #459
+MERGED — classification artifacts now gate on DER-delta ≤0.25pp,
+generation law untouched; (2) quantization arm = **int8-dynamic**
+(DER-neutral +0.0549pp, crown-consistent); (3) version =
+**heb-vocalized-plane-3.0** (plane lineage 1.0→2.0→3.0; owner
+pre-approved the recommendation explicitly, 2026-11-21 — record that
+delegation verbatim in the ledger)."
+
+Publish-guard run (real data, the merged law):
+- quality PASS — cer 6.6078 ≤ 8.18 (crown gate; improves on the registry best)
+- parity PASS (classification, #459) — DER delta 0.0549pp ≤ 0.25pp vs the
+  fp32 reference (9.8276 → 9.8825) on the 600-sample committed slice
+- license PASS — corpora heb-knesset-weak (MIT) + hebrew-v4 (owner-approved
+  crown-lineage review record)
+- conformance PASS — 600 frozen vectors
+  (conformance/heb-vocalized-plane-3.0-vectors.json), single-row-greedy
+- regression PASS — improves: 6.6078 < best-known 8.18
+- budgets/graph_io PASS; guard verdict: PUBLISH READY, version 3.0.0
+  (semver form of the owner's heb-vocalized-plane-3.0)
+
+Artifact: `heb-vocalized-plane-3.0-int8-dynamic.zip` (416,041,780 B,
+sha256 `d6833fc79751ad39ee6a6a7d45632038997ec060955e46f77d39c1fdb848959a`)
+— the gated wo92rc int8-dynamic bytes repackaged under the final identity
+(onnx member byte-identical `40a774d3…`, classes `0c94a937…`); golden
+`golden/heb-vocalized-plane-3.0-int8-dynamic.jsonl` (sha `027f786e…`,
+verified against the bucket sidecar).

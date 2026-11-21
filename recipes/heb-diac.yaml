@@ -1,0 +1,28 @@
+id: heb-diac
+task: diacritization
+corpora:
+  train: heb-knesset-weak@2026-11-19
+  test: hebrew-v4@v1
+model: byt5-plane
+stages:
+  - stage: plane
+    env_prefix: H
+    route: legacy:interscript-train/train_hebrew_weakpre_hf.py
+    params: {epochs: 1, max_weak: 1500000}
+  - stage: sft
+    env_prefix: H
+    route: legacy:interscript-train/train_hebrew_sft_hf.py
+    params: {epochs: 4}
+gates:
+  anchor: TODO.sota/92-heb-weak-pretrain.md — crown gate vs heb-vocalized-plane-2.0 (DER 8.18, greedy K=3, seq2seq_der); ship DER 6.6078 (run-094 verdict.json)
+  convention: row-mean
+  quality: {cer_max: 8.18} # cer_max ≙ der_total_greedy on the crown protocol (per-char niqqud error rate)
+  parity:
+    mode: single-row
+    kind: classification # gate law #459: DER-delta vs the fp32 reference on the committed eval slice
+    der_delta_max_pp: 0.25
+    min_samples: 500
+negative_results:
+  - int8-static on the plane encoder measured +1.21pp slice DER (quality-material) — the static lever is KV-only (WO20u scope), plane measured negative (WO92 ship-gate round)
+  - int8-dynamic parity flips 33.8% of rows while staying DER-neutral (+0.05pp) — per-char flip ≠ quality drift on classifiers (gate law #459's rationale)
+  - capacity arms closed at 50K gold (WO26); data was the lever (WO92 curriculum confirms at −1.57pp)

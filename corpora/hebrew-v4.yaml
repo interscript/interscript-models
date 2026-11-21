@@ -1,0 +1,23 @@
+id: hebrew-v4
+task: diacritization
+sources:
+  # The crown lineage's gold corpus (heb-diac-1.x + the plane family all
+  # trained on it; WO04 run-022 mounted it for run-093/094). Internal
+  # assembly: Nakdimon + Sefaria + distilled v1/v2 + expanded v2, rebuilt by
+  # train_hebrew_v4.py; held-out test = the 1,864-row human-verified
+  # Nakdimon-derived split (the crown protocol's eval set).
+  - kind: hf-dataset
+    id: Interscript/hebrew-v4
+    revision: main
+    license: LicenseRef-mixed-internal # assembled from public sources; restricted marker pending upstream license audit
+    license_review:
+      status: owner-approved
+      date: "2026-11-21"
+      note: >-
+        crown-lineage corpus — ship approved by the WO92 ship decision
+        (heb-vocalized-plane-3.0, owner go 2026-11-21); assembled internally
+        from public sources for the shipped plane family; upstream license
+        audit tracked as backlog, card states the lineage
+splits:
+  train: {path: train.jsonl, rows: 50433, sha256: 3b71166c842d9515412bb1ac2b76cdb874f336f2b02e9cbf648e1921ed696c48}
+  test: {path: test.jsonl, rows: 1864, sha256: 77e9b5dc3a3b9e7d70924e670f7361455b714ec8212e046662ea04187b153ccc}

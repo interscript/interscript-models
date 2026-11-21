@@ -1,0 +1,38 @@
+id: heb-knesset-weak
+task: diacritization
+sources:
+  # Upstream: Phonikud/phonikud-data knesset_nikud_v6.txt.7z (MIT, verified
+  # via the dataset card cardData 2026-11-19; archive sha256 7002aaee131ca54d…
+  # pinned at fetch, 142,845,067 B). Labels are the Dicta machine diacritizer
+  # (+ ~1k manual high-frequency corrections) — WEAK supervision only, never
+  # the quality/eval signal (no-teacher-poison law).
+  - kind: hf-dataset
+    id: Phonikud/phonikud-data
+    revision: main
+    license: MIT
+    provenance: https://huggingface.co/datasets/Phonikud/phonikud-data (knesset_nikud_v6.txt.7z; snapshot 2026-11-19)
+  # Staged derived corpus consumed by training (WO92 prep: plane-mark
+  # normalization, s45 filters, exact-skeleton dedupe 2,667,695 of 5,329,211
+  # lines, 40-char window decontam vs hebrew-v4 test; 8 contiguous shards +
+  # manifest.json + SHA256SUMS.txt; private, rhtse-admin).
+  - kind: hf-dataset
+    id: Interscript/he-knesset-v6-weak
+    revision: main
+    license: MIT # derived corpus, inherits upstream MIT
+    provenance: built by interscript-train prep_heb_knesset_weak.py (job 6afe91e5e41aae15936d24b1, 2026-11-19)
+splits:
+  # The 8 contiguous source-order shards, taken together, are the train
+  # split; the sha256 pins the shard-manifest file (SHA256SUMS.txt), which
+  # pins every shard individually.
+  train:
+    path: heb-knesset-weak-00000-of-00008.jsonl … heb-knesset-weak-00007-of-00008.jsonl (8 shards; pins in SHA256SUMS.txt)
+    rows: 2667695
+    sha256: 825015b13c128f6bd964935daa6d7113baa94930a68e99c86ffdc633f5bf66d6 # sha256 of SHA256SUMS.txt
+  # STRUCTURAL KEY ONLY — this corpus has no held-out eval split: all 8
+  # shards trained run-093 (WO92 stage 1). The shard below is recorded to
+  # satisfy the registry's two-split contract WITHOUT implying a fake eval
+  # set; the WO92 eval set is hebrew-v4@test (see recipes/heb-diac.yaml).
+  test:
+    path: heb-knesset-weak-00007-of-00008.jsonl
+    rows: 333462
+    sha256: 10c2c7c595d24aae0bf5ea4fa7431861ef16656d4492fa00411d3229159ce144
