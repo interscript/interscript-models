@@ -196,3 +196,15 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   superseded). The script-defined relabel smoke (2 × 200 rows,
   `relabel-smoke.env` verbatim, no edits) was relaunched to produce
   that corpus for the student smoke: `rhtse/6afff0d44fdc5ab3c55af879`.
+
+### run-094 launch (2026-11-20)
+
+- Relabel smoke re-run COMPLETED in 3 m (created 07:03:48 UTC):
+  verdict PASS, 400/400 rows out (2 × 200), dups 0, overlong 0,
+  guard drops 0, `GATE_DONE` ok — `run-093a-urd-teacher-relabel-smoke`
+  now exists as the corpus `student-smoke.env` expects.
+- Student smoke launched (`student-smoke.env` verbatim):
+  `rhtse/6b00f8c6efaf5e14f4b4419c`, a100-large, detached, 24 h
+  timeout, `--attempts 2` — ByT5-small init, 1 epoch over the 400-pair
+  smoke corpus, 200-row eval slice, lineage recipe constants. Chain
+  validated before the full student launches (issue #5 doctrine).
