@@ -1,0 +1,48 @@
+{
+ "stage": "wo92-shipgates",
+ "status": "RECORDED — export gate PASS; parity gate FAIL at the pre-registered flip gate for BOTH quantization arms on the run-094 plane line. The goldens here are the measured cross-runtime contracts of the two RC candidates (isx-training:/wo92-rc/, SHA256SUMS-pinned), NOT ship-grade fixtures: no owner version decision has been made and no arm is cleared for publish.",
+ "date": "2026-11-21",
+ "candidate": {
+  "line": "run-094-heb-gold-sft (WO92 stage-2 gold SFT; crown-protocol DER 6.6078 full-set)",
+  "kind": "plane",
+  "target": "Hebr",
+  "decode_mode": "single-row greedy K=3 (shipped)",
+  "final_id": "heb-vocalized-plane-{major.minor} = OWNER DECISION at publish; wo92rc lane id used until then"
+ },
+ "gating_slice": {
+  "file": "conformance/wo20/eval600/heb_eval_600.jsonl",
+  "rows": 600,
+  "sha256": "993581cc411b73f3196e6441d0e4f8ae2a01810c2e2e7974a2651b179cdce5c3",
+  "provenance": "the committed WO20u publication slice (first 600 rows of Interscript/hebrew-v4 test.jsonl); sha-verified in-job"
+ },
+ "reference": "the fp32 ONNX artifact (plane-fp32.onnx, 1661.3MB) decoded under ORT CPU x86 — the published round's definition; torch bf16-autocast decode kept as a sanity lane (66/600 flips vs fp32, informational)",
+ "gates": {"cer_delta_pp_max": 2.0, "flip_rate_max": 0.01, "samples_min": 500},
+ "results": [
+  {
+   "arm": "int8-static (house recipe, run-070: MatMul/Gemm-only QDQ, QUInt8 activations, per-channel QInt8 weights, 150-row calibration)",
+   "mean_cer_delta_pp": 0.9376,
+   "max_cer_delta_pp": 17.2131,
+   "flips": 288,
+   "flip_rate": 0.48,
+   "pass": false,
+   "informational_slice_der_pp": {"fp32_onnx": 9.8276, "int8": 11.0422, "der_cost_pp": 1.2146}
+  },
+  {
+   "arm": "int8-dynamic (the crown lineage's shipped mode, quantize_dynamic QInt8)",
+   "mean_cer_delta_pp": 0.3629,
+   "max_cer_delta_pp": 5.8824,
+   "flips": 203,
+   "flip_rate": 0.338333,
+   "pass": false,
+   "informational_slice_der_pp": {"fp32_onnx": 9.8276, "int8": 9.8825, "der_cost_pp": 0.0549}
+  }
+ ],
+ "finding": "The <=1% flip gate (written for generation-based seq2seq artifacts) fails for per-char plane classification under ANY int8 recipe: quantization flips single low-margin characters in a third to half of rows. The DER-vs-gold data is the quality truth: int8-dynamic is quality-NEUTRAL (+0.05pp DER on the slice, within noise) while int8-static costs +1.21pp DER. Consistent with the WO20u scope note ('static recipe is KV-only'). Gate redefinition (e.g. a DER-delta gate for plane artifacts) and the arm choice are OWNER decisions.",
+ "artifacts": {
+  "bucket": "hf://buckets/Interscript/isx-training/wo92-rc/",
+  "sha256sums": "wo92-rc/SHA256SUMS.txt (verified on fetch)",
+  "zips": ["heb-vocalized-plane-wo92rc-int8static.zip (418.8MB)", "heb-vocalized-plane-wo92rc-int8dynamic.zip (416.0MB)"],
+  "job": "heb-wo92-shipgate id 6b0120f04fdc5ab3c55c6204 (a100-large, COMPLETED)"
+ },
+ "publish_boundary": "CLOSED — no models.yaml entry, no index bump, no release, no version number"
+}

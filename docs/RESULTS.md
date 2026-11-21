@@ -2721,3 +2721,36 @@ heb-vocalized-plane-2.0) is CLEARED**.
   explicit owner-stated version, index entry + aliases, HF mirror.
   Candidate id per WO87: `heb-vocalized-plane-{major.minor}` — no
   version number picked by the campaign.
+
+## WO92 ship-gate round: exports PASS, parity gate FAIL for both int8 arms at the pre-registered flip gate; int8-dynamic is DER-neutral while static costs +1.21pp (2026-11-21)
+
+Job `heb-wo92-shipgate` (id `6b0120f04fdc5ab3c55c6204`, a100-large,
+completed; one in-job pass on the run-094 best) measured the full
+quantization matrix on the 600-row eval600 heb slice (sha-verified
+in-job), reference = the fp32 ONNX artifact under ORT CPU x86 (the
+published round's definition; torch bf16 kept as a sanity lane only —
+66/600 flips informational).
+
+| arm | CER delta (mean/max pp) | flips | slice DER pp (Δ vs fp32) |
+|---|---|---|---|
+| fp32 ONNX (reference) | — | — | 9.8276 (—) |
+| int8-static (house run-070 recipe) | 0.9376 / 17.2131 | 288/600 (48.0%) | 11.0422 (+1.2146) |
+| int8-dynamic (crown's shipped mode) | 0.3629 / 5.8824 | 203/600 (33.8%) | 9.8825 (+0.0549) |
+
+- Pre-registered gates (CER ≤ 2.0pp, flips ≤ 1%, ≥ 500 samples):
+  **parity FAIL for both arms** — the flip gate cannot pass for
+  per-char plane classification under any int8 recipe; quantization
+  flips single low-margin characters everywhere. The DER-vs-gold data
+  is the quality truth: dynamic int8 is DER-neutral, static int8 costs
+  +1.21pp DER — consistent with WO20u's scope note ("static recipe is
+  KV-only"); the plane encoder sits outside that verdict's scope.
+- Fixtures + ledger recorded (fresh branch, models PR on merge):
+  golden/heb-vocalized-plane-wo92rc-int8{static,dynamic}-golden.jsonl
+  (600 rows each, plane-family {"input","output"} shape),
+  conformance/wo92/manifest.json (full round record, sha-pinned,
+  references the committed eval600 slice), WO92 ledger gate table.
+- All RC artifacts + SHA256SUMS: `isx-training:/wo92-rc/`.
+- **Publish boundary CLOSED**: no models.yaml entry, no index bump, no
+  release, no version. Owner decision queue in the WO92 ledger:
+  plane-gate semantics (flip gate predates the plane family), the
+  quantization arm, and the `heb-vocalized-plane-{major.minor}` word.

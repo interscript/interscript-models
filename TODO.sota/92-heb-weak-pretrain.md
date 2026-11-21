@@ -157,3 +157,51 @@ option (a)** — the 1,864-row human-verified crown set as-is.
   ≥ 500 samples single-row greedy, export/int8 per the standard chain,
   explicit owner-stated version, index entry + aliases, HF mirror.
   NO version numbers are picked by the campaign.
+
+## Ship-gate round (owner standing directive; STOP at publish) — 2026-11-21
+
+Job `heb-wo92-shipgate` (id `6b0120f04fdc5ab3c55c6204`, a100-large,
+COMPLETED; trainer code interscript-train PR #149): one in-job pass on
+the run-094 best checkpoint against the committed 600-row eval600 heb
+slice (sha-verified in-job), single-row greedy K=3 (shipped decode
+mode), reference = the fp32 ONNX artifact under ORT CPU x86 (the
+published round's definition; torch bf16 decode kept as a sanity lane,
+66/600 flips informational).
+
+| gate | result |
+|---|---|
+| export (fp32 plane ONNX opset 17, input_ids+plane_ids) | **PASS** — 1661.3MB |
+| int8-static export (house run-070 recipe: MatMul/Gemm-only QDQ, QUInt8 acts) | **PASS** — 418.8MB |
+| int8-dynamic export (crown lineage's shipped mode) | **PASS** — 416.0MB |
+| parity int8-static vs fp32 (CER ≤ 2.0pp, flips ≤ 1%, ≥ 500 samples) | **FAIL** — 0.94pp OK, flips 288/600 = 48.0% |
+| parity int8-dynamic vs fp32 (same gates) | **FAIL** — 0.36pp OK, flips 203/600 = 33.8% |
+
+Informational slice DER vs gold (seq2seq_der, 600 rows): fp32 9.8276 ·
+int8-static 11.0422 (**+1.21pp DER cost**) · int8-dynamic 9.8825
+(**+0.05pp — quality-neutral**). Full-set reference: 6.6078
+(verdict.json).
+
+**Finding:** the ≤1% flip gate — written for generation-based seq2seq
+artifacts — cannot pass for per-char plane classification under ANY
+int8 recipe; quantization flips single low-margin characters in a
+third to half of rows. The quality truth is the DER delta: dynamic
+int8 is neutral, static int8 costs +1.21pp. Consistent with the WO20u
+scope note ("static recipe is KV-only") — the plane encoder sits
+outside that verdict's scope.
+
+Fixtures landed: `golden/heb-vocalized-plane-wo92rc-int8static-golden.jsonl`
++ `...-int8dynamic-golden.jsonl` (600 rows each, {"input","output"},
+plane-family golden shape) + `conformance/wo92/manifest.json` (full
+round record; sha-pinned; references the committed eval600 slice, no
+duplication). All RC artifacts + SHA256SUMS on
+`isx-training:/wo92-rc/` (verified on fetch).
+
+**Owner decision queue (publish stays CLOSED until then):**
+1. Gate semantics for plane artifacts: the flip gate predates the
+   plane family; a DER-delta gate (e.g. ≤ 0.25pp on the slice) is the
+   quality-faithful alternative. Redefinition = owner call.
+2. Quantization arm: int8-dynamic (quality-neutral, the crown's
+   shipped mode) vs fp32/fp16 vs a redefined static recipe.
+3. Version word for `heb-vocalized-plane-{major.minor}` — the rename
+   of the wo92rc lane fixtures + the chosen arm's zip is mechanical
+   once spoken.
