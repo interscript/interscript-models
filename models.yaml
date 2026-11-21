@@ -753,6 +753,29 @@ models:
       value: 8.18
       source: interscript/interscript-models docs/RESULTS.md#run-022-heb-plane-base--818-der-at-the-artifact-level-gate-cleared-hebrew--430pp-2026-10-07
     license: BSD-3-Clause
+  heb-vocalized-plane-3.0:
+    task: diacritization
+    scripts:
+    - Hebr
+    - Hebr
+    kind: plane
+    precision: int8
+    filename: heb-vocalized-plane-3.0-int8-dynamic.zip
+    url: https://github.com/interscript/interscript-models/releases/download/heb-vocalized-plane-3.0/heb-vocalized-plane-3.0-int8-dynamic.zip
+    sha256: d6833fc79751ad39ee6a6a7d45632038997ec060955e46f77d39c1fdb848959a
+    size: 416041780
+    metrics:
+    - name: der_total_greedy
+      value: 6.6078
+      source: interscript/interscript-models docs/RESULTS.md#wo92-stage-2-cleared--run-094-gold-sft-der-66078-vs-crown-818-157pp-the-curriculum-verdict-confirms-on-the-plane-lineage-2026-11-20
+    - name: der_crown_baseline
+      value: 8.18
+      source: interscript/interscript-models docs/RESULTS.md#run-022-heb-plane-base--818-der-at-the-artifact-level-gate-cleared-hebrew--430pp-2026-10-07
+    parity:
+      samples: 600
+      der_delta: 0.0549
+      cer_delta: 0.3629
+    license: BSD-3-Clause
   urd-ipa-base-1.0:
     task: g2p
     scripts:
