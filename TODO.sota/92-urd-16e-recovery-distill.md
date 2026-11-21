@@ -405,3 +405,44 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   optional later arm, not the fix), same guard (MUST drop 0), shard
   + `.done` + manifest discipline, then the corpus review gate and
   the student retrain.
+
+### Corrected chain (2026-11-21) — OWNER GO; execution records
+
+- Owner ruling: the corrected chain is approved exactly as proposed,
+  with the smoke upgraded to SEMANTIC validation. **Incident lesson
+  is now LAW: count-balanced smokes are not semantic validation —
+  every corpus gate asserts a src/tgt-relationship invariant from
+  today.**
+- Fix landed: urdu-dev PR #22 (`wo92-relabel-v2`) —
+  `relabel_teacher_hf.py` parses `json.loads(line)["src"]`, aborts
+  at load time on a JSON-looking src, and enforces the semantic
+  invariant per shard BEFORE the `.done` commit: median
+  len(tgt)/len(src) inside [0.5, 3.0] and degenerate share
+  (ratio < 0.35 — the 1–5-char-on-long-src class) under 1%; a
+  violation raises with the shard uncommitted. Manifest/verdict gain
+  `semantic_invariant` (totals + pass flag); verdict PASS requires
+  it; `.done` markers carry per-shard ratio_median +
+  degenerate_share. Validated: py_compile + stubbed dry-run
+  (healthy ratios pass; the exact run-093 fragment distribution and
+  a 2%-degenerate shard abort).
+- Corrected run plan (naming: the run-095 unit = corpus regen +
+  student; lettered subruns are its stages):
+  1. `run-095a-urd-teacher-relabel-smoke` — 2 × 200 rows, semantic
+     smoke (job launched at record time; must show invariant PASS +
+     guard drops 0 + ratio median in band).
+  2. `run-095b-urd-teacher-relabel` — full 573,130-row greedy
+     regeneration, HELD until the smoke PASSes. ETA 7.5–9 h on
+     run-093's measured 18.3 rows/s basis (bs 64, MAX_NEW 256);
+     24 h timeout, `--attempts 2`, shard `.done` resume, CLE guard
+     MUST drop 0.
+  3. **Corpus review gate** before any training: manifest review +
+     `target_stats_hf.py` over run-095b asserting the invariant
+     across all 58 shards (ratio median in band, degenerate share
+     < 1%, guard 0, artifact set complete).
+  4. `run-095-urd-diac-distill` — student on the corrected corpus,
+     recipe identical to run-094 otherwise (ByT5-small init, 3
+     epochs, bs 16 × accum 2, lr 3e-4 cosine 200 warmup, bf16,
+     MAXLEN 256, CKPT_EVERY 1000, final full-split eval vs 0.0377).
+  5. Eval → calibrated Clause 16(e) (reference google/byt5-small,
+     self-control exactly 0.5, AUC ±0.05, success-rate 0.6) →
+     ship recommendation → owner version.
