@@ -261,3 +261,57 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   0.0377 → calibrated Clause 16(e) suite (reference google/byt5-small,
   reference self-control exactly 0.5) → standard ship gates →
   owner-stated version.
+
+### run-094 verdict (2026-11-21) — QUALITY MISS; 16(e) spend withheld
+
+- Job `rhtse/6b011020efaf5e14f4b45001` COMPLETED in ~3 h 34 m
+  (45,309/45,309 steps at 3.91 it/s; all step checkpoints 1000→45309
+  committed; `GATE_DONE ok`). Verdict VERBATIM (ledger law):
+
+  ```json
+  {
+      "run": "run-094-urd-diac-distill",
+      "init": "google/byt5-small",
+      "corpus_run": "run-093-urd-teacher-relabel",
+      "steps": 45309, "epochs": 3, "pairs": 483289, "eval_rows": 11940,
+      "cer": 3.2066,
+      "quality_gate_cer": 0.0377,
+      "quality_pass": false,
+      "verdict": "MISS"
+  }
+  ```
+
+- **CER 3.2066 vs bar 0.0377 → pre-registered kill criterion fires**:
+  quality MISS, record the negative, no publish consideration,
+  **calibrated 16(e) suite NOT launched** (no spend on a candidate that
+  already failed the quality gate). Owner decides the next arm.
+- Training was healthy to the final step: loss 0.006–0.019 across the
+  last 500 logged steps (45,000–45,309), zero NaN skips, constant
+  rate. The miss is NOT late-training divergence.
+- Eval evidence (`eval_progress.jsonl`, all 11,940 rows scored; mean
+  3.2066 == verdict — eval arithmetic internally consistent):
+  - median CER = **1.0 exactly** (the empty-prediction signature:
+    edit distance == gold length), p10 0.9091, p75 5.5, p90 8.875,
+    p99 16.0;
+  - distribution: CER ≤ 0.0377 — **0 rows**; 0.0377–0.1 — 0;
+    0.1–0.5 — 0; 0.5–1 — 8,120; 1–2 — 94; 2–5 — 544; >5 — 3,182
+    (of which >10 — 822);
+  - ZERO rows anywhere near the bar: free-running decode is bimodal
+    empty-or-runaway, the classic byte-level seq2seq mode-collapse /
+    exposure-bias failure (teacher-forced loss ≈ 0.01 alongside
+    degenerate self-decode — the known "flat byte student" failure
+    mode, cf. the Thai seq2seq precedent).
+- Ruled OUT: eval arithmetic bug (per-row data matches the verdict;
+  the same generate/batch_decode path produced sane teacher outputs
+  in run-093 and sane run-092 evals); late-training collapse (loss
+  curve above). The WO51 batched-padded-decode export finding is
+  about exported unmasked encoders, not in-job HF generate with
+  attention_mask — but any post-mortem should re-confirm the eval
+  path against it anyway.
+- Live differentiators vs the lineage run-066 (same tier, same
+  recipe, NO collapse): targets are teacher GREEDY OUTPUTS rather
+  than the human-verified corpus (distillation-target degeneracy is
+  the prime suspect), 483k vs 573k rows. NO arm is launched —
+  candidate directions already pre-registered in the kill criteria
+  above (guard tightening, loss-magnitude filtering, logit-level
+  distillation) plus the mode-collapse angle are owner's call.
