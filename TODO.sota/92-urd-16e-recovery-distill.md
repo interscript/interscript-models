@@ -355,3 +355,53 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   over the run-093 corpus (the manifest does not record it) to
   separate empty-truncated target pathology from runaway-target
   pathology before regenerating.
+
+### STEP 1 histogram (2026-11-21) — ROOT CAUSE FOUND: relabel input bug; corpus INVALID
+
+- Job `rhtse/6b016cc4efaf5e14f4b4d2d8` (cpu-performance, 1 h cap)
+  COMPLETED in seconds of compute over all 58 complete shards /
+  483,289 rows; artifact `target-stats.json` + `STATS_DONE ok` in the
+  run dir. Script: urdu-dev PR #21
+  (`training/teacher_distill/target_stats_hf.py`), aggregate counts
+  only (Clause 19).
+- Histogram (tgt char lengths): empty 0; 1–5 — **337,005 (69.7%)**;
+  6–20 — 36,761; 21–50 — 5,570; >50 — 103,953 (21.5%).
+  Degeneracy counters: tgt == src 0; token repetition 0;
+  single-char repeat 68; **tgt ≤ 25% of src length — 351,300
+  (72.7%)**; tgt ≥ 3× src — 58,838 (12.2%). Cross-tab: for src
+  21–50 chars (n=382,073), 276,559 targets are 1–5 chars and 63,308
+  are >50 (longer than their source). For a vocalization task the
+  target must track the source length — this distribution is
+  impossible for real teacher vocalizations.
+- **Root cause (structural check, 9,951/9,951 rows of shard-000000):
+  every run-093 `src` field IS the raw JSONL line** — starts with
+  `{"src"` and parses as a JSON object with both keys. `relabel_teacher_hf.py`
+  stored the raw line (`s = line.strip()`) instead of
+  `json.loads(line)["src"]` and fed serialized JSON pairs to the
+  teacher as if they were bare text. The teacher never saw the bare
+  source; it emitted fragments (1–5 chars, 69.7%) and occasional
+  rambling (>50 chars, 21.5%) from JSON noise. The teacher itself is
+  NOT degenerate — its 0.03567 retention on real inputs (run-092)
+  stands; every count-balanced "PASS" in the chain was blind to this
+  because the bug sits upstream of every counter.
+- Consequences: the run-093 corpus is INVALID; run-094 (and its MISS
+  verdict, and the decode probe's checkpoint trajectory) trained on
+  JSON-line → fragment mapping. The probe's *mechanical* conclusion
+  stands (targets degenerate, training dynamics exonerated) — the
+  degeneracy's cause is now identified as our input bug, not teacher
+  capability. Beam-4 over the same broken inputs would reproduce the
+  garbage at ~26 GPU-h — **the authorized sweep as specified is
+  invalid and was NOT launched** (a100 left free).
+- Lesson recorded: a count-balanced chain smoke (400/400 rows, all
+  counters green) is not semantic validation. Any corpus-producing
+  smoke must assert a src-field invariant (e.g., parsed src is
+  non-JSON text; tgt length correlates with src length) before a
+  corpus is declared CLEAN. This goes into the relabel script's
+  checks when it is fixed.
+- Corrected STEP 2 (proposed, NOT launched — owner go required):
+  fix the parse (`json.loads(line)["src"]`), add the src-field
+  invariant to the script, regenerate greedy first (greedy teacher
+  behavior on real inputs is proven champion-tier; beam-4 becomes an
+  optional later arm, not the fix), same guard (MUST drop 0), shard
+  + `.done` + manifest discipline, then the corpus review gate and
+  the student retrain.
