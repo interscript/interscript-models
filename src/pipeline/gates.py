@@ -14,6 +14,9 @@ from pathlib import Path
 from typing import Any, ClassVar
 
 from pipeline.contracts import (
+    ParityGate as ParityGateSpec,
+)
+from pipeline.contracts import (
     RecipeSpec,
     _license_blocked_source,
     load_corpus,
@@ -77,10 +80,67 @@ def check_quality(recipe: RecipeSpec, metrics: dict | None) -> GateResult:
     return GateResult("quality", True, ", ".join(details))
 
 
+def check_parity_classification(
+    gate: ParityGateSpec, parity: dict[str, Any]
+) -> GateResult:
+    """WO92 gate law for classification-style artifacts (the plane
+    family): a confident flip in a generation artifact means a different
+    generated string, so flips gate — but a per-char classifier is
+    expected to flip low-margin characters under quantization (WO92
+    ship-gate, heb-wo92-shipgate 600-row slice: 33.8-48.0% of rows
+    flipped across int8 arms while the int8-dynamic DER delta stayed
+    +0.05pp). The quality-faithful criterion is therefore the DER delta
+    vs the fp32 reference on the committed eval slice; generation
+    artifacts keep the flip/agreement law untouched."""
+    der_ref = parity.get("der_reference_pp")
+    der_cand = parity.get("der_candidate_pp")
+    delta = parity.get("der_delta_pp")
+    samples = parity.get("samples")
+    if delta is None:
+        if der_ref is None or der_cand is None:
+            return GateResult(
+                "parity",
+                False,
+                "classification parity needs der_delta_pp or both "
+                "der_reference_pp and der_candidate_pp in the results",
+            )
+        delta = round(float(der_cand) - float(der_ref), 4)
+    if samples is None:
+        return GateResult(
+            "parity",
+            False,
+            "classification parity needs the eval-slice sample count",
+        )
+    if int(samples) < gate.min_samples:
+        return GateResult(
+            "parity",
+            False,
+            f"eval slice has {samples} samples < the "
+            f"{gate.min_samples}-sample floor",
+        )
+    shape = (
+        f"DER delta {delta}pp vs fp32 reference "
+        f"(ref {der_ref}, candidate {der_cand}) on {samples} samples"
+    )
+    if float(delta) > gate.der_delta_max_pp:
+        return GateResult(
+            "parity",
+            False,
+            f"{shape} exceeds the {gate.der_delta_max_pp}pp budget",
+        )
+    return GateResult(
+        "parity",
+        True,
+        f"classification {shape} <= {gate.der_delta_max_pp}pp budget",
+    )
+
+
 def check_parity(recipe: RecipeSpec, parity: dict | None) -> GateResult:
     if parity is None:
         return GateResult("parity", False, "no parity results provided")
     gate = recipe.gates.parity
+    if gate.kind == "classification":
+        return check_parity_classification(gate, parity)
     if gate.mode == "single-row":
         cer = parity.get("ort_single_cer")
         if cer is None:

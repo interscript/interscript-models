@@ -113,8 +113,24 @@ class CorpusSpec(_Strict):
 
 class ParityGate(_Strict):
     mode: Literal["single-row", "batched-mask"] = "single-row"
-    agree_min: float = Field(ge=0.0, le=1.0)
+    agree_min: float | None = Field(default=None, ge=0.0, le=1.0)
     three_way: bool = True
+    # WO92: classification-style artifacts (the plane family) gate on the
+    # DER delta vs the fp32 reference on the committed eval slice — per-char
+    # argmax flips are expected quantization behavior there, so the
+    # confident-flip criterion stays a generation-artifact law.
+    kind: Literal["generation", "classification"] = "generation"
+    der_delta_max_pp: float = Field(default=0.25, ge=0.0)
+    min_samples: int = Field(default=500, ge=1)
+
+    @model_validator(mode="after")
+    def _criterion_declared(self) -> ParityGate:
+        if self.kind == "generation" and self.agree_min is None:
+            raise ValueError(
+                "parity gate: generation artifacts must declare agree_min "
+                "(the decode-mode agreement floor)"
+            )
+        return self
 
 
 class GateSpec(_Strict):

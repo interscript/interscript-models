@@ -25,6 +25,12 @@ Project purpose and direction live in README.md.
 - Parity >= 500 samples in the SHIPPED decode mode (single-row greedy by
   default; batched mode only for artifacts exported with a masked
   encoder, `EXPORT_ATTENTION_MASK=1`).
+- Classification-style artifacts (the plane family; WO92) gate parity on
+  DER-delta <= 0.25pp vs the fp32 reference on the committed eval slice
+  (same 500-sample floor) — the confident-flip criterion remains a
+  generation-artifact law: there a flip means a different generated
+  string, while a per-char classifier is expected to flip low-margin
+  characters under quantization.
 - Metric conventions declared per metric (row-mean vs corpus-level CER).
 - `UNVERIFIED` / `LicenseRef-*` licenses block publishing. Owner waivers
   are `license_review:` records — the license string itself never
