@@ -2692,3 +2692,32 @@ gold training that produced every shipped Hebrew number).
   1,864-row crown set vs add a held-out human-verified dev slice),
   (b) an explicit go, (c) at ship time: version number + the public
   GH-Release copy of the weak corpus artifact.
+
+## WO92 stage 2 CLEARED — run-094 gold SFT DER 6.6078 vs crown 8.18 (−1.57pp): the curriculum verdict CONFIRMS on the plane lineage (2026-11-20)
+
+Job `6afffde5efaf5e14f4b2d441` (a100-large) completed in 1h 04m: all
+12,072 steps (4 epochs over 48,303 gold train units), CE 0.0006–0.07
+warm-start descent. Crown-protocol greedy eval (K=3, 1,864-row
+human-verified test, 1,975 windows, seq2seq_der, original-separator
+stitching): **DER 6.6078 — the pre-registered crown gate (< 8.18,
+heb-vocalized-plane-2.0) is CLEARED**.
+
+| run | corpus | DER (crown protocol) |
+|---|---|---|
+| heb-vocalized-plane-2.0 (crown, gold-only 4ep) | 50K gold | 8.18 |
+| run-093 stage-1 (weak-pretrain, INFORMATIONAL) | 1.5M weak + 50K gold | 9.1316 |
+| **run-094 stage-2 (gold SFT from run-093 best)** | 50K gold | **6.6078** |
+
+- The s45 curriculum verdict reproduces at the plane crown lineage and
+  doubles its effect: weak-pretrain + gold SFT beats gold-only by
+  **−1.57pp** (s45 measured −0.88 on the custom stack). Stage-1 alone
+  (9.13) sat above the crown exactly as expected — the weak mass pays
+  only through the gold fine-tune.
+- Integrity: 12/12 step checkpoints + `inventory.json` (inherited
+  180 classes, labels.sha `edd595d96d09`) + `best/model.pt` + 1,975-row
+  eval progress + EVAL_DONE + verdict.json, all verified in the bucket.
+- Ship chain (owner-gated at every step, per the ledger): parity
+  ≥ 500 samples single-row greedy, export/int8 per the standard chain,
+  explicit owner-stated version, index entry + aliases, HF mirror.
+  Candidate id per WO87: `heb-vocalized-plane-{major.minor}` — no
+  version number picked by the campaign.
