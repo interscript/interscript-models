@@ -446,3 +446,47 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   5. Eval → calibrated Clause 16(e) (reference google/byt5-small,
      self-control exactly 0.5, AUC ±0.05, success-rate 0.6) →
      ship recommendation → owner version.
+
+### run-095b corpus review gate PASS + run-095 student launch (2026-11-23)
+
+- run-095b COMPLETED in 1 h 57 m (`seconds_total` 7,036 — ~62 rows/s,
+  far faster than the 18.3 rows/s basis; the JSON-line srcs of
+  run-093 were the slow case, not the corpus). VERDICT PASS:
+  573,130 → **439,786** rows out (dups 133,344, overlong 0,
+  **regurgitation 0**), 58/58 shards, semantic invariant PASS
+  (ratio_median 1.6667, degenerate_share 0.0).
+- **Manifest review**: artifact set exactly 119 entries (58 jsonl +
+  58 `.done` + manifest + verdict + GATE_DONE); every `.done` carries
+  `ratio_median` + `degenerate_share`; per-shard ratio_median spans
+  1.6667–1.7 — all in [0.5, 3.0]; per-shard degenerate_share max
+  0.0003 — all < 1%; global and per-shard balance close exactly;
+  last shard 3,130 rows; teacher sha8 6ac0f27c matches. Independent
+  streamed line-count spot checks: shard-000000 = 9,918 lines ==
+  marker; shard-000057 = 2,016 == marker.
+- **Independent stats gate** (`target_stats_hf.py` over run-095b,
+  439,786 rows, owner-verified from job logs): tgt buckets empty 1 /
+  1–5: 5,455 (1.2%) / 6–20: 379,774 (86.3%) / 21–50: 54,491 /
+  >50: 66; degeneracy: tgt_empty 1, single-char 0, token-repetition
+  242 (0.06%), tgt==src 6, ≤25%-of-src 1, ≥3×-src 6 — degenerate
+  share ~0.05%, targets track sources. **GATE PASS** (owner ruling).
+- Process note recorded: the first stats attempt
+  (`rhtse/6b0220214fdc5ab3c55e8469`) silently ran with the DEFAULT
+  run dir because `--env <(process substitution)` did not deliver the
+  env — it re-computed run-093's stats and overwrote that dir's
+  `target-stats.json` with bit-identical content (no information
+  lost). Relaunched properly with an env file
+  (`rhtse/6b026a64efaf5e14f4b79505`). Lesson: stick to the
+  campaign's env-file launch pattern; process-substitution envs fail
+  silently.
+- **run-095 student launched**: `rhtse/6b036c958d268c0fbd22dbc2`,
+  a100-large, detached, 24 h timeout, `--attempts 2`,
+  `student-run095.env` — ByT5-small init, 439,786 corrected pairs,
+  3 epochs, bs 16 × accum 2, lr 3e-4 cosine (200 warmup), bf16,
+  MAXLEN 256, CKPT_EVERY 1000, final full-split eval (11,940 rows,
+  WO37) vs the 0.0377 bar. 41,232 optimizer steps; ETA ≈ 2.9 h
+  stepping at run-094's measured 3.91 it/s + ~15–25 min eval ≈
+  **3.2–3.5 h** total.
+- Gates ahead (unchanged): full-split CER ≤ 0.0377 → calibrated
+  Clause 16(e) suite (reference google/byt5-small, reference
+  self-control exactly 0.5, AUC ±0.05, success-rate 0.6) → standard
+  ship gates → owner-stated version.
