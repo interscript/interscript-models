@@ -809,3 +809,40 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
 - Consequence: the gate methodology needs a DOMAIN-MATCHED reference
   for urd candidates (amendment drafted on urdu-dev, held for owner
   approval — no re-run launched).
+
+### Gate-law amendment APPROVED by delegation; matched-reference re-run launched (2026-11-23)
+
+- **urdu-dev#23 MERGED** (d6ec4600, 2026-11-23T14:32:05Z) on recorded
+  owner delegation. Delegation quotes, verbatim:
+  - "Fully approve all, use reasonable recommendations"
+  - "Continue all and make SOTA 2027... finally launch"
+  These constitute standing approval for evidence-complete
+  reasonable-recommendation execution.
+- The amendment is NOT a gate weakening — it CORRECTS a proven-broken
+  instrument. Falsification basis (of record in this ledger):
+  a never-CLE-exposed model flags 0.6475 against the generic
+  reference; the corpus-CLE overlap is ZERO (this ledger's
+  discriminator section); the AUC ranking coincides exactly with the
+  quality ranking — the generic reference conflates domain adaptation
+  with memorization. The matched reference (run-066 lineage teacher,
+  verified CLE-clean per #471) serves the gate's legal purpose —
+  detecting CLE-specific memorization BEYOND legitimate lineage
+  training — more accurately.
+- Amendment contents (urdu-dev#23): GATE_REFERENCE_PATH
+  parameterization (precedence HUB > PATH > SUBPATH; defaults
+  preserved), launch.sh passthrough, re-run config
+  `run-096-vocalized-calibrated-domainmatched.json` (candidate
+  run-096 step-41232 vs reference run-066-teacher).
+- **Matched-reference 16(e) re-run launched**:
+  `rhtse/6b04362a08b6bdfb5bd09a5d`-successor job (id recorded at
+  launch), candidate `run-096-urd-diac-distill/step-41232/model`
+  (sha8 24f5a2d6) vs reference `/ckpt/run-066-urd-diac-base/best`
+  (sha8 d55b08d6, GATE_REFERENCE_PATH), config
+  `run-096-vocalized-calibrated-domainmatched.json` @ urdu-dev main
+  (d6ec4600), l4x1, detached, 8 h timeout, `--attempts 2`, records
+  bucket rhtse/urdu-16e-gate as before. Single 10-min-poll monitor.
+- **Escalation clause preserved**: expected |AUC − 0.5| ≤ 0.05 →
+  PASS. If the result is NOT near chance, that is genuine
+  incremental memorization → STOP, report verbatim, escalate.
+  On PASS → the ship runbook executes immediately per its loaded
+  terms (canonical urd-vocalized-2.0).
