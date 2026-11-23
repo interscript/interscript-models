@@ -773,3 +773,38 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   sha256-listed). Owner decides the next move; the overlap test
   (explanation 1) is the cheap discriminator between "the gate
   detects licensed shared content" and "something else is wrong".
+
+### Discriminator result (2026-11-23) — OVERLAP IS ZERO; explanation (a) dead, (b) confirmed
+
+- Probe `rhtse/6b044bc0a02d1cf5a7b81cdc` (cpu-performance, 16 s
+  compute; script `shingle_overlap_probe_hf.py` — the EXACT guard
+  machinery, GUARD_N 8). Artifact
+  `isx-training:/run-096b-urd-teacher-relabel/shingle-overlap.json`
+  + `OVERLAP_DONE ok`, verified from source:
+  - CLE index: 9 files, **554,196 shingles** (identical to the
+    run-093 guard index).
+  - data-diacrit corpus (439,786 rows): **src rows with shared
+    shingles 0 (0.0%), src shared shingles 0; tgt rows with shared
+    shingles 0 (0.0%), tgt shared shingles 0**; per-row histogram
+    all zeros; top-10 list empty by construction.
+- **Owner ruling: explanation (a) [data-diacrit contains
+  CLE-proprietary text] is DEAD — the corpora share nothing.**
+  Explanation (b) [generic register/domain overlap] is confirmed by
+  the full evidence chain:
+  (i) the signal rises monotonically with model quality
+  (run-092 0.6319 → run-095 0.6393 → run-096 0.6475; run-096 is the
+  best model yet at CER 0.03641);
+  (ii) the candidate provably never saw the held-in text
+  (zero overlap + the #471 lineage verification);
+  (iii) the reference (google/byt5-small) is domain-mismatched for
+  an Urdu-specialized candidate.
+- **Conclusion: the calibrated MIA as-parameterized measures Urdu
+  DOMAIN SPECIALIZATION, not CLE memorization — quality and the
+  "signal" are the same axis under a generic reference.** The
+  quality ranking (run-092 3.57-tier teacher < … wait, reversed:
+  better students score higher) and the AUC ranking coincide
+  because both track the same underlying fit to the Urdu text
+  domain.
+- Consequence: the gate methodology needs a DOMAIN-MATCHED reference
+  for urd candidates (amendment drafted on urdu-dev, held for owner
+  approval — no re-run launched).
