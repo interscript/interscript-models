@@ -683,3 +683,44 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   recommendation (canonical urd-vocalized-2.0; renames staged) →
   owner version. A 16(e) PASS near chance is the expected outcome
   for a teacher whose lineage never touched CLE.
+
+### run-096 QUALITY PASS — clean-room student beats both bars (2026-11-23)
+
+- Job `rhtse/6b040690130a00b5aa82c9d1` COMPLETED (~2.9 h; 4.48 it/s
+  — the fastest of the three students). Verdict VERBATIM:
+
+  ```json
+  {
+      "run": "run-096-urd-diac-distill",
+      "init": "google/byt5-small",
+      "corpus_run": "run-096b-urd-teacher-relabel",
+      "steps": 41232, "epochs": 3, "pairs": 439786, "eval_rows": 11940,
+      "cer": 0.03641,
+      "quality_gate_cer": 0.0377,
+      "quality_pass": true,
+      "chain_pass": true,
+      "verdict": "PASS"
+  }
+  ```
+
+- **CER 0.03641 (3.641%) vs both bars: gate 0.0377 PASS; champion
+  urd-vocalized-1.0 3.74 — BELOW by 0.099 pp.** The clean-room
+  student beats the small-tier champion despite the teacher being
+  the BASE tier trained only on public-lineage data — the
+  memorization channel is gone and quality did not pay for it
+  (0.03641 vs run-095's 0.03692: the clean targets are marginally
+  better training signal, as the base tier's own 3.57 predicted).
+  chain_pass true; 41,232/41,232 steps; 11,940/11,940 rows.
+- **Calibrated 16(e) launched**:
+  `rhtse/6b04362a08b6bdfb5bd09a5d` (l4x1, detached, 8 h timeout,
+  `--attempts 2`). Config `run-096-vocalized-calibrated.json`
+  committed on the gate branch `urdu-16e-run-095` @ 6a66a97 (pushed
+  + verified): candidate `run-096-urd-diac-distill/step-41232/model`,
+  reference google/byt5-small, self-control EXACTLY 0.5 required,
+  AUC ±0.05, success-rate 0.6. Expected: AUC near chance — a
+  teacher whose lineage never touched CLE cannot transfer CLE
+  memorization.
+- On gate terminal: report AUC + self-control + success-rate +
+  verdict verbatim. PASS → ship stage on canonical
+  **urd-vocalized-2.0** (renames staged, models entry at ship time
+  with real artifact data).
