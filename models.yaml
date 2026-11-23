@@ -31,6 +31,7 @@ renames:
   tha-g2p-small-1.0: tha-phonemic-small-1.0
   tha-g2p-small-1.0-int4: tha-phonemic-small-1.0-int4
   urd-diac-1.0: urd-vocalized-1.0
+  urd-diac-2.0: urd-vocalized-2.0
   urd-diac-base-1.0: urd-vocalized-base-1.0
   urd-g2p-1.0: urd-ipa-1.0
   urd-g2p-base-1.0: urd-ipa-base-1.0
