@@ -604,3 +604,49 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   change WHAT the teacher emits (logits, filtering) or WHAT the
   student trains on (a teacher never exposed to CLE) attack the
   root.
+
+### ARM: clean-room re-relabel (2026-11-23) — root attack; run-092 retired from label-source role
+
+- **Owner decision: Option A, the root-attack arm.** Rationale: the
+  16(e) FAIL lives in run-092's weight content; the filtering/logit
+  arms keep the CLE-exposed teacher as label source and inherit the
+  defect through the targets. A never-CLE-exposed teacher cannot
+  memorize CLE content — the MIA signal should collapse to chance,
+  and the license question dissolves for the MODEL entirely (the
+  model no longer derives from CLE; CLE12T003/12L001 themselves stay
+  licensed and retained per agreement).
+- **run-092-urd-dapt-cle is hereby RETIRED from the urd
+  label-source role** (owner). It remains in the access-controlled
+  bucket under the same Schedule-C retention discipline; no new
+  corpus, student, or release may derive from it.
+- **STEP 0 lineage verification — CLEAN** (recorded before any
+  spend):
+  - `run-066-urd-diac-base/best` ← init **google/byt5-base** (raw
+    Google pretrained checkpoint — no interscript ancestry, no CLE;
+    WO41 recipe record) + data **`rababa-urdu-cc174b96/data-diacrit/`**
+    573,130 sha256-pinned pairs (RESULTS.md run-066 gate record,
+    2026-10-19; public-lineage vocalized corpus, owner license
+    review 2026-10-18, explicitly NOT CLE).
+  - Single hop. No CLE-exposed ancestor exists: CLE entered the urd
+    diacritization line ONLY at run-092 (the DAPT trainer docstring:
+    "DAPT of urd-diac-base-1.0 (run-066 best…)" — run-066 is the
+    pre-DAPT state), corroborated by the run-092 calibrated gate's
+    own reference arch_note ("run-066-urd-diac-base/best … never
+    trained on the CLE plane") and the WO41 ledger. The clean
+    teacher is also strong: run-066's gate CER 3.57 (better than
+    the 3.74 small-tier champion).
+- Execution plan (run-096 unit; same relabel-v2 mechanics — parse
+  fix, semantic invariant, GUARD_N 8 MUST drop 0, shard `.done`):
+  1. `run-096a-urd-teacher-relabel-smoke` — 2 × 200 rows, teacher
+     `/ckpt/run-066-urd-diac-base/best`.
+  2. `run-096b-urd-teacher-relabel` — full 573,130 rows; timeout
+     sized to run-095b's measured ~92 rows/s basis (ETA ≈ 1.7 h;
+     24 h ceiling).
+  3. Corpus review gate: manifest + target-stats invariant across
+     all shards.
+  4. `run-096-urd-diac-distill` student (run-094 recipe otherwise).
+  5. Full-split CER vs **0.0377 gate AND the 3.74 champion**.
+  6. Calibrated 16(e), same config parameterization (candidate =
+     run-096 final step ckpt; reference stays google/byt5-small) —
+     PASS expected near chance; report verbatim.
+- GPU budget: one big job at a time (a100).
