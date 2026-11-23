@@ -834,8 +834,8 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   `run-096-vocalized-calibrated-domainmatched.json` (candidate
   run-096 step-41232 vs reference run-066-teacher).
 - **Matched-reference 16(e) re-run launched**:
-  `rhtse/6b04362a08b6bdfb5bd09a5d`-successor job (id recorded at
-  launch), candidate `run-096-urd-diac-distill/step-41232/model`
+  `rhtse/6b044eb4a02d1cf5a7b8236e` (job id appended post-launch),
+  candidate `run-096-urd-diac-distill/step-41232/model`
   (sha8 24f5a2d6) vs reference `/ckpt/run-066-urd-diac-base/best`
   (sha8 d55b08d6, GATE_REFERENCE_PATH), config
   `run-096-vocalized-calibrated-domainmatched.json` @ urdu-dev main
