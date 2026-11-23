@@ -490,3 +490,62 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   Clause 16(e) suite (reference google/byt5-small, reference
   self-control exactly 0.5, AUC ±0.05, success-rate 0.6) → standard
   ship gates → owner-stated version.
+
+### run-095 QUALITY PASS — beats the shipped champion (2026-11-23)
+
+- Job `rhtse/6b036c958d268c0fbd22dbc2` COMPLETED (~3 h; 4.26–4.36
+  it/s live, above the 3.91 precedent — the corrected corpus's
+  shorter, cleaner pairs step faster). Verdict VERBATIM:
+
+  ```json
+  {
+      "run": "run-095-urd-diac-distill",
+      "init": "google/byt5-small",
+      "corpus_run": "run-095b-urd-teacher-relabel",
+      "steps": 41232, "epochs": 3, "pairs": 439785, "eval_rows": 11940,
+      "cer": 0.03692,
+      "quality_gate_cer": 0.0377,
+      "quality_pass": true,
+      "chain_pass": true,
+      "verdict": "PASS"
+  }
+  ```
+
+- **Exact number vs the three bars: CER 0.03692 (3.692%)** — gate
+  0.0377 PASS; champion **urd-vocalized-1.0 recorded 3.74% → the
+  student lands BELOW it: the SOTA-claim condition holds on
+  quality** (owner's rule: SOTA requires landing below 3.74).
+  chain_pass true (41,232/41,232 steps, final checkpoint usable,
+  all 11,940 eval rows scored) — the new chain-verdict field
+  working as designed. pairs 439,785 = corpus rows 439,786 − 1
+  (the loader drops the single empty-target row the stats counted).
+- The corrected chain — parse fix + semantic invariant — took the
+  corpus from unusable (run-094: CER 3.2066, decode collapse) to
+  champion-beating (run-095: 0.03692) with the SAME recipe. The
+  lever was data validity, not training dynamics.
+- **Ship naming law (owner, models.yaml WO87 renames)**: canonical
+  ship name **`urd-vocalized-2.0`** (NOT urd-diac-2.0); renames
+  entry `urd-diac-2.0: urd-vocalized-2.0` mirrors the
+  urd-diac-1.0 → urd-vocalized-1.0 precedent. All ship artifacts
+  (GH release tag, HF repo id, index entry, certificate, notes)
+  use the canonical; the alias preserves legacy lookups. The
+  `models:` ship entry is created at ship time with real artifact
+  data (sha256/urls are never pre-staged).
+- **Calibrated Clause 16(e) launched**:
+  `rhtse/6b03c5d4130a00b5aa821ecd` (l4x1, detached, 8 h timeout,
+  `--attempts 2`, records bucket rhtse/urdu-16e-gate). Gate branch
+  `urdu-16e-run-095` @ d7ac1f8 (pushed + verified):
+  `run-095-vocalized-calibrated.json` — candidate
+  `run-095-urd-diac-distill/step-41232/model`, reference
+  **google/byt5-small** resolved from the hub per the WO92
+  pre-registration (gate_job.py parameterized:
+  GATE_MODEL_SUBPATH / GATE_REFERENCE_HUB; reference mount check
+  skipped for hub ids, from_pretrained fails loudly on a bad id).
+  Pre-registered gates: reference self-control EXACTLY 0.5, AUC
+  tolerance ±0.05, success-rate 0.6, verbatim floor 25 words
+  (Clause 18(d)), WordNet vocab scan. Monitor: single until-loop,
+  10-min polls.
+- Next: on gate terminal — report AUC + self-control + suite
+  verdict verbatim. PASS → ship stage (index-v17 → pins → releases
+  → certificate → notes → HF; canonical urd-vocalized-2.0).
+  FAIL → stop, retain records (2-year clock), owner decides.
