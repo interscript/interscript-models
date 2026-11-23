@@ -650,3 +650,36 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
      run-096 final step ckpt; reference stays google/byt5-small) —
      PASS expected near chance; report verbatim.
 - GPU budget: one big job at a time (a100).
+
+### run-096b corpus review gate PASS + run-096 student launch (2026-11-23)
+
+- Clean-room sweep `rhtse/6b03d5cb130a00b5aa824c55` COMPLETED in
+  2 h 01 m (`seconds_total` 7,226). VERDICT PASS: 573,130 →
+  **439,786** rows out (dups 133,344, overlong 0, **guard 0**),
+  58/58 shards, semantic invariant PASS (ratio_median 1.6842,
+  degenerate_share 0.0). Teacher sha8 **d55b08d6** = the run-066
+  lineage checkpoint — distinct from the retired run-092 teacher
+  (6ac0f27c), asserted in-artifact.
+- **Manifest review**: artifact set exactly 119 entries; per-shard
+  ratio_median 1.6667–1.7 (all in [0.5, 3.0]); degenerate_share
+  max 0.0; global + per-shard balance close exactly.
+- **Independent stats gate** (`target_stats_hf.py` over run-096b,
+  439,786 rows): tgt buckets empty 0 / 1–5: 5,417 (1.2%) /
+  6–20: 379,711 (86.3%) / 21–50: 54,612 / >50: 46; tgt==src 3,
+  token-repetition 244 (0.055%), ≤25%-of-src 0, ≥3×-src 6 rows
+  (1e-05) — cleaner than run-095b in every degeneracy cell.
+  **GATE PASS.**
+- **run-096 student launched**: `rhtse/6b040690130a00b5aa82c9d1`,
+  a100-large, detached, 24 h timeout, `--attempts 2`,
+  `student-run096.env` — ByT5-small init, 439,786 clean-room pairs,
+  run-094 recipe otherwise (3 epochs, bs 16 × accum 2, lr 3e-4
+  cosine 200 warmup, bf16, MAXLEN 256, CKPT_EVERY 1000, final
+  full-split eval vs 0.0377). 41,232 optimizer steps; ETA ≈
+  2.7–3.0 h stepping + ~15–25 min eval ≈ **3.0–3.3 h** total at
+  run-095's measured 4.26–4.36 it/s.
+- Gates ahead: full-split CER vs **0.0377 gate AND the 3.74
+  champion** → calibrated 16(e) (candidate run-096 final ckpt,
+  reference google/byt5-small, self-control exactly 0.5) → ship
+  recommendation (canonical urd-vocalized-2.0; renames staged) →
+  owner version. A 16(e) PASS near chance is the expected outcome
+  for a teacher whose lineage never touched CLE.
