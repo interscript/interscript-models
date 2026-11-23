@@ -800,11 +800,12 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   an Urdu-specialized candidate.
 - **Conclusion: the calibrated MIA as-parameterized measures Urdu
   DOMAIN SPECIALIZATION, not CLE memorization — quality and the
-  "signal" are the same axis under a generic reference.** The
-  quality ranking (run-092 3.57-tier teacher < … wait, reversed:
-  better students score higher) and the AUC ranking coincide
-  because both track the same underlying fit to the Urdu text
-  domain.
+  "signal" are the same axis under a generic reference.** The AUC
+  ranking across the three students coincides exactly with their
+  quality ranking because both track the same underlying fit to the
+  Urdu text domain: the better the student vocalizes, the further
+  its loss profile moves from the generic reference on any Urdu
+  text, including the held-in CLE shards it has never seen.
 - Consequence: the gate methodology needs a DOMAIN-MATCHED reference
   for urd candidates (amendment drafted on urdu-dev, held for owner
   approval — no re-run launched).
