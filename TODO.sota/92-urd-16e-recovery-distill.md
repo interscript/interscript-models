@@ -549,3 +549,58 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   verdict verbatim. PASS → ship stage (index-v17 → pins → releases
   → certificate → notes → HF; canonical urd-vocalized-2.0).
   FAIL → stop, retain records (2-year clock), owner decides.
+
+### Calibrated 16(e) verdict (2026-11-23) — FAIL: distillation did not remove the memorization signal
+
+- Job `rhtse/6b03c5d4130a00b5aa821ecd` COMPLETED (~5 h).
+  **Suite verdict: FAIL** — `failures: ["mia: FAIL"]`. Candidate
+  `run-095-urd-diac-distill/step-41232/model` (sha8 2a29658c),
+  reference `google/byt5-small` (sha8 336b39c7, resolved from the
+  hub per pre-registration), corpus digest dbaae25c… identical to
+  the run-092 gate. Retention clock: records retained to
+  **2028-11-23** (2 years).
+- Gated metrics, verbatim:
+  - **calibrated_auc: 0.6393** (chance 0.5, deviation 0.1393 ≫
+    tolerance ±0.05) → FAIL
+  - **calibrated_success_rate: 0.6293** (tolerance 0.6) → FAIL
+  - naive preserved for disclosure: naive_auc 0.6137,
+    naive_success_rate 0.6045
+  - **ref_selfcontrol_auc: 0.5 exactly; ref_selfcontrol_success_rate:
+    0.5 exactly** — the probe is SOUND; this is real memorization
+    signal, not a broken harness (the run-092 lesson inverted: the
+    calibrated method of record sees genuine signal).
+- All other sub-tests PASS: extraction 0 violations (125 prompts, 5
+  templates), verbatim 0 violations (200 probes, 25-word floor),
+  WordNet 0 vocab hits (5,131 synsets, 384-byte vocab,
+  67,364 content n-grams indexed). mia-scores.jsonl 440 rows
+  (300 held-in / 140 held-out).
+- **Reading**: the student beats the champion on quality (0.03692
+  vs 3.74%) while carrying the teacher's memorization signal almost
+  unchanged — run-092 calibrated AUC 0.6319 → run-095 0.6393. The
+  distillation channel transferred the teacher's function INCLUDING
+  its CLE memorization: the teacher absorbed CLE content during
+  DAPT and re-emits enough of it in its outputs for the student to
+  inherit the loss-level signal, without ever tripping the exact
+  8-word-shingle guard (guard drops were 0 across the corpus).
+  Quality and privacy move on different axes: data validity fixed
+  quality; it could not fix privacy, because the privacy defect
+  lives in the teacher's weight content, not in the training
+  pipeline.
+- **Kill criterion invoked (pre-registered): the distillation lever
+  FAILED.** Stop; records retained (2028-11-23 clock); no ship —
+  index-v17 / release / certificate / notes for urd-vocalized-2.0
+  are WITHHELD. Full probe artifacts:
+  `hf://buckets/rhtse/urdu-16e-gate/urdu-16e-run-095-vocalized-calibrated/`
+  (verdict.json, progress.log, job-meta.json, records/
+  mia-scores.jsonl + per-probe artifacts, all sha256-listed).
+- Owner decides the next arm. Pre-registered candidates, in order:
+  (1) tighten the regurgitation guard (5-word shingles) — note the
+  evidence suggests loss-level signal survives exact-n-gram guards,
+  so its expected yield is limited; (2) loss-magnitude filtering of
+  teacher outputs; (3) logit-level distillation (soft targets carry
+  different information than argmax text). Honest caveat from this
+  round: every arm that keeps the run-092 teacher as the label
+  source inherits its memorization through the targets; arms that
+  change WHAT the teacher emits (logits, filtering) or WHAT the
+  student trains on (a teacher never exposed to CLE) attack the
+  root.
