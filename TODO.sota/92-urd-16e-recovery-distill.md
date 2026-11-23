@@ -724,3 +724,52 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   verdict verbatim. PASS → ship stage on canonical
   **urd-vocalized-2.0** (renames staged, models entry at ship time
   with real artifact data).
+
+### Clean-room calibrated 16(e) verdict (2026-11-23) — FAIL; ship runbook NOT executed
+
+- Job `rhtse/6b04362a08b6bdfb5bd09a5d` COMPLETED (~2 h). **Suite
+  verdict: FAIL** — `failures: ["mia: FAIL"]`. Candidate
+  `run-096-urd-diac-distill/step-41232/model` (sha8 24f5a2d6),
+  reference `google/byt5-small` (sha8 336b39c7), corpus digest
+  dbaae25c… unchanged. Records retained to 2028-11-23.
+- Gated metrics, verbatim:
+  - **calibrated_auc: 0.6475** (chance 0.5, deviation 0.1475 ≫
+    tolerance ±0.05) → FAIL
+  - **calibrated_success_rate: 0.6324** (tolerance 0.6) → FAIL
+  - **ref_selfcontrol_auc: 0.5 exactly; ref_selfcontrol_success_rate:
+    0.5 exactly** — probe sound
+  - extraction / verbatim / wordnet: all PASS (0 violations)
+- **The clean-room hypothesis is falsified as stated**: a teacher
+  whose verified lineage never touched CLE produced a student whose
+  MIA signal is HIGHER than the CLE-DAPT line (run-092 0.6319 →
+  run-095 0.6393 → run-096 0.6475). The monotone-in-cleanness
+  prediction fails; the signal cannot be explained by run-092
+  weight content alone. Candidate explanations, untested (owner's
+  call — no new probes launched):
+  1. **data-diacrit ∩ CLE content overlap**: both corpora may draw
+     on common Urdu digest/news sources; the MIA's held-in set is
+     CLE train shards — legitimate licensed training data that
+     happens to share text with CLE would register as "memorized"
+     even with a spotless lineage. Testable cheaply with the
+     existing hashed-shingle machinery (shared-shingle count
+     between data-diacrit and the CLE plane).
+  2. **Domain-specialization residual**: the probe measures the
+     Urdu-specialized candidate against a generic multilingual
+     reference on a same-domain held-in/held-out split; specialization
+     interacting with the split could leave residual AUC after
+     calibration.
+  3. Undiscovered lineage exposure — NOT found: STEP 0 traced
+     run-066 to google/byt5-base + data-diacrit only, corroborated
+     by four independent records.
+- **Ship runbook NOT executed** (precondition failed): no artifact
+  fetch, no GH release, no models.yaml ship entry, no index-v17, no
+  pin PRs, no patch releases, no HF mirror, no certificate flip, no
+  site change. urd-vocalized-2.0 remains UNSHIPPED; the renames
+  staging (#469) stays harmless. run-092 stays retired from the
+  label-source role (that ruling is independent of this FAIL).
+- Full probe artifacts:
+  `hf://buckets/rhtse/urdu-16e-gate/urdu-16e-run-096-vocalized-calibrated/`
+  (verdict.json, progress.log, job-meta.json, records/, all
+  sha256-listed). Owner decides the next move; the overlap test
+  (explanation 1) is the cheap discriminator between "the gate
+  detects licensed shared content" and "something else is wrong".
