@@ -1,0 +1,77 @@
+# Model-BOM lineage registry.
+#
+# models.yaml records artifact sha256/urls, license, metrics and parity, but
+# leaves the model -> training-corpus linkage implicit (prose trained_from
+# notes or card text). This registry makes that linkage declarative for the
+# SPDX 3.0-style Model BOM (scripts/generate_model_bom.py):
+#
+#   shipped models  -> `corpora` list resolved against corpora/*.yaml
+#                      (+ optional `lineage` training-chain notes)
+#   pending models  -> full gated-pending entry (status, gate, lineage)
+#
+# Every value here is transcribed from the org's recorded evidence
+# (models.yaml, corpora/*.yaml, cards/*.md, TODO.sota/*). Artifact
+# sha256/urls are NEVER pre-staged for pending models (owner law,
+# TODO.sota/92: the models.yaml ship entry is created at ship time with
+# real artifact data).
+
+heb-vocalized-plane-3.0:
+  corpora: [hebrew-v4, heb-knesset-weak]
+  lineage:
+    - step: WO92 stage 1 (weak pretrain)
+      detail: >-
+        run-093-heb-weak-pretrain: 1,500,000 deduped knesset-v6 weak units
+        (Dicta machine labels — weak supervision only) COMBINED with the
+        full gold corpus (50,303 gold), 1 epoch
+        (cards/heb-vocalized-plane-3.0.md).
+    - step: WO92 stage 2 (gold SFT)
+      detail: >-
+        run-094-heb-gold-sft (train_hebrew_sft_hf.py, HF Jobs a100-large),
+        resumed from run-093 best with the exact crown recipe; inventory
+        inherited byte-identical (labels.sha edd595d96d09)
+        (cards/heb-vocalized-plane-3.0.md).
+  source_refs:
+    card: cards/heb-vocalized-plane-3.0.md
+
+urd-vocalized-2.0:
+  status: gated-pending
+  ship_name: urd-vocalized-2.0
+  # canonical ship name per the WO87 renames (models.yaml:
+  # urd-diac-2.0 -> urd-vocalized-2.0, staged)
+  version: "2.0"
+  task: diacritization
+  scripts: [Arab, Arab]
+  planned_license: BSD-3-Clause
+  # org convention (code + weights); confirmed at ship time
+  corpora: [urd-dia]
+  descends_from: [urd-vocalized-base-1.0]
+  lineage:
+    - step: teacher lineage (public only)
+      detail: >-
+        urd-vocalized-base-1.0 (run-066): google/byt5-base + data-diacrit
+        only — STEP 0 trace corroborated by four independent records
+        (TODO.sota/92).
+    - step: clean-room distill candidates
+      detail: >-
+        run-095-urd-diac-distill (candidate sha8 2a29658c) and
+        run-096-urd-diac-distill (candidate
+        run-096-urd-diac-distill/step-41232/model, sha8 24f5a2d6);
+        41,232/41,232 steps; CER 0.03641 vs quality gate 0.0377 (PASS),
+        below champion urd-vocalized-1.0 3.74 (TODO.sota/92).
+  gate:
+    name: Clause 16(e) calibrated membership-inference (CLE compliance)
+    verdict: FAIL
+    date: "2026-11-23"
+    detail: >-
+      calibrated_auc 0.6475 (tolerance ±0.05 around 0.5) and calibrated
+      success rate 0.6324 (tolerance 0.6) — both FAIL; reference
+      self-control exactly 0.5 (probe sound); extraction / verbatim /
+      wordnet all PASS. Shingle-overlap discriminator: data-diacrit vs CLE
+      overlap is ZERO. Records retained to 2028-11-23 (TODO.sota/92).
+    records: hf://buckets/rhtse/urdu-16e-gate/urdu-16e-run-096-vocalized-calibrated/
+    ship_runbook_executed: false
+  artifact:
+    note: >-
+      Deliberately absent: sha256/urls are never pre-staged; the models.yaml
+      ship entry is created at ship time with real artifact data (owner law,
+      TODO.sota/92).
