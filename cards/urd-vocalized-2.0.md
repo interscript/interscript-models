@@ -58,3 +58,21 @@ lineage cleanliness were the levers, not training dynamics.
 ## License
 
 BSD-3-Clause (code + weights).
+
+## Attribution (Schedule D)
+
+Linguistic resources provided by the Center for Language Engineering
+(CLE), Al-Khawarizmi Institute of Computer Science (KICS), University of
+Engineering and Technology (UET), Lahore, Pakistan.
+
+> CLE Urdu Digest Corpus 1M (International Package), Catalogue No.
+> CLE12T003; CLE Urdu WordNet (International Package), Catalogue No.
+> CLE12L001. Center for Language Engineering, Al-Khawarizmi Institute of
+> Computer Science, University of Engineering and Technology, Lahore,
+> Pakistan.
+
+(The released model derives from no CLE content — zero corpus overlap,
+verified lineage; the citation is carried per the CLE license program's
+Schedule D placement rules for the certification period. CLE-KICS, UET's
+name is used only to give credit and not in a way that suggests
+endorsement.)
