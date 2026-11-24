@@ -897,3 +897,87 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   GATE_REFERENCE_PATH). Launch held for PR #24 merge-on-green per
   owner instruction; expected near chance — NOT near chance on a
   properly matched split is real signal → STOP + escalate.
+
+
+### SHIP: urd-vocalized-2.0 released (2026-11-24) — the full chain
+
+**Matched-split calibrated Clause 16(e) re-run: PASS (2026-11-24)** —
+config `run-096-vocalized-calibrated-matchedsplit.json` (same_population
+split per urdu-dev#24; holdout shards 06+07 disjoint from held-in
+shards; length_parity true; candidate run-096 step-41232 vs reference
+run-066 best via GATE_REFERENCE_PATH), l4x1, records bucket
+`rhtse/urdu-16e-gate/urdu-16e-run-096-vocalized-calibrated-matchedsplit-v3`,
+seed 20261117, retention_until **2028-11-24**. Verdict verbatim:
+- calibrated AUC **0.4933** (chance 0.5, deviation 0.0067 <= 0.05) PASS
+- **ref_selfcontrol_auc 0.5 exactly** (harness soundness precondition)
+- calibrated success rate 0.5267 (tolerance 0.6); TPR@FPR=0.05 0.0633
+- extraction 125 prompts / 0 violations / 0 canaries; verbatim 200
+  probes / 0 violations (25-word floor); WordNet 5,131 synsets,
+  67,364 n-grams, 0 vocab hits; failures list: empty
+- split record: enforced, same_population, in/out median 507/494 words,
+  parity pass — the #477 confound is closed by construction
+
+**Delegation of record (verbatim, from the merged urdu-dev#23 record):**
+- "Fully approve all, use reasonable recommendations" (2026-11-21)
+- "Continue all and make SOTA 2027... finally launch" (2026-11-22)
+These constitute standing approval for evidence-complete
+reasonable-recommendation execution; the ship runbook was executed
+within its loaded terms.
+
+**Ship runbook executed (2026-11-24), every step verified:**
+1. Artifact: `urd-vocalized-2.0-int8-dynamic.zip` — 261,064,847 B,
+   sha256 `02fa02d9bab70d044bf294e5e721ffe61df2e5cb7510fec582f60bef48671722`
+   (+ .sha256 sidecar). House IMF export (`src/imf/export.py`):
+   encoder.onnx 219.8 MB + decoder.onnx / decoder-kv.onnx 86.3 MB each,
+   opset 14, dynamic int8 MatMul-only with the tied head fp32
+   (`/lm_head/MatMul` excluded); sanity decode exact on gold.
+   Parity: cer_delta **0.0062 pp** on the committed 600-row slice
+   `conformance/wo20/eval600/urd_eval_600.jsonl` (sha256
+   `a06c8a2dcacec88bec0ad85b4e851a78c72429102e4051d2705b994c48108ca0`,
+   single-row greedy MAXLEN 512, reference = fp32 ONNX under ORT CPU;
+   int8 gate 2.0pp; argmax flips 0.1709%, confident flips 0.1052%,
+   gate 1%).
+2. GH release: tag `urd-vocalized-2.0`, assets zip + sidecar, notes with
+   the clean-room lineage, gate numbers, 16(e) PASS verbatim, and the
+   Schedule D attribution —
+   https://github.com/interscript/interscript-models/releases/tag/urd-vocalized-2.0
+3. models.yaml entry + docs/RESULTS.md run-096 section + 600 frozen
+   conformance vectors + golden decode tokens + model card — PR #483
+   (all gates green, rebase-merged). Metrics anchor (house slug):
+   `docs/RESULTS.md#run-096-urd-vocalized-20-quality-gate-pass-and-clean-room-clause-16e-2026-11-24`.
+   WO87 canonical id; the renames entry (#469) expanded into the
+   `urd-diac-2.0` alias at index cut time.
+4. index-v17: release-index.yml dispatch (tag index-v17), sidecar
+   verified (sha256
+   `6b825a99b0516399ea01affa4e2f2232f3a4444fb4a25b7b4578c454155cd160`),
+   71 entries, urd-vocalized-2.0 resolves.
+5. Pins (each rebased onto the moved mains — the staged branches
+   predated the index-v16 pin commits and conflicted; resolved to the
+   v17 side): rs #54, ruby #879, ts #156, py #56 — all green, all
+   rebase-merged.
+6. Patch releases: rs 0.4.1 (#55, version + publish-gate literal same
+   commit; tag v0.4.1; publish.yml dispatched from main; crates.io
+   verified — max_version 0.4.1; SBOM + sha256 sidecar attached to the
+   release), ruby 3.8.1 (#880; tag v3.8.1 verified to carry the bump;
+   tag-triggered release.yml success; rubygems.org verified —
+   versions[0] 3.8.1; note: one macos CI job was cancelled by runner
+   infra at exactly 15m01s with zero failed steps and passed on
+   `run rerun --failed` — recorded as infra flake, not a gate failure),
+   npm 6.0.1 (release.yml dispatch -f version=6.0.1; registry HEAD
+   ground-truth verified — the publish was confirmed in-log before the
+   CDN metadata caught up; "CDN lag is never a re-dispatch signal"
+   honored), py: pin merge only (#56; PyPI form is owner-gated).
+7. HF mirror: `Interscript/urd-vocalized-2.0` public (hf-publish.yml
+   dispatch; zip byte-exact; card from cards/urd-vocalized-2.0.md;
+   #484 completes the Schedule D full-citation placement on the card
+   and re-publishes).
+8. Compliance certificate: `interscript/pk-cle-urdu`
+   COMPLIANCE-CERTIFICATE.md flipped (LOCAL commit 40de5d1 per that
+   repo's convention — never pushed): Part 1 item 4 → Y (shipped),
+   Part 2 row → released with URLs + sha256, Part 4 verdict → PASS
+   verbatim (the numbers above + records bucket + retention clock),
+   Part 5 release-records line renamed. Filing with CLE-KICS, UET
+   remains the Responsible Officer's action (30 days of period close).
+9. Site: /ml staged hold deleted, catalogue regenerated (39 models,
+   CER 3.641 verified vs the verdict before publish) —
+   interscript.github.io #254.
