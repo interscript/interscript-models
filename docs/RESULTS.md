@@ -2754,3 +2754,71 @@ published round's definition; torch bf16 kept as a sanity lane only —
   release, no version. Owner decision queue in the WO92 ledger:
   plane-gate semantics (flip gate predates the plane family), the
   quantization arm, and the `heb-vocalized-plane-{major.minor}` word.
+## run-096 urd-vocalized-2.0 quality gate pass and clean-room Clause 16(e) (2026-11-24)
+
+The WO92 ship round closes: the clean-room student **urd-vocalized-2.0**
+passes BOTH release gates — the pre-registered quality bar and the
+calibrated Clause 16(e) suite on the matched split (the methodology
+fixed by the #474/#475/#477 falsification chain + urdu-dev#23/#24/#25/#26).
+
+**Quality gate PASS** (`isx-training:/run-096-urd-diac-distill/verdict.json`,
+verbatim):
+
+```json
+{
+    "run": "run-096-urd-diac-distill",
+    "init": "google/byt5-small",
+    "corpus_run": "run-096b-urd-teacher-relabel",
+    "steps": 41232, "epochs": 3, "pairs": 439786, "eval_rows": 11940,
+    "cer": 0.03641,
+    "quality_gate_cer": 0.0377,
+    "quality_pass": true,
+    "chain_pass": true,
+    "verdict": "PASS"
+}
+```
+
+| urd vocalized tier | full-split raw CER (WO37 protocol, 11,940 rows) |
+|---|---|
+| urd-vocalized-1.0 (shipped champion) | 0.0374 |
+| **run-096 student (urd-vocalized-2.0)** | **0.03641** |
+| pre-registered gate (champion bar) | 0.0377 |
+
+- **Clean-room lineage (ledger #471)**: teacher =
+  `run-066-urd-diac-base/best` (google/byt5-base init + data-diacrit
+  public-lineage only; sha8 d55b08d6); corpus run-096b (439,786 pairs,
+  relabel v2 parse fix + semantic invariant + GUARD_N 8 regurgitation
+  guard drops 0). The CLE-DAPT teacher run-092 stays RETIRED from the
+  label-source role. Corpus-CLE overlap measured ZERO (ledger #475).
+- **Calibrated Clause 16(e) PASS** (matched split, records
+  `rhtse/urdu-16e-gate/urdu-16e-run-096-vocalized-calibrated-matchedsplit-v3`,
+  seed 20261117, retention 2028-11-24): calibrated AUC **0.4933**
+  (deviation 0.0067 <= tolerance 0.05), reference self-control AUC
+  **0.5 exactly**, calibrated success rate **0.5267** (<= 0.6);
+  extraction 125 prompts / 0 violations / 0 canaries; verbatim 200
+  probes / 0 violations (25-word floor); WordNet 5,131 synsets,
+  67,364 n-grams, 0 vocab hits. Methodology:
+  reference-calibrated LiRA-style MIA (urdu-dev#17), matched-split
+  amendment urdu-dev#23, split fix urdu-dev#24 (#25/#26 records).
+- **Artifact**: IMF v1, int8 dynamic (MatMul-only, tied head fp32),
+  decoder kv, opset 14 — encoder.onnx + decoder.onnx + decoder-kv.onnx,
+  exported from `run-096-urd-diac-distill/step-41232/model` per the
+  house export (`src/imf/export.py`); sanity decode exact on gold.
+- **Parity** (committed slice
+  `conformance/wo20/eval600/urd_eval_600.jsonl`, sha256
+  `a06c8a2dcacec88bec0ad85b4e851a78c72429102e4051d2705b994c48108ca0`,
+  single-row greedy MAXLEN 512, reference = fp32 ONNX graphs under ORT
+  CPU): CER delta **0.0062 pp** on 600 samples (int8 gate 2.0pp;
+  reference row-mean 3.7356, candidate 3.7417), argmax flips
+  0.1709%, confident flips (margin >= p10) 0.1052% (gate 1%).
+- **Conformance**: 600 frozen vectors
+  (`conformance/urd-vocalized-2.0-vectors.json`) + golden decode tokens
+  (`golden/urd-vocalized-2.0-int8-dynamic.jsonl`) pinned to the shipped
+  zip sha.
+- **Ship**: GH release `urd-vocalized-2.0`, asset
+  `urd-vocalized-2.0-int8-dynamic.zip` + sha256 sidecar; index-v17;
+  models.yaml entry (WO87 canonical id; renames staged #469); HF mirror
+  `Interscript/urd-vocalized-2.0`; compliance certificate flipped in
+  `interscript/pk-cle-urdu` (LOCAL commit per that repo's convention).
+  Schedule D attribution ships in the model card, zip README, and
+  release notes per the placement rules.

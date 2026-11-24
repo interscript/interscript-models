@@ -155,6 +155,28 @@ models:
       samples: 11940
       cer_delta: 0.0
     license: BSD-3-Clause
+  # urd-vocalized-2.0 — WO92 clean-room ship. Schedule D attribution (CLE
+  # program): the full CLE citation ships in the model card, the zip README,
+  # and the release notes — cards/urd-vocalized-2.0.md is canonical.
+  urd-vocalized-2.0:
+    task: diacritization
+    scripts:
+    - Arab
+    - Arab
+    precision: int8
+    filename: urd-vocalized-2.0-int8-dynamic.zip
+    url: https://github.com/interscript/interscript-models/releases/download/urd-vocalized-2.0/urd-vocalized-2.0-int8-dynamic.zip
+    sha256: 02fa02d9bab70d044bf294e5e721ffe61df2e5cb7510fec582f60bef48671722
+    size: 261064847
+    metrics:
+    - name: cer
+      value: 3.641
+      protocol: greedy decode; 11,940 held-out; full-split raw CER, WO37 protocol (gate 0.0377, champion urd-vocalized-1.0 3.74); ByT5-small clean-room distill student (run-096), 3 epochs
+      source: interscript/interscript-models docs/RESULTS.md#run-096-urd-vocalized-20-quality-gate-pass-and-clean-room-clause-16e-2026-11-24
+    parity:
+      samples: 600
+      cer_delta: 0.0062
+    license: BSD-3-Clause
   heb-vocalized-1.0:
     task: diacritization
     scripts:
