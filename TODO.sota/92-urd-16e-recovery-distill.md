@@ -846,3 +846,54 @@ run-094 ≈ run-059/run-066 measured scale ≈ 5.5 GPU-h.
   incremental memorization → STOP, report verbatim, escalate.
   On PASS → the ship runbook executes immediately per its loaded
   terms (canonical urd-vocalized-2.0).
+
+### Matched-reference gate FAIL + FINAL AUDIT: the split itself is the confound (2026-11-23/24)
+
+- Matched-reference gate `rhtse/6b044eb4a02d1cf5a7b8236e` COMPLETED:
+  **FAIL** — calibrated_auc **0.6357** (vs 0.6475 generic —
+  reference-INVARIANT), calibrated_success_rate 0.6324, naive AUCs
+  BOTH below chance (candidate 0.4243, reference 0.3803),
+  self-control 0.5 exact, extraction/verbatim/wordnet PASS.
+  Records retained to 2028-11-28.
+- Owner-ordered FINAL AUDIT of the probe's split construction
+  (no new gates; checkpoint /tmp/urd-ship-notes.md):
+  1. Held-in = 32-line chunks of `train/shard-*.txt` (run-092's
+     actual DAPT text); held-out = 32-line chunks of
+     `eval/documents/*.txt` — a DIFFERENT CLE collection.
+  2. Sampling: held-out pool (140 ≤ n_eval 300) used IN FULL, no
+     sampling; held-in = rng.sample 300 of an 8-source pool (~37
+     correlated chunks per shard).
+  3. Empirical (run-096-DM mia-scores, 440 rows): held-in median
+     4,058 tokens with 75th/90th percentiles AT the 4,096 truncation
+     cap; held-out median 3,283 with an 80-token tail. BOTH models
+     find held-in easier (candidate loss/token 4.625 < 4.735;
+     reference 3.431 < 3.785); candidate−reference gap asymmetric
+     (1.194 vs 0.950); naive AUCs agree in direction.
+  4. **Read: the comparison is confounded by split construction.**
+     Both naive AUCs below chance on a membership-free candidate =
+     the probe reads the set difference (format/register/length/
+     truncation), not memorization. The full chain — zero overlap,
+     clean lineage, monotone AUC-vs-quality, reference-invariance —
+     admits only that explanation.
+- **Owner decision: fix the split (Path 1)** — the audit proves a
+  harness BUG (mismatched populations, opposite truncation profiles,
+  different sampling procedures); fixing it makes the instrument
+  honest per standard LiRA methodology.
+- **Fix implemented**: urdu-dev PR #24 (`wo92-mia-split-fix`,
+  733f77c) — corpus.partition_holdout() + corpus.membership_samples()
+  (nearest-value counterpart matching on word count: the held-out
+  sample's length distribution mirrors held-in by construction;
+  parity is a hard property — violations raise, the probe returns
+  FAIL, it never runs confounded); runner same_population mode
+  (both sets from train_globs minus holdout_globs); mia.split record
+  emitted into every future verdict; legacy globs mode unchanged.
+  Regression pins: 7 (disjoint provenance, parity enforced/achieved,
+  bimodal pool matched, unmatchable + undersized pools fail loudly,
+  legacy mode record-only) — full suite 59 passed.
+- **Matched-split 16(e) re-run**: config
+  `run-096-vocalized-calibrated-matchedsplit.json` (same_population;
+  holdout shards 06+07 disjoint from held-in shards; length_parity
+  true; candidate run-096 step-41232 vs reference run-066 best via
+  GATE_REFERENCE_PATH). Launch held for PR #24 merge-on-green per
+  owner instruction; expected near chance — NOT near chance on a
+  properly matched split is real signal → STOP + escalate.
