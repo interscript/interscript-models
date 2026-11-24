@@ -7,9 +7,7 @@ on:
     tags: ["*-v*.*.*"]
 
 permissions:
-  contents: write
-  attestations: write
-  id-token: write
+  contents: read
 
 jobs:
   parse-tag:
@@ -104,6 +102,10 @@ jobs:
   release:
     needs: [parse-tag, build, benchmark]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      attestations: write
+      id-token: write
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v4
