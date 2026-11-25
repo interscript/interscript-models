@@ -1,0 +1,53 @@
+id: fas-ganjoor
+task: diacritization
+sources:
+  # WO94 phase-1 acquisition (interscript-models#488 owner-approved; WO66
+  # dossier source 1). ganjoor.net live API = the canonical bulk channel
+  # (the official ganjoor-db dump is from 2017 — rejected as stale, probe
+  # sha256 4623701c5ff54a4f…). Crawl 2026-11-25 (job
+  # 6b06780e1460ffe1d5e9e4c2): 246 published poets, 3,155,942 raw verses,
+  # 3,078,058 kept after filters + exact-tgt dedupe + 40-char-window
+  # decontam vs BOTH pinned fas evals (interscript-train
+  # prep_fas_ganjoor.py).
+  # THIS corpus = the VOCALIZED subset, carved by owner decision on the
+  # parent gate FAIL (parent vocalized_share 0.054141 vs the pre-registered
+  # 0.30 floor — falsification record retained verbatim at
+  # isx-training:/run-098-fas-acquisition/gate-verdict.json, sha256
+  # b20776e319e88011bb1d08c78c1eaeaeecba23b7e59c0d38ded2e3fc5973e7a5;
+  # parent manifest sha256 8d2aab248a03aca9…). Membership set = FAS_GATE_LAW
+  # haraqat U+064B-U+065F + U+0670 (the frozen gate counting set — the
+  # narrower pinned-eval strip set U+064B-U+0652+U+0670 remains only the
+  # src-derivation convention). The unvocalized rows stay in
+  # run-098-fas-acquisition/ganjoor/ as an UNSUPERVISED REGISTER.
+  # Subset gate: FRESH pre-registered def (gate_fas_ganjoor_vocalized.py,
+  # job 6b07023dd91f621b930847ea) — VERDICT PASS, all 9 checks; verdict
+  # sha256 9e3395c14ea340dab6a0ec85da8082f99afa5e9145f53325d0a522cb4387d470.
+  # License: CC BY-SA 3.0 (site-stated; WO66 dossier record, owner-reviewed
+  # 2026-10-25; acquisition approved #488 2026-11-24) — carried over from
+  # the parent. Per-row attribution: poet_url, poet_name, cat_path,
+  # poem_id, poem_title (+ ganjoor.net). ShareAlike: the derived corpus
+  # inherits CC BY-SA 3.0; weights carry the copyleft dependency note
+  # (the tashkeela lane). Built by interscript-train
+  # prep_fas_ganjoor_subset.py (job 6b0701f4b6a90bbe997dd45e, 2026-11-25).
+  - kind: bucket
+    id: Interscript/isx-training/run-098-fas-acquisition/ganjoor-vocalized
+    revision: run-098
+    license: CC BY-SA 3.0
+    provenance: https://api.ganjoor.net/api/ganjoor (ganjoor.net live API crawl, snapshot 2026-11-25; vocalized subset of the 3,078,058-row parent corpus)
+splits:
+  # The 8 contiguous parent-source-order shards; the train sha256 pins the
+  # SHA256SUMS.txt sidecar (covers all 8 shards + the manifest — the
+  # heb-knesset-weak pattern). Shard manifest sha256
+  # 81a25fe02e058fdc112903e76cfc2ce91da109e6728a2a6004f9407986d0cdfb.
+  train:
+    path: ganjoor-vocalized-00000-of-00008.jsonl … ganjoor-vocalized-00006-of-00008.jsonl (7 shards; pins in SHA256SUMS.txt)
+    rows: 215067
+    sha256: cb42588ce2764766a5ecb512f524b55f2c6492c81f526c3e3dec798dcc080fb7 # sha256 of SHA256SUMS.txt (all 8 shards + manifest)
+  # Held-out slice of the same crawl (source order), 30,724 rows. The
+  # campaign quality evals remain the two PINNED external sets (the
+  # 9,288-row news/docs split + the 3,497-verse Ganjoor eval, sha
+  # 94f318f688b556be…) — see TODO.sota/94.
+  test:
+    path: ganjoor-vocalized-00007-of-00008.jsonl
+    rows: 30724
+    sha256: 256c2349dc07b56a848f11b156eae21b77837625e327dec87f40631f9487da4b

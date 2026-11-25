@@ -1,0 +1,37 @@
+id: fas-wikisource
+task: diacritization
+sources:
+  # WO94 phase-1 acquisition (interscript-models#488 owner-approved;
+  # WO66 dossier source 2). Canonical Wikimedia dump channel:
+  # fawikisource-latest-pages-articles.xml.bz2, fetched 2026-11-25,
+  # sha256 5fb9ad7365ec413605722f81c3351f41efc34c922d88d117fe99ef8bbf44f5e6
+  # (47,719,980 B, byte-identical to the probe size). License: CC BY-SA 4.0
+  # (Wikimedia site terms; per-page attribution via page history —
+  # title + pageid preserved per row). Raw text mass: weak-pretrain /
+  # classical-prose register mass ONLY — never the quality or eval signal.
+  # Built by interscript-train prep_fas_fawikisource.py (job
+  # 6b067816d0582cfbbefdbef5, 2026-11-25, 105 s; 84,176 pages seen ->
+  # 37,143 extracted -> 35,692 kept after filters + 40-char-window
+  # decontam vs both pinned fas evals; poetry templates flattened to
+  # argument values so {{شعر|بیت|بیت}} keeps the verses).
+  - kind: bucket
+    id: Interscript/isx-training/run-098-fas-acquisition/fawikisource
+    revision: run-098
+    license: CC BY-SA 4.0
+    provenance: https://dumps.wikimedia.org/fawikisource/latest/fawikisource-latest-pages-articles.xml.bz2 (snapshot 2026-11-01)
+splits:
+  # The 8 contiguous source-order shards; the sha256 pins the
+  # SHA256SUMS.txt sidecar, which pins every shard + the manifest
+  # individually (the heb-knesset-weak pattern).
+  train:
+    path: fawikisource-00000-of-00008.jsonl … fawikisource-00006-of-00008.jsonl (7 shards; pins in SHA256SUMS.txt)
+    rows: 31230
+    sha256: 3aa4dd5c0692bd4c9ca65c9aaf7bb9168c91fb48af5af482b5913a73ae253898 # sha256 of SHA256SUMS.txt (all 8 shards + manifest)
+  # STRUCTURAL KEY ONLY — shard 7 is the held-out val slice for
+  # weak-pretrain loss; raw text has no diacritization targets, so this
+  # is not a quality eval split (the campaign evals are the pinned
+  # news/docs + Ganjoor sets, see TODO.sota/94).
+  test:
+    path: fawikisource-00007-of-00008.jsonl
+    rows: 4462
+    sha256: c995114adf5a04dcd50b9be5d167acc91287b94656ca77fb4a248341dcb4617b
