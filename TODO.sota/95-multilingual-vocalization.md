@@ -258,6 +258,87 @@ logging (Clause 19): corpus text never printed.
    per-language verdicts verbatim in this ledger.
 5. Negative results recorded with the same care (the ledger's law).
 
+## Execution records
+
+### Trainer + smoke (2026-11-25)
+
+- Trainer landed: urdu-dev#31 (`train_multiling_vocalize_hf.py` +
+  `multilingual.env` + `multiling-smoke.env` + 22 regression pins,
+  suite 30 passed; no-corpus guard clean; Urdu fixtures romanized per
+  the split-parity precedent). Real-data pre-check through the actual
+  loaders on actual bytes: heb 50,433 rows → 93,429 windows at the
+  230-byte budget, nikud density 0.6487 (the abort floor set to 0.4
+  against the measured norm); urd train 573,130 pairs sha256
+  `95736b0d…` verified from the bucket (ratio_median 1.7, degenerate
+  0.0); urd test 11,940 rows sha256 `6d822ae7…`; ByT5 prefix tokens
+  verified atomic (ids 384/385, vocab 384 → 386).
+- Smoke `run-098a` (job `rhtse/6b06a4ed1460ffe1d5ea4814`, a100-large,
+  COMPLETED 2m54s): **CHAIN PASS** — `{"chain_pass": true, "pairs":
+  1286, "steps_completed": 41, "steps_expected": 41,
+  "final_checkpoint_usable": true, "nan_skips": 0, "eval_langs":
+  ["he","ur"], "eval_rows_scored": 617}` — both per-language eval
+  routes emitted metrics (he corpus-level seq2seq_der over 417
+  windows; ur WO37 CER over 200 rows). Quality fields MISS as
+  expected at 41 steps from raw init (WO92 ruling: smokes gate on
+  chain only).
+
+### Full run launch (2026-11-25)
+
+- `run-098-multi-vocalized`: job `rhtse/6b06d122d91f621b93079037`,
+  a100-large, detached, 24 h timeout, `--attempts 2`, CKPT_EVERY
+  1000, mounts = launcher defaults (`isx-training:/ckpt` rw,
+  `rababa-urdu-cc174b96:/data-replay` ro) + `hebrew-v4:/data-heb` ro.
+- Fleet at dispatch: this campaign held THE big-GPU job (others:
+  4× ivrb cpu-basic, 3× foreign a10g-large). Early-stepping sanity:
+  step 900/80,010, loss 0.107 falling, 2.28 it/s, zero NaN skips.
+
+### run-098 verdict (2026-11-26) — **PASS: both parity bars beaten, zero interference**
+
+Job COMPLETED in 10 h 07 m (80,010/80,010 steps at ~2.2 it/s;
+verdict.json + SHA sidecar at `isx-training:/run-098-multi-vocalized/`).
+Gated fields, verbatim:
+
+```json
+{
+  "run": "run-098-multi-vocalized",
+  "init": "google/byt5-base",
+  "steps": 80010, "epochs": 3, "pairs": 853417,
+  "ur_cer": 0.03604,
+  "he_der_pct": 5.3075,
+  "ur_pass": true, "he_pass": true,
+  "ur_interference": false, "he_interference": false,
+  "chain_pass": true,
+  "verdict": "PASS"
+}
+```
+
+Gate table (WO95 pre-registered bars):
+
+| language | metric (protocol) | joint run-098 | gate | champion | verdict |
+|---|---|---|---|---|---|
+| urd | raw-char CER, row-mean (WO37, 11,940 rows) | **0.03604 (3.604%)** | ≤ 0.0377 | 0.03641 (urd-vocalized-2.0) · 0.03632 (urd-vocalized-2.1) | **PASS — beats BOTH champions** |
+| heb | corpus-level seq2seq_der, generative crown protocol (1,864 rows / 4,094 windows) | **5.3075%** | ≤ 6.6078 | 6.6078 (heb-vocalized-plane-3.0) | **PASS — beats the crown by 1.30pp** |
+| urd interference | >2% relative degradation (bar 0.0370464) | flag **false** | — | — | no interference |
+| heb interference | >2% relative degradation (bar 6.74) | flag **false** | — | — | no interference |
+| chain | steps 80,010/80,010, final ckpt usable, 0 NaN skips, 16,034 eval rows scored (4,094 + 11,940) | chain_pass **true** | — | — | PASS |
+
+Reading: the first cross-abjad joint vocalization model is
+parity-or-better on BOTH language champions — the SOTA-claim condition
+of this WO holds. The low-resource sibling (Hebrew, 50K gold vs Urdu's
+573K) shows the largest margin: one gold-only generative ByT5-base
+beats the plane-classifier crown that trained with the WO92
+weak-pretrain curriculum, with zero >2% degradation on either language
+— no interference signal fired. Architecture caveat unchanged: the heb
+comparison is the pre-registered reference signal (metric/test/stitch/
+aggregation identical), not an architecture-controlled trial.
+
+Release status: **NOT SHIPPED — nothing ships from this record.** The
+urd-side calibrated Clause 16(e) matched-split gate (run-066 clean
+reference), the standard ship chain (parity ≥ 500 shipped-mode samples,
+conformance fixtures, license strings, Schedule D, certificate), and
+the owner-stated version (candidate `multi-vocalized-base-1.0`, never
+picked here) all remain ahead of any release consideration.
+
 ## Status
 
-IN_PROGRESS — work order + trainer; smoke pending trainer merge.
+RUN COMPLETE — verdict PASS recorded 2026-11-26; ship chain owner-gated.
