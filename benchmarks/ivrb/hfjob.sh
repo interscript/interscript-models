@@ -56,24 +56,44 @@ print("[job] heb data fetched")
 PY
 
 # ---- model zip (release channel; harness verifies the pin) ----------------
+# Split-part releases (2 GiB GH cap) list their part URLs; concatenate.
 case "$MODEL" in
-  urd-vocalized-1.0)        URL=https://github.com/interscript/interscript-models/releases/download/urd-diac-1.0/urd-diac-1.0-fp32.zip ;;
-  urd-vocalized-2.1)        URL=https://github.com/interscript/interscript-models/releases/download/urd-vocalized-2.1/urd-vocalized-2.1-int8-dynamic.zip ;;
-  heb-vocalized-1.0)        URL=https://github.com/interscript/interscript-models/releases/download/heb-diac-1.0/heb-diac-1.0-fp32.zip ;;
-  heb-vocalized-1.1)        URL=https://github.com/interscript/interscript-models/releases/download/heb-diac-1.1/heb.zip ;;
-  heb-vocalized-small-1.0)  URL=https://github.com/interscript/interscript-models/releases/download/heb-diac-small-1.0/heb-diac-small-1.0-fp32.zip ;;
+  urd-vocalized-1.0)
+    PARTS=(https://github.com/interscript/interscript-models/releases/download/urd-diac-1.0/urd-diac-1.0-fp32.zip) ;;
+  urd-vocalized-2.1)
+    PARTS=(https://github.com/interscript/interscript-models/releases/download/urd-vocalized-2.1/urd-vocalized-2.1-int8-dynamic.zip) ;;
+  heb-vocalized-1.0)
+    PARTS=(https://github.com/interscript/interscript-models/releases/download/heb-diac-1.0/heb-diac-1.0-fp32.zip.part-00
+           https://github.com/interscript/interscript-models/releases/download/heb-diac-1.0/heb-diac-1.0-fp32.zip.part-01) ;;
+  heb-vocalized-1.1)
+    PARTS=(https://github.com/interscript/interscript-models/releases/download/heb-diac-1.1/heb.zip.part-00
+           https://github.com/interscript/interscript-models/releases/download/heb-diac-1.1/heb.zip.part-01) ;;
+  heb-vocalized-small-1.0)
+    PARTS=(https://github.com/interscript/interscript-models/releases/download/heb-diac-small-1.0/heb-diac-small-1.0-fp32.zip) ;;
   *) echo "unknown model: $MODEL" >&2; exit 2 ;;
 esac
-curl -sSLo "$WORK/model.zip" "$URL"
+rm -f "$WORK/model.zip"
+for u in "${PARTS[@]}"; do
+  part="$WORK/part.$RANDOM"
+  curl -sSLo "$part" "$u"
+  cat "$part" >> "$WORK/model.zip"
+  rm -f "$part"
+done
 export IVRB_ZIP="$WORK/model.zip"
 
 # ---- decode legs (sequential: bounds RAM on cpu-basic) ---------------------
-for s in "${SHARDS[@]}"; do
-  echo "[job] === $MODEL shard $s ==="
-  python3 models/benchmarks/ivrb/ivrb.py "$MODEL" --shard "$s"
-done
+if [ "${#SHARDS[@]}" -eq 0 ]; then
+  echo "[job] === $MODEL full split ==="
+  python3 models/benchmarks/ivrb/ivrb.py "$MODEL"
+else
+  for s in "${SHARDS[@]}"; do
+    echo "[job] === $MODEL shard $s ==="
+    python3 models/benchmarks/ivrb/ivrb.py "$MODEL" --shard "$s"
+  done
+fi
 
-# ---- upload + verify-read-back --------------------------------------------
+# ---- upload + verify read-back ---------------------------------------------
+shopt -s nullglob
 for f in "$WORK"/out/*.json; do
   name="$(basename "$f")"
   dest="hf://buckets/rhtse/jobs-artifacts/ivrb/$MODEL.$name"
