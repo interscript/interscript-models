@@ -114,6 +114,9 @@ LEAK_RANGES = [(0x0591, 0x05C7), (0x0610, 0x061A), (0x064B, 0x065F),
 
 SEP_RE = re.compile(r"\s+")
 
+# word-level memo across systems (urdu/heb words repeat heavily across rows)
+_word_cache: dict[tuple[str, str, str], bool] = {}
+
 
 def is_leak_char(ch: str) -> bool:
     o = ord(ch)
@@ -210,6 +213,9 @@ def main() -> None:
     ap.add_argument("model_id", choices=sorted(MODELS))
     ap.add_argument("--rows", type=int, default=0, help="cap rows (0 = full split)")
     ap.add_argument("--out", default="")
+    ap.add_argument("--shard", default="",
+                    help="K/N — process rows with index %% N == K (protocol-clean: "
+                    "rows are independent; shards merge by summing raw accumulators)")
     ap.add_argument("--crossval", action="store_true",
                     help="isurs cross-check vs iscrs (>= 200 sampled rows per system)")
     ap.add_argument("--seed", type=int, default=20261125)
@@ -229,6 +235,11 @@ def main() -> None:
     rows = [json.loads(l) for l in
             Path(data["path"]).read_text(encoding="utf-8").splitlines() if l.strip()]
     assert len(rows) == data["rows"], f"row count {len(rows)} != {data['rows']}"
+    if args.shard:
+        k, n = (int(x) for x in args.shard.split("/"))
+        rows_all = rows
+        rows = [r for i, r in enumerate(rows) if i % n == k]
+        print(f"[shard] {args.shard}: {len(rows)}/{len(rows_all)} rows", flush=True)
     if args.rows:
         rows = rows[: args.rows]
     print(f"[data] {len(rows)} rows", flush=True)
@@ -269,9 +280,9 @@ def main() -> None:
     print(f"[decode] done in {decode_s:.0f}s", flush=True)
 
     # cer_nat (corpus-level, native space)
-    d = sum(edit_distance(p, g) for p, g in zip(v_dir, golds))
-    n = sum(len(g) for g in golds)
-    cer_nat = cer(d, n)
+    d_nat = sum(edit_distance(p, g) for p, g in zip(v_dir, golds))
+    n_nat = sum(len(g) for g in golds)
+    cer_nat = cer(d_nat, n_nat)
     print(f"[cer_nat] {cer_nat:.5f} (corpus-level)", flush=True)
 
     # ---- system arms ------------------------------------------------------
@@ -293,12 +304,17 @@ def main() -> None:
         skel_cer = cer(d_skl, n_skl)
         retention = 1.0 - recovery_cer / skel_cer if skel_cer > 0 else 0.0
 
-        # model-free encode rate: word-level f_S(voc) != f_S(skel)
+        # model-free encode rate: word-level f_S(voc) != f_S(skel), memoized
         same = diff = 0
         for g, s in zip(golds, skels):
             gw, sw = g.split(), s.split()
             for wv, ws in zip(gw, sw):
-                if transliterate(sysid, wv) == transliterate(sysid, ws):
+                pair = (sysid, wv, ws)
+                if pair not in _word_cache:
+                    _word_cache[pair] = (
+                        transliterate(sysid, wv) == transliterate(sysid, ws)
+                    )
+                if _word_cache[pair]:
                     same += 1
                 else:
                     diff += 1
@@ -312,6 +328,11 @@ def main() -> None:
             "recovery_cer": round(recovery_cer, 6),
             "skel_cer": round(skel_cer, 6),
             "retention": round(retention, 6),
+            "raw": {
+                "d_rec": d_rec, "n_rec": n_rec,
+                "d_skl": d_skl, "n_skl": n_skl,
+                "w_same": same, "w_diff": diff,
+            },
             "encode_rate": round(encode_rate, 6),
             "mark_leak_gold_rows": leak,
             "mark_leak_dir_rows": leak_dir,
@@ -351,7 +372,9 @@ def main() -> None:
         "lang": lang,
         "precision": model["precision"],
         "rows": len(golds),
+        "shard": args.shard or "0/1",
         "cer_nat": round(cer_nat, 6),
+        "raw": {"d_nat": d_nat, "n_nat": n_nat},
         "decode_wall_s": round(decode_s, 1),
         "systems": results,
         "crossval": crossval,
@@ -365,7 +388,8 @@ def main() -> None:
         },
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
     }
-    out = args.out or f"/tmp/ivrb-out/{args.model_id}.json"
+    shard_tag = args.shard.replace("/", "-") if args.shard else ""
+    out = args.out or f"/tmp/ivrb-out/{args.model_id}{shard_tag}.json"
     Path(out).parent.mkdir(parents=True, exist_ok=True)
     Path(out).write_text(json.dumps(record, indent=2, ensure_ascii=False))
     print(f"[done] {out}", flush=True)
