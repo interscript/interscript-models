@@ -117,6 +117,29 @@ SEP_RE = re.compile(r"\s+")
 # word-level memo across systems (urdu/heb words repeat heavily across rows)
 _word_cache: dict[tuple[str, str, str], bool] = {}
 
+# Decode budgets (ivrb-v1 amendment): base budget = the language's house
+# protocol budget (urd: the recipe's maxlen 256; heb: the crown eval's
+# max_new_tokens=512, eval_hebrew_s46_greedy.py). A row whose generation
+# FILLS the budget without EOS is truncated: re-decode it with
+# max_new = ceil(1.2 x generated length), iterated to stability (cap 4).
+BASE_MAX = {"urd": 256, "heb": 512}
+RESIZE_FACTOR = 1.2
+RESIZE_PASSES = 4
+
+
+def translate_sized(voc, text: str, lang: str) -> str:
+    """House-budget decode with truncation-aware resizing."""
+    from interscript.ml.tokens import decode
+    from interscript.ml.model import first_alternates
+
+    budget = BASE_MAX[lang]
+    for _ in range(RESIZE_PASSES):
+        ids = voc.generate(text, max_len=budget)
+        if len(ids) < budget:  # EOS emitted — not truncated
+            return first_alternates(decode(ids))
+        budget = int(RESIZE_FACTOR * len(ids)) + 1
+    return first_alternates(decode(ids))
+
 
 def is_leak_char(ch: str) -> bool:
     o = ord(ch)
@@ -270,7 +293,7 @@ def main() -> None:
     t0 = time.time()
     for i, sk in enumerate(skels, 1):
         wins = split_windows(sk)
-        v_dir.append(stitch(sk, [voc.translate(w) for w in wins]))
+        v_dir.append(stitch(sk, [translate_sized(voc, w, lang) for w in wins]))
         if i % 200 == 0:
             rate = i / (time.time() - t0)
             eta = (len(skels) - i) / rate / 60

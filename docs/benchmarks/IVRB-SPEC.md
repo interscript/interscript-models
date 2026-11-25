@@ -109,9 +109,17 @@ mismatch.
 ## 5. Conventions and comparability rules (house laws)
 
 1. **Decode protocol:** single-row greedy decode, no batching, no repetition
-   penalties, max_len 256 (the IMF runtime `translate()` default), ONNXRuntime
-   CPU, `intra_op = inter_op = 1` (the WO79 byte-exact conformance law). No
-   beam. Batched/masked-encoder modes are out of scope for v1.
+   penalties, ONNXRuntime CPU, `intra_op = inter_op = 1` (the WO79
+   byte-exact conformance law). No beam. Batched/masked-encoder modes are
+   out of scope for v1. **Decode budget:** the base budget is the
+   language's house protocol budget — urd 256 new tokens (the recipe's
+   `maxlen: 256`), heb 512 new tokens (the crown eval's
+   `max_new_tokens=512`, `eval_hebrew_s46_greedy.py`). A row whose
+   generation fills the budget without EOS is truncated; it is re-decoded
+   with `max_new = ⌈1.2 × generated length⌉`, iterated to stability (cap
+   4 passes). Rows that end on EOS under the base budget — every urd row
+   and the short-heb majority — are identical to the plain house-budget
+   decode; the resizing touches only truncated rows.
 2. **Byte table:** ByT5 byte-level, byte `b` → id `b + 3`, trailing EOS; the
    runtime owns this (the silent-garbage class of bugs is excluded by using the
    conformance-proven runtime, never hand-rolled encoding).
