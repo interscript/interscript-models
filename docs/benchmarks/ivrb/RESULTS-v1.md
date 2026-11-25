@@ -24,6 +24,32 @@ per system before ranking (SPEC §9.4).
 | heb-vocalized-1.0 (fp32, shards 0/2+1/2) | `6b06c3191460ffe1d5ea862e` | RUNNING | `93b7977` | bucket |
 | heb-vocalized-small-1.0 (fp32, shards 0/2+1/2) | `6b06c2a51460ffe1d5ea84f7` | RUNNING | `7213461` | bucket |
 
+**Re-dispatch footnote (2026-11-25, live-log driven).** The two fp32
+Hebrew base legs ran at the measured cpu-basic rate of ~73–110 s/row
+(single-thread ORT decode), putting the sequential 0/2+1/2 plans past
+the 23 h timeout: heb-1.1 measured eta 890 min for shard 0 alone
+(~30 h total), and heb-1.0 produced zero 200-row decode prints after
+~6 h (rate floor ≥ 104 s/row → shard 0 alone ≥ 26.9 h). Both jobs were
+canceled after log-verified identification and re-dispatched as four
+independent per-shard jobs each (k=4 → 466 rows/shard → 9.5–14.3 h
+measured-band, margin ≥ 8.7 h), same harness sha `93b7977f…`, same
+pins, same decode budgets — protocol unchanged, records stay
+merge-compatible:
+
+- heb-vocalized-1.1: `ivrb-heb-11-s0` `6b06fea5b6a90bbe997dca35`,
+  `-s1` `6b06fea7d91f621b93083bd8`, `-s2` `6b06fea8d91f621b93083be0`,
+  `-s3` `6b06feaab6a90bbe997dca3c` (all cpu-basic RUNNING)
+- heb-vocalized-1.0: `ivrb-heb-10-s0` `6b06feb5d91f621b93083bfc`,
+  `-s1` `6b06feb6d91f621b93083c01`, `-s2` `6b06feb8d91f621b93083c05`,
+  `-s3` `6b06feb9b6a90bbe997dca66` (all cpu-basic RUNNING)
+
+heb-vocalized-small-1.0 stays on its original job (log eta 504 min →
+~21 h total, margin ~1.8 h — within timeout, watch item). Flavor note:
+cpu-upgrade (8 vCPU) was considered and rejected — ORT decode is
+single-thread (`intra_op = inter_op = 1`), so the extra vCPUs do not
+improve per-row rate, and its per-core clock is unmeasured; the
+measured-rate k=4 shape on cpu-basic is the guaranteed fit.
+
 Shared pins: interscript-py `bf3ac6f` (engine + IMF runtime), maps
 `cc67dd3` (= maps release v3.2.0, `maps/` byte-identical), data shas
 `6d822ae7…` (urd, WO37 set) and `77e9b5dc…` (heb, crown set) — both
