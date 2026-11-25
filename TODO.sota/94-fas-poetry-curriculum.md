@@ -411,3 +411,54 @@ ckpts, step-* ckpts, verdict.json, dropped-rows.jsonl sha256
 2b1c29fe9992ad52cc062d985f72e0be9f623fabfa52439970180c2000beb00c,
 holdout-decomposition.json). Trainer + fix on `interscript-train`
 `feat/fas-vocalized-sft` (c6f1523, 3a93274; f528d6f probe).
+
+## Docs-instrument RE-BASELINE — the triangle (2026-11-26, disposition 1
+## executed and approved-now; disposition 2 HELD for owner relay)
+
+Instrument construction (owner-approved law, pre-registered before any
+eval): the pinned 9,288-row docs test minus every row whose `src.strip()`
+appears in the stripped-src set of the ORIGINAL pinned register train
+split (445,869 rows, 383,923 unique stripped srcs) — src-side ONLY (the
+memorization vector is the visible input), rows verbatim, no re-split.
+**Clean instrument: 7,621 rows** (1,667 colliding rows removed; the
+probe's 1,587 was the unique-input count — multi-row collisions account
+for the difference). Built by `interscript-train build_docs_test_clean.py`
+(job `rhtse/6b07529fb6a90bbe997e8057`; input pins verified in-job):
+`isx-training:/wo94-docs-instrument/docs-test-clean/`,
+docs-test-clean.jsonl sha256 61f2b760d5fc5b89569998cc8a2627588495cbdd00d1521d916d61bcc8341dc9.
+
+### The triangle (identical greedy crown protocol on the SAME 7,621 rows)
+
+| model | instrument | rows | cer row-mean | word acc |
+|---|---|---|---|---|
+| crown lineage champion (`run-078-fas-diac-base/best`, the shipped fas-vocalized-base-1.0 tier's torch source) | contaminated (historical, RESULTS/models.yaml) | 9,288 | **0.603%** | — |
+| crown, clean | `wo94-docs-instrument/docs-test-clean` | 7,621 | **0.6527%** (0.006527) | 0.805537 |
+| run-099-r2 best, clean | `wo94-docs-instrument/docs-test-clean` | 7,621 | **0.8526%** (0.008526) | 0.777457 |
+
+eval-verdict.json sha256s: crown e4e6b3d08cc56423fb1391f799291f9850bb7f5bcf4b397f8112fde1a4b863b3;
+run-099 35f9affd712b873b40aa6b26af66ecbc5574e6b255cfd5bb871742852b301863
+(`run-078-fas-diac-base-best-clean-eval/` and
+`run-099-fas-vocalized-sft-best-clean-eval/` on the bucket; jobs
+`rhtse/6b075300b6a90bbe997e8129` 20m5s and `rhtse/6b075306b6a90bbe997e8141`
+19m54s, l4x1, identical protocol/code).
+
+### Reading (the triangle decides)
+
+- **The contamination subsidy on the crown is +0.0497pp** (0.603 →
+  0.6527 clean). Real, but small — the crown still clears the 0.70% gate
+  on the clean instrument.
+- **The run-099 docs regression is REAL on the clean instrument**:
+  +0.1999pp clean-to-clean (0.8526 vs 0.6527). Contamination explains
+  only ~0.05pp of the apparent gap; the remaining ~0.20pp is genuine
+  register cost from the curriculum's poetry share (0.330).
+- **Disposition 2 is therefore JUSTIFIED per the owner's rule**
+  ("proportion iteration only if the regression is real on the clean
+  instrument"): launch a proportion-iteration run — recommendation:
+  ganjoor share 0.330 → **0.15** (between the register arm's ~0.073
+  effective share and run-099's 0.330), same recipe otherwise, ~13 h
+  a100 — **HELD for owner relay before dispatch** (per instruction; no
+  training GPU until the triangle is seen). The clean instrument is the
+  eval for that iteration, and the gate re-read on it: crown clean 0.6527%
+  clears 0.70% — the gate stands as-is on the clean instrument for now;
+  any redefinition stays an owner call.
+- Successor naming stays unpicked; nothing ships.
