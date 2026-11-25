@@ -168,3 +168,120 @@ Aggregate-only logging (Clause 19): corpus text never printed.
 ## Cost
 
 ≈ 3.5–3.8 GPU-h on a100 (single job) + ~2 h l4x1 if the 16(e) gate runs.
+
+### SHIP: urd-vocalized-2.1 released (2026-11-25) — the full chain
+
+**Matched-split calibrated Clause 16(e): PASS (2026-11-25)** — config
+`run-097-vocalized-calibrated-matchedsplit.json` (candidate run-097
+step-53733 vs reference run-066-urd-diac-base/best via
+GATE_REFERENCE_PATH, sha8 d55b08d6; same_population matched split per
+urdu-dev#24), records bucket
+`rhtse/urdu-16e-gate/urdu-16e-run-097-vocalized-calibrated-matchedsplit`,
+seed 20261117, retention_until **2028-11-25**. Verdict verbatim:
+- calibrated AUC **0.4816** (chance 0.5, deviation 0.0184 <= 0.05) PASS
+- **ref_selfcontrol_auc 0.5 exactly** (harness soundness precondition)
+- calibrated success rate 0.515 (tolerance 0.6); TPR@FPR=0.05 0.04
+- extraction 125 prompts / 0 violations / 0 canaries; verbatim 200
+  probes / 0 violations (25-word floor); WordNet 5,131 synsets,
+  67,364 n-grams, 0 vocab hits; failures list: empty
+- split record: enforced, same_population, in/out median 507/494 words,
+  parity pass
+
+**Delegation of record (verbatim, from the merged urdu-dev#23 record):**
+- "Fully approve all, use reasonable recommendations" (2026-11-21)
+- "Continue all and make SOTA 2027... finally launch" (2026-11-22)
+These constitute standing approval for evidence-complete
+reasonable-recommendation execution; the ship runbook was executed
+within its loaded terms, with the version urd-vocalized-2.1 stated in
+the owner's runbook instruction (this record's Version candidate
+section, pre-registered before the gates ran).
+
+**The direct-gold finding of record (WO93 hypothesis CONFIRMED):**
+human-verified gold labels beat distilled (teacher-relabel) labels on
+the same corpus — run-097 (ByT5-small trained DIRECTLY on the 573,130
+sha-pinned public-lineage gold pairs, data-diacrit 95736b0d, no
+teacher, no relabel, no distillation, no LLM labels) scored full-split
+raw CER **0.03632** vs the shipped distilled student's 0.03641
+(run-096/urd-vocalized-2.0), the champion 3.74 (urd-vocalized-1.0),
+and the pre-registered gate 0.0377 — with the cleanest possible
+lineage: single hop from raw google/byt5-small, zero CLE exposure
+anywhere (data-diacrit ∩ CLE = 0 shingles at GUARD_N 8, ledgers
+#475/#477). The distilled line is not discarded: urd-vocalized-2.0
+remains listed and available; 2.1 supersedes it as the small-tier
+reference.
+
+**Ship runbook executed (2026-11-25), every step verified:**
+1. Artifact: `urd-vocalized-2.1-int8-dynamic.zip` — 261,179,496 B,
+   sha256 `993a441144342db400f9db912f133cb992f9c593710d1e78d111729c6c8f5525`
+   (+ .sha256 sidecar). House IMF export (`src/imf/export.py`):
+   encoder.onnx 219.8 MB + decoder.onnx / decoder-kv.onnx 86.3 MB each,
+   opset 14, dynamic int8 MatMul-only with the tied head fp32
+   (`/lm_head/MatMul` excluded); sanity decode 'سربراہ' →
+   'سْرَبْرْاَہْ' exact on gold. Parity: cer_delta **0.0671 pp** on the
+   committed 600-row slice
+   `conformance/wo20/eval600/urd_eval_600.jsonl` (sha256
+   `a06c8a2dcacec88bec0ad85b4e851a78c72429102e4051d2705b994c48108ca0`,
+   single-row greedy MAXLEN 512, reference = fp32 ONNX under ORT CPU;
+   int8 gate 2.0pp; argmax flips 0.5391%, confident flips 0.3485%,
+   gate 1%) — larger than run-096's 0.0062pp, comfortably inside both
+   pre-registered gates.
+2. GH release: tag `urd-vocalized-2.1` (live), assets zip (261,179,496
+   B, byte-exact) + sidecar, notes with the direct-gold lineage, all
+   three bars, 16(e) PASS verbatim, and the Schedule D attribution —
+   https://github.com/interscript/interscript-models/releases/tag/urd-vocalized-2.1
+3. models.yaml entry + docs/RESULTS.md run-097 section + 600 frozen
+   conformance vectors + golden decode tokens + model card — PR #489
+   (all 13 checks green, rebase-merged 581c884). Metrics anchor
+   (house slug):
+   `docs/RESULTS.md#run-097-urd-vocalized-21-direct-gold-quality-gate-pass-and-calibrated-clause-16e-2026-11-25`.
+4. index-v18: release-index.yml dispatch (tag index-v18), sidecar
+   verified (sha256
+   `6ad2f6185abb482028bf3e7e29212effeae5ecb8528792aac7f446aaadb59d27`),
+   72 entries, urd-vocalized-2.1 resolves (sha/size/precision verified
+   from the served yaml).
+5. Pins (fresh branches off the current mains, all green, all
+   rebase-merged): rs #56 (d1c8815), ruby #882 (516fa75),
+   ts #161 (7da3904), py #57 (c8d7ddd).
+6. Patch releases: rs 0.4.2 (PR #57 merged 7fba2f3 — Cargo.toml +
+   publish.yml Verify-version gate literal same commit; tag v0.4.2 on
+   it; publish.yml dispatched from main, success; crates.io verified —
+   max_version 0.4.2, versions[0] 0.4.2), ruby 3.8.2 (PR #883 merged
+   4a39f25; tag v3.8.2 on it; tag-triggered release.yml success —
+   "Successfully registered gem: interscript (3.8.2)" in-log;
+   rubygems.org verified — v2 endpoint created 2026-11-25T07:12:24Z,
+   versions[0] 3.8.2 after one CDN-lagged read showed 3.8.1, the
+   documented "CDN lag is never a re-dispatch signal" pattern), npm
+   6.0.2 (release.yml dispatch -f version=6.0.2 success; publish
+   confirmed in-log "+ interscript@6.0.2" before registry metadata
+   caught up; registry tarball HEAD 200 ground-truth), py: pin merge
+   only (#57; the PyPI publish form is owner-gated).
+7. HF mirror: `Interscript/urd-vocalized-2.1` public (hf-publish.yml
+   dispatch, run 45560959458 success; repo private=False gated=False;
+   zip byte-exact anonymous download 993a4411…; README card carries
+   the full Schedule D citation — no follow-up PR needed this time
+   since the merged card already carries it).
+8. Compliance certificate: `interscript/pk-cle-urdu`
+   COMPLIANCE-CERTIFICATE.md extended + flipped (LOCAL commit 9024a41
+   per that repo's convention — never pushed): title/status cover both
+   period artifacts, Part 1 item 4 covers both releases' placements,
+   Part 2 gains the urd-vocalized-2.1 row (release URL + HF URL +
+   sha256 + PASS 2026-11-25), Part 4 gains the full run-097 verdict
+   record (the numbers above + records bucket + retention clock +
+   direct-gold lineage note), Part 5 covers both release records.
+   Filing with CLE-KICS, UET remains the Responsible Officer's action
+   (30 days of period close).
+9. Site: models-catalogue.json regenerated from the shipped models.yaml
+   (39 → 40 models; the 2.1 row field-verified against the release
+   record before commit) + the /vocalization family table gains
+   urd-vocalized-2.1 (CER 3.632%, direct-gold; 2.0 kept listed as
+   available; index refs moved to v18) — interscript.github.io PR #262
+   (astro check 0 errors, build verified locally, the built pages
+   render the new row) — MERGED fd36738; live verified:
+   https://interscript.org/ml/ renders "40 models" + urd-vocalized-2.1
+   (CER 3.632), https://interscript.org/vocalization/ renders the 2.1
+   family row.
+10. End-to-end runtime verification (final gate): the shipped py
+    runtime (origin/main, index-v18 pin baked) — `load_index()` →
+    urd-vocalized-2.1 → `resolve()` downloaded + sha256-VERIFIED to
+    cache (993a4411… == models.yaml sha, 261,179,496 B); 72 index
+    entries served. The whole chain is live for real consumers.
