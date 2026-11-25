@@ -462,3 +462,32 @@ run-099 35f9affd712b873b40aa6b26af66ecbc5574e6b255cfd5bb871742852b301863
   clears 0.70% — the gate stands as-is on the clean instrument for now;
   any redefinition stays an owner call.
 - Successor naming stays unpicked; nothing ships.
+
+## run-100 PRE-DISPATCH record (2026-11-26 — disposition 2 RELAYED)
+
+The owner relayed the triangle and authorized the proportion iteration.
+Pair numbers, derived BEFORE dispatch (trainer knob
+`FAS_GANJOOR_SHARE`, interscript-train `feat/fas-vocalized-prop-iter`
+9b82a48 off main 01a1b4b):
+
+- **docs side stays COMPLETE**: 436,599 post-exclusion rows (the
+  register anchor is never subsampled — same as run-099-r2).
+- **ganjoor capped**: floor(436,599 × 0.15 / 0.85) = **77,046** rows,
+  seed-42 sample over the SAME post-exclusion pool run-099 used —
+  so PROPORTION is the only experimental delta (exclusions, recipe,
+  holdout law identical).
+- **combined: 513,645 pairs; ganjoor share 0.149999 (~0.15 by
+  construction)**. vs run-099-r2: ganjoor 215,067 → 77,046 (−64%),
+  poetry exposure per epoch ~77k verses.
+- **The docs gate now measures on the CLEAN instrument**:
+  `wo94-docs-instrument/docs-test-clean` (7,621 rows, docs-test-clean
+  sha256 61f2b760d5fc5b89569998cc8a2627588495cbdd00d1521d916d61bcc8341dc9,
+  pin-verified in-job), threshold UNCHANGED at 0.0070 row-mean; crown
+  clean reference on the same instrument: 0.6527% (under gate).
+- Gates for the completion report: docs clean-instrument row-mean
+  < 0.70% (gate), pinned poetry 3,497 reported INFORMATIONALLY against
+  run-099's 15.1375%, corpus val (ganjoor shard-7 5k) reported.
+- Run: **run-100-fas-vocalized-sft** (new run dir; a100-large, detached,
+  16 h, attempts 2, step-1000 ckpts + resume; fleet at dispatch: 0
+  big-GPU jobs). ETA ~8–10 h (513,645/32 × 3 ≈ 48,154 steps at the
+  measured ~4.1 it/s + evals).
