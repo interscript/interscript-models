@@ -328,3 +328,86 @@ quality evals stay the two pinned external sets.
 Training does NOT launch from this ledger update — the owner relays the
 gate PASS before any GPU dispatch. The curriculum plan and the GPU table
 above are the standing draft.
+
+## Phase 2 — run-099 RECORD (2026-11-26): poetry HALVED+ on a clean eval;
+## docs gate FAIL + a docs-gate INSTRUMENT finding — successor claim OPEN
+
+Owner relayed the subset-gate PASS (2026-11-25); phase-2 authorized per
+the plan. Dispatched the DIRECT-GOLD arm (the cc-fa-web weak-pretrain arc
+stays parked per the launch-authority note): **run-099-fas-vocalized-sft**
+(google/byt5-base; combined curriculum fas-ganjoor 215,067 + fas-dia
+register, seed-42 shuffle; crown recipe verbatim — bs 16×2, MAXLEN 256,
+3 epochs, 61,092 steps, lr 1e-4 cosine, bf16; step-1000 ckpts + resume;
+greedy decode only; nan_skips 0). Job `rhtse/6b070d99b6a90bbe997df9e9`
+(a100-large, detached, 16h; attempt-1 aborted pre-step at the eval-leak
+kill — 5 register rows matched pinned eval sources; the fix enforces the
+holdout law constructively: drop + record to dropped-rows.jsonl, hard
+residual assertion).
+
+### Verdict VERBATIM (verdict.json sha256 f3c48d1695eab43c1dc0e72063ca9061c8b87da8480c0fed0da0376a34a9b13b)
+
+```
+{"run": "run-099-fas-vocalized-sft", "backbone": "google/byt5-base",
+ "curriculum": {"ganjoor": 215067, "docs": 436599},
+ "epochs": 3, "steps": 61092, "nan_skips": 0,
+ "docs_gate": {"rows": 9288, "cer_row_mean": 0.009334, "word_acc": 0.770457,
+               "gate_row_mean_max": 0.007, "gate_pass": false},
+ "poetry_eval": {"rows": 3497, "cer_row_mean": 0.151375, "word_acc": 0.078353,
+                 "baseline": 0.3367, "register_arm_precedent": 0.1655},
+ "ganjoor_val": {"tag": "ganjoor-val5k", "rows": 5000,
+                 "cer_row_mean": 0.042028, "word_acc": 0.4724},
+ "verdict": "FAIL"}
+```
+
+- **Poetry (the SOTA surface): 15.1375%** on the fully held-out pinned
+  eval — vs the 33.67% baseline (2.2× better) AND below the 16.55%
+  register-arm precedent, with NO eval exposure (the acquisition
+  decontam + the run's holdout exclusion; ganjoor drops 0). The
+  acquired-mass curriculum delivers more poetry than the seed-oversample
+  arm did.
+- **Docs hold: FAIL** — 0.9334% vs the 0.70% gate. Per the pre-registered
+  kill criterion this run is a poetry specialist, NOT the successor; the
+  crown `fas-vocalized-base-1.0` stays shipped.
+
+### INSTRUMENT FINDING — the docs gate's comparability is broken
+
+The r2 holdout dropped **9,270 docs rows**, and the decomposition probe
+(`interscript-train holdout_decompose.py`, job
+`rhtse/6b0750ded91f621b9308fe30`,
+holdout-decomposition.json on the run dir):
+
+```
+{"total_dropped": 9270, "reason_counts": {"docs_test_src": 9264,
+ "docs_test_tgt": 7911, "poetry_eval_src": 5}, "src_side_drops": 9264,
+ "tgt_side_drops": 6, "docs_test_srcs_total": 9205,
+ "docs_test_srcs_also_in_train": 1587,
+ "docs_test_srcs_also_in_train_fraction": 0.172406}
+```
+
+**9,264 register-TRAIN rows carry INPUTS verbatim-identical to the
+9,288-row docs test**; 1,587 of 9,205 unique test inputs (17.24%) appear
+in the train split (many-to-one, ~5.8 train rows per test input). Every
+lineage docs number (the 0.52% docs line, the 0.603% champion, the 0.70%
+gate) was measured while a chunk of the gate set was visible in training;
+run-099 trained WITHOUT those rows. The 0.9334% and the 0.603% are NOT
+same-instrument numbers — the register cost of this run is overstated by
+an unquantified memorization subsidy the prior champions enjoyed. The
+poetry number carries no such confound.
+
+### Disposition (owner queue — no further GPU until ruled)
+
+1. **Re-baseline the docs instrument**: measure the shipped 0.603%
+   champion (and run-099) on the contamination-controlled test (drop the
+   1,587 exposed test inputs, or dedupe test-vs-train) — restores
+   comparability; then re-read the 0.70% gate.
+2. **The pre-registered proportion iteration** (the kill criterion's
+   "seed-oversample proportion next"): re-run with the ganjoor share
+   reduced (e.g. 0.330 → ~0.15) — same 40–80 GPU-h envelope, ~13 h.
+3. **Successor naming stays unpicked** (fas-vocalized-1.0 remains the
+   candidate id; nothing ships from run-099).
+
+run artifacts: `isx-training:/run-099-fas-vocalized-sft/` (best/, 3 epoch
+ckpts, step-* ckpts, verdict.json, dropped-rows.jsonl sha256
+2b1c29fe9992ad52cc062d985f72e0be9f623fabfa52439970180c2000beb00c,
+holdout-decomposition.json). Trainer + fix on `interscript-train`
+`feat/fas-vocalized-sft` (c6f1523, 3a93274; f528d6f probe).
