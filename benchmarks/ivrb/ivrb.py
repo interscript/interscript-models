@@ -32,29 +32,41 @@ import time
 from pathlib import Path
 
 # ---------------------------------------------------------------- pins ----
+# Paths are env-overridable so the same pinned harness runs locally and
+# inside HF Jobs (benchmarks/ivrb/hfjob.sh sets IVRB_*); the sha256 pins
+# are the identity, never the path.
 
-ISCRS_BIN = "/Users/mulgogi/src/interscript/interscript-rs/target/release/iscrs"
+import os
+
+ISCRS_BIN = os.environ.get(
+    "IVRB_ISCRS", "/Users/mulgogi/src/interscript/interscript-rs/target/release/iscrs")
 ISCRS_GIT = "interscript-rs@f054108 (release/0.2.2)"
-MAPS_DIR = "/Users/mulgogi/src/interscript/maps/maps"
-MAPS_GIT = "interscript-maps@cc67dd3"
+MAPS_DIR = os.environ.get("IVRB_MAPS", "/Users/mulgogi/src/interscript/maps/maps")
+MAPS_GIT = "interscript-maps@cc67dd3 (= maps release v3.2.0, maps/ byte-identical)"
 PY_ENGINE_GIT = "interscript-py@bf3ac6f (wo20-fix-py)"
 ML_RUNTIME_GIT = "interscript-py@bf3ac6f src/interscript/ml (Model, WO79 single-thread CPU)"
 PROTOCOL = "ivrb-v1"
 
 DATA = {
     "urd": {
-        "path": "/Users/mulgogi/src/interscript/rababa-urdu/data-diacrit/test.jsonl",
+        "path": os.environ.get(
+            "IVRB_DATA_URD",
+            "/Users/mulgogi/src/interscript/rababa-urdu/data-diacrit/test.jsonl"),
         "sha256": "6d822ae70a383e5547ee82e841a65e83fac81ae47ff320999b8e6b101b1790bb",
         "rows": 11940,
         "note": "urd-dia@v1#test, WO37 protocol set",
     },
     "heb": {
-        "path": "/Users/mulgogi/.cache/huggingface/hub/datasets--Interscript--hebrew-v4/snapshots/b5e6502d8e1eb99a443ed5c6e54b38e841a8dc86/test.jsonl",
+        "path": os.environ.get(
+            "IVRB_DATA_HEB",
+            "/Users/mulgogi/.cache/huggingface/hub/datasets--Interscript--hebrew-v4/snapshots/b5e6502d8e1eb99a443ed5c6e54b38e841a8dc86/test.jsonl"),
         "sha256": "77e9b5dc3a3b9e7d70924e670f7361455b714ec8212e046662ea04187b153ccc",
         "rows": 1864,
         "note": "hebrew-v4 test split, crown protocol set",
     },
 }
+
+OUT_DIR = os.environ.get("IVRB_OUT", "/tmp/ivrb-out")
 
 SYSTEMS = {
     "heb": [
@@ -211,9 +223,19 @@ def cer(dist: int, total: int) -> float:
 
 # ------------------------------------------------------------ engines ----
 
+# the py-engine/ml runtime source: local checkout by default, PYTHONPATH
+# in HF Jobs (hfjob.sh exports IVRB_PY_SRC after the pinned clone)
+PY_SRC = os.environ.get(
+    "IVRB_PY_SRC", "/Users/mulgogi/src/interscript/interscript-py/src")
+
+
+def _ensure_py_src() -> None:
+    if PY_SRC and os.path.isdir(PY_SRC) and PY_SRC not in sys.path:
+        sys.path.insert(0, PY_SRC)
+
 
 def load_engine():
-    sys.path.insert(0, "/Users/mulgogi/src/interscript/interscript-py/src")
+    _ensure_py_src()
     from interscript import add_load_path, transliterate
 
     add_load_path(MAPS_DIR)
@@ -247,11 +269,14 @@ def main() -> None:
     model = MODELS[args.model_id]
     lang = model["lang"]
     data = DATA[lang]
+    # IVRB_ZIP relocates the artifact (HF Jobs fetches the same release
+    # zip; the sha256 pin below is the identity, never the path)
+    zip_path = os.environ.get("IVRB_ZIP") or model["zip"]
 
     # pins: verify data + model shas before anything runs (SPEC section 9)
     data_sha = sha256_file(Path(data["path"]))
     assert data_sha == data["sha256"], f"data sha mismatch: {data_sha}"
-    model_sha = sha256_file(Path(model["zip"]))
+    model_sha = sha256_file(Path(zip_path))
     assert model_sha == model["sha256"], f"model zip sha mismatch: {model_sha}"
     print(f"[pins] data sha ok; model zip sha ok", flush=True)
 
@@ -268,11 +293,11 @@ def main() -> None:
     print(f"[data] {len(rows)} rows", flush=True)
 
     # vocalizer: the conformance-proven runtime, single-row greedy (SPEC 5.1)
-    sys.path.insert(0, "/Users/mulgogi/src/interscript/interscript-py/src")
+    _ensure_py_src()
     from interscript.ml import Model
 
     t0 = time.time()
-    voc = Model.load(model["zip"])
+    voc = Model.load(zip_path)
     print(f"[model] {args.model_id} loaded ({args.model_id and model['precision']}) "
           f"in {time.time()-t0:.1f}s", flush=True)
 
@@ -412,7 +437,7 @@ def main() -> None:
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
     }
     shard_tag = args.shard.replace("/", "-") if args.shard else ""
-    out = args.out or f"/tmp/ivrb-out/{args.model_id}{shard_tag}.json"
+    out = args.out or f"{OUT_DIR}/{args.model_id}{shard_tag}.json"
     Path(out).parent.mkdir(parents=True, exist_ok=True)
     Path(out).write_text(json.dumps(record, indent=2, ensure_ascii=False))
     print(f"[done] {out}", flush=True)
