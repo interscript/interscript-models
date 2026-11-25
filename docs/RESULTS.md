@@ -2822,3 +2822,77 @@ verbatim):
   `interscript/pk-cle-urdu` (LOCAL commit per that repo's convention).
   Schedule D attribution ships in the model card, zip README, and
   release notes per the placement rules.
+
+## run-097 urd-vocalized-2.1 direct-gold quality gate pass and calibrated Clause 16(e) (2026-11-25)
+
+The WO93 direct-gold arm closes: **urd-vocalized-2.1** — ByT5-small
+trained DIRECTLY on the human-verified gold pairs (no teacher, no
+distillation, single hop) — passes BOTH release gates and beats the
+shipped distilled student urd-vocalized-2.0.
+
+**Quality gate PASS** (`isx-training:/run-097-urd-diac-gold/verdict.json`,
+verbatim):
+
+```json
+{
+    "run": "run-097-urd-diac-gold",
+    "init": "google/byt5-small",
+    "corpus_run": "data-diacrit-gold-95736b0d",
+    "steps": 53733, "epochs": 3, "pairs": 573130, "eval_rows": 11940,
+    "cer": 0.03632,
+    "quality_gate_cer": 0.0377,
+    "quality_pass": true,
+    "chain_pass": true,
+    "verdict": "PASS"
+}
+```
+
+| urd vocalized tier | full-split raw CER (WO37 protocol, 11,940 rows) |
+|---|---|
+| **run-097 student (urd-vocalized-2.1)** | **0.03632** |
+| urd-vocalized-2.0 (run-096 distilled student) | 0.03641 |
+| urd-vocalized-1.0 (shipped champion) | 0.0374 |
+| pre-registered gate (champion bar) | 0.0377 |
+
+- **Direct-gold lineage (single hop)**: init = raw `google/byt5-small`;
+  labels = the human-verified gold corpus itself — data-diacrit train
+  split, 573,130 src/tgt pairs (sha256 95736b0d19e57ada…, the run-066
+  lineage source; owner license review 2026-10-18, explicitly NOT CLE).
+  No teacher, no relabel, no distillation step; no LLM anywhere near
+  the labels (registry law). The finding of record (WO93 hypothesis
+  CONFIRMED): **human-verified gold labels beat distilled
+  (teacher-relabel) labels** on the same corpus — 0.03632 vs 0.03641 —
+  with the cleanest possible lineage: zero CLE exposure anywhere
+  (data-diacrit ∩ CLE = 0 shingles at GUARD_N 8, ledgers #475/#477).
+- **Calibrated Clause 16(e) PASS** (matched split, records
+  `rhtse/urdu-16e-gate/urdu-16e-run-097-vocalized-calibrated-matchedsplit`,
+  seed 20261117, retention 2028-11-25): calibrated AUC **0.4816**
+  (deviation 0.0184 <= tolerance 0.05), reference self-control AUC
+  **0.5 exactly**, calibrated success rate **0.515** (<= 0.6);
+  extraction 125 prompts / 0 violations / 0 canaries; verbatim 200
+  probes / 0 violations (25-word floor); WordNet 5,131 synsets,
+  67,364 n-grams, 0 vocab hits. Reference model
+  `run-066-urd-diac-base/best` (sha8 d55b08d6) per the matched-split
+  amendment (urdu-dev#23/#24/#25/#26; falsification chain
+  #474/#475/#477).
+- **Artifact**: IMF v1, int8 dynamic (MatMul-only, tied head fp32),
+  decoder kv, opset 14 — encoder.onnx + decoder.onnx + decoder-kv.onnx,
+  exported from `run-097-urd-diac-gold/step-53733/model` per the
+  house export (`src/imf/export.py`); sanity decode exact on gold.
+- **Parity** (committed slice
+  `conformance/wo20/eval600/urd_eval_600.jsonl`, sha256
+  `a06c8a2dcacec88bec0ad85b4e851a78c72429102e4051d2705b994c48108ca0`,
+  single-row greedy MAXLEN 512, reference = fp32 ONNX graphs under ORT
+  CPU): CER delta **0.0671 pp** on 600 samples (int8 gate 2.0pp;
+  reference row-mean 3.8075, candidate 3.8746), argmax flips
+  0.5391%, confident flips (margin >= p10) 0.3485% (gate 1%).
+- **Conformance**: 600 frozen vectors
+  (`conformance/urd-vocalized-2.1-vectors.json`) + golden decode tokens
+  (`golden/urd-vocalized-2.1-int8-dynamic.jsonl`) pinned to the shipped
+  zip sha.
+- **Ship**: GH release `urd-vocalized-2.1`, asset
+  `urd-vocalized-2.1-int8-dynamic.zip` + sha256 sidecar; index-v18;
+  models.yaml entry; HF mirror `Interscript/urd-vocalized-2.1`;
+  compliance certificate flipped in `interscript/pk-cle-urdu` (LOCAL
+  commit per that repo's convention). Schedule D attribution ships in
+  the model card, zip README, and release notes per the placement rules.
