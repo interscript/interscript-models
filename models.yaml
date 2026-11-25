@@ -177,6 +177,28 @@ models:
       samples: 600
       cer_delta: 0.0062
     license: BSD-3-Clause
+  # urd-vocalized-2.1 — WO93 direct-gold ship. Schedule D attribution (CLE
+  # program): the full CLE citation ships in the model card, the zip README,
+  # and the release notes — cards/urd-vocalized-2.1.md is canonical.
+  urd-vocalized-2.1:
+    task: diacritization
+    scripts:
+    - Arab
+    - Arab
+    precision: int8
+    filename: urd-vocalized-2.1-int8-dynamic.zip
+    url: https://github.com/interscript/interscript-models/releases/download/urd-vocalized-2.1/urd-vocalized-2.1-int8-dynamic.zip
+    sha256: 993a441144342db400f9db912f133cb992f9c593710d1e78d111729c6c8f5525
+    size: 261179496
+    metrics:
+    - name: cer
+      value: 3.632
+      protocol: greedy decode; 11,940 held-out; full-split raw CER, WO37 protocol (gate 0.0377, champion urd-vocalized-1.0 3.74, distilled urd-vocalized-2.0 3.641); ByT5-small direct-gold student (run-097), 3 epochs
+      source: interscript/interscript-models docs/RESULTS.md#run-097-urd-vocalized-21-direct-gold-quality-gate-pass-and-calibrated-clause-16e-2026-11-25
+    parity:
+      samples: 600
+      cer_delta: 0.0671
+    license: BSD-3-Clause
   heb-vocalized-1.0:
     task: diacritization
     scripts:
