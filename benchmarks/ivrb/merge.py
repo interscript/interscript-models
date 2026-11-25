@@ -101,9 +101,18 @@ def main() -> None:
     records = [json.loads(p.read_text()) for p in sorted(in_dir.glob("*.json"))
                if not p.name.startswith("smoke")]
     assert records, f"no run records in {in_dir}"
+    for r in records:
+        assert "raw" in r and "raw" in next(iter(r["systems"].values())), (
+            f"{r.get('model_id')}: stale record without raw accumulators — "
+            "regenerate with the post-ed8a274 harness"
+        )
     protocols = {r["protocol"] for r in records}
     assert protocols == {PROTOCOL}, f"protocol mix: {protocols}"
-    pins = {json.dumps(r["pins"], sort_keys=True) for r in records}
+    # shared pins: everything except the per-model zip sha
+    def shared_pins(r: dict) -> str:
+        p = {k: v for k, v in r["pins"].items() if k != "model_zip_sha256"}
+        return json.dumps(p, sort_keys=True)
+    pins = {shared_pins(r) for r in records}
     assert len(pins) == 1, "pin mismatch across run records"
 
     by_model: dict[str, list[dict]] = defaultdict(list)
