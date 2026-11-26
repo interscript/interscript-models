@@ -264,24 +264,27 @@ def main() -> None:
     from imf.pack import pack_zip
     from imf.schema import ModelMetadata
 
-    base_meta = ModelMetadata(
-        format="imf-v1",
-        id=MODEL_ID,
-        task="diacritization",
-        source_script="Hebr",
-        target="Hebr",
-        tokenizer="byt5",
-        opset=14,
-        decoder="kv",
-        precision="fp32",
-        license="BSD-3-Clause",
-        trained_from=(
-            "run-098-multi-vocalized/step-80010 (job rhtse/6b06d122d91f621b9"
-            "3079037): joint ByT5-base, init google/byt5-base, 3 epochs on "
-            "heb hebrew-v4 gold (50,433 rows x3 window oversample) + urd "
-            "data-diacrit gold (573,130 rows sha256 95736b0d); WO95 ledger "
-            "models#490/#495; " + SCHEDULE_D),
-    )
+    def base_meta_for(lang: str, precision: str) -> ModelMetadata:
+        return ModelMetadata(
+            format="imf-v1",
+            id=MODEL_ID,
+            task="diacritization",
+            source_script="Hebr" if lang == "he" else "Arab",
+            target="Hebr" if lang == "he" else "Arab",
+            tokenizer="bytes",
+            opset=14,
+            decoder="kv",
+            precision=precision,
+            license="BSD-3-Clause",
+            trained_from=(
+                "run-098-multi-vocalized/step-80010 (job rhtse/6b06d122d91f621b9"
+                "3079037): joint ByT5-base, init google/byt5-base, 3 epochs on "
+                "heb hebrew-v4 gold (50,433 rows x3 window oversample) + urd "
+                "data-diacrit gold (573,130 rows sha256 95736b0d); WO95 ledger "
+                "models#490/#495; " + SCHEDULE_D),
+        )
+
+    base_meta = base_meta_for("he", "fp32")  # readme template only
     readme = (
         f"# {MODEL_ID}\n\nJoint cross-abjad vocalization model (WO95): one\n"
         "generative ByT5-base trained on Hebrew niqqud + Urdu haraqat gold,\n"
@@ -319,7 +322,7 @@ def main() -> None:
             fname = (f"{MODEL_ID}-{precision}.zip" if lang == "he"
                      else f"{MODEL_ID}-ur-{precision}.zip")
             out_zip = OUT / fname
-            pack_zip(pdir, base_meta, readme, out_zip)
+            pack_zip(pdir, base_meta_for(lang, precision), readme, out_zip)
             zips.setdefault(lang, {})[precision] = out_zip
             log(f"exported {lang}/{precision}: {fname} {out_zip.stat().st_size} B")
 
