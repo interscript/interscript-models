@@ -198,9 +198,9 @@ def main() -> None:
         shutil.copytree(CKPT_DIR, shm)
     from imf.export import (decode_tokens, head_matmul_names,
                             load_byte_seq2seq, quantize_int8)
-    model, tok = load_byte_seq2seq(shm)
+    model = load_byte_seq2seq(shm)
     model.eval()
-    log(f"model loaded vocab={len(tok)}")
+    log(f"model loaded vocab={model.config.vocab_size}")
 
     # ---------------- slices ----------------
     urd_pairs, urd_sha = load_slice(Path(REPO_DIR), URD_SLICE, URD_SLICE_SHA)
