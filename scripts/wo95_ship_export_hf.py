@@ -265,7 +265,7 @@ def main() -> None:
     from imf.schema import ModelMetadata
 
     base_meta = ModelMetadata(
-        format="interscript.imf.v1",
+        format="imf-v1",
         id=MODEL_ID,
         task="diacritization",
         source_script="Hebr",
