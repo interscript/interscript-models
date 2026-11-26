@@ -162,8 +162,16 @@ def _sample_pasts(model, encoder_hidden_states):
         encoder_hidden_states=encoder_hidden_states,
         use_cache=True,
     )
+    cache = out[1]
+    # transformers version drift: newer releases return the legacy tuple
+    # when no cache was passed in (deprecation notice) — normalize to the
+    # EncoderDecoderCache API either way
+    if not hasattr(cache, "self_attention_cache"):
+        from transformers import EncoderDecoderCache
+
+        cache = EncoderDecoderCache.from_legacy_cache(cache)
     pasts = []
-    for layer in out[1].self_attention_cache.layers:
+    for layer in cache.self_attention_cache.layers:
         pasts += [layer.keys.clone(), layer.values.clone()]
     return pasts
 
