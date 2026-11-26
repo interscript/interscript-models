@@ -137,9 +137,18 @@ def _decoder_kv(model):
             )[0]
             logits = self.lm_head(hidden * self.scale)
             outputs = [logits]
-            for i in range(num_layers):
-                outputs.append(cache.self_attention_cache.layers[i].keys)
-                outputs.append(cache.self_attention_cache.layers[i].values)
+            # transformers version drift: the self-cache is either the
+            # per-layer .layers API or a DynamicCache with tensor lists —
+            # the presents are the same full cached tensors either way
+            sa = cache.self_attention_cache
+            if hasattr(sa, "layers"):
+                for i in range(num_layers):
+                    outputs.append(sa.layers[i].keys)
+                    outputs.append(sa.layers[i].values)
+            else:
+                for i in range(num_layers):
+                    outputs.append(sa.key_cache[i])
+                    outputs.append(sa.value_cache[i])
             return tuple(outputs)
 
     return DecoderKV(model)
