@@ -491,3 +491,58 @@ Pair numbers, derived BEFORE dispatch (trainer knob
   16 h, attempts 2, step-1000 ckpts + resume; fleet at dispatch: 0
   big-GPU jobs). ETA ~8–10 h (513,645/32 × 3 ≈ 48,154 steps at the
   measured ~4.1 it/s + evals).
+
+## run-100 RECORD — VERDICT FAIL; the proportion-response curve closes
+## the proportion lever (2026-11-26)
+
+Job `rhtse/6b0764f2b6a90bbe997e9da0` COMPLETED (a100-large, ~9.4 h,
+48,153 steps, nan_skips 0). Verdict VERBATIM (verdict.json sha256
+03bb61b1cdf9939074190bcd739edebc201ed3d22502c8376a1a3c2cddeddf02):
+
+```
+{"run": "run-100-fas-vocalized-sft", "backbone": "google/byt5-base",
+ "curriculum": {"ganjoor": 77046, "docs": 436599},
+ "epochs": 3, "steps": 48153, "nan_skips": 0,
+ "docs_gate": {"rows": 7621, "cer_row_mean": 0.007988, "word_acc": 0.780606,
+               "instrument": "wo94-docs-instrument/docs-test-clean (7621 rows, sha 61f2b760d5fc5b89…)",
+               "gate_row_mean_max": 0.007, "gate_pass": false},
+ "poetry_eval": {"rows": 3497, "cer_row_mean": 0.167797, "word_acc": 0.026308,
+                 "baseline": 0.3367, "register_arm_precedent": 0.1655,
+                 "run_099_precedent": 0.151375},
+ "ganjoor_val": {"rows": 5000, "cer_row_mean": 0.054184, "word_acc": 0.4052},
+ "verdict": "FAIL"}
+```
+
+### The proportion-response curve (CLEAN instrument, same protocol)
+
+| run | ganjoor share | docs clean (7,621) | poetry pinned (3,497) |
+|---|---|---|---|
+| crown (no ganjoor) | 0 | **0.6527%** | — |
+| run-100 | 0.150 | **0.7988%** | 16.7797% |
+| run-099 | 0.330 | **0.8526%** | **15.1375%** |
+
+### Reading — both pre-registered kill branches fire
+
+- The 0.330 → 0.150 share cut improved docs by only **0.054pp**
+  (0.8526 → 0.7988) while COSTING poetry **1.64pp** (15.14 → 16.78) —
+  poetry is now ABOVE the 16.55% register-arm precedent. Clearing docs
+  < 0.70% on the clean instrument needs a share well below 0.15, where
+  poetry converges to the register-arm number: **the curriculum does not
+  beat the proven arm on the available data**. The proportion lever is
+  CLOSED — recorded as the negative with the same care.
+- The clean-instrument comparisons are the honest set: the lineage's
+  0.603% carried a +0.0497pp contamination subsidy (crown clean 0.6527%).
+- **Disposition:** the crown `fas-vocalized-base-1.0` stays shipped; the
+  register arm (run-089 lineage) remains the best known
+  poetry-vs-register tradeoff; NO further proportion GPU runs without an
+  owner ruling; naming stays unpicked; nothing ships. Remaining open
+  levers for the register gap (owner queue, none dispatched): more
+  gold-scale poetry mass (the acquired corpus is only 245,791 vocalized
+  verses vs the register's 436,599), human-verified poetry eval expansion,
+  or a two-model register-specialist line (the WO17 doctrine).
+
+run-100 artifacts: `isx-training:/run-100-fas-vocalized-sft/` (best/, 3
+epoch ckpts, step-* ckpts, verdict.json sha 03bb61b1…, dropped-rows.jsonl
+sha 2b1c29fe…, curriculum concat). Trainer knobs on `interscript-train`
+`feat/fas-vocalized-prop-iter` (9b82a48, merged-to-be via the prop-iter
+branch; #152 carried the tooling to main).
