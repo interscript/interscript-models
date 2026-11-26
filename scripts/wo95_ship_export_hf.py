@@ -282,6 +282,27 @@ def main() -> None:
                 "heb hebrew-v4 gold (50,433 rows x3 window oversample) + urd "
                 "data-diacrit gold (573,130 rows sha256 95736b0d); WO95 ledger "
                 "models#490/#495; " + SCHEDULE_D),
+            # the of-record quality metrics (the strict validator requires a
+            # non-empty metrics block; write_parity adds the parity block on
+            # top) — verbatim from the run-098 verdict
+            metrics=[
+                {
+                    "name": "ur_cer_row_mean",
+                    "value": 0.03604,
+                    "protocol": "WO37 protocol (row-mean raw-char CER, "
+                                "11,940 rows, data-diacrit test)",
+                    "source": "isx-training:/run-098-multi-vocalized/"
+                              "verdict.json (WO95 ledger models#495)",
+                },
+                {
+                    "name": "he_der_corpus",
+                    "value": 5.3075,
+                    "protocol": "crown protocol (greedy, seq2seq_der, "
+                                "1,864 rows / 4,094 windows, hebrew-v4 test)",
+                    "source": "isx-training:/run-098-multi-vocalized/"
+                              "verdict.json (WO95 ledger models#495)",
+                },
+            ],
         )
 
     base_meta = base_meta_for("he", "fp32")  # readme template only
