@@ -163,16 +163,27 @@ def _sample_pasts(model, encoder_hidden_states):
         use_cache=True,
     )
     cache = out[1]
-    # transformers version drift: newer releases return the legacy tuple
-    # when no cache was passed in (deprecation notice) — normalize to the
-    # EncoderDecoderCache API either way
-    if not hasattr(cache, "self_attention_cache"):
+    # transformers version drift, three storage shapes in the wild:
+    # (a) legacy tuple when no cache was passed in; (b) EncoderDecoderCache
+    # whose self_attention_cache exposes per-layer .layers objects; (c)
+    # DynamicCache-style per-layer tensor lists. Normalize to interleaved
+    # (key, value) tensor pairs — the only contract the traced export uses.
+    if isinstance(cache, tuple):
         from transformers import EncoderDecoderCache
 
         cache = EncoderDecoderCache.from_legacy_cache(cache)
+    sa = getattr(cache, "self_attention_cache", cache)
+    if hasattr(sa, "layers"):
+        pairs = [(layer.keys, layer.values) for layer in sa.layers]
+    elif hasattr(sa, "key_cache"):
+        pairs = list(zip(sa.key_cache, sa.value_cache))
+    else:
+        raise AttributeError(
+            f"unrecognized cache type {type(sa).__name__} in _sample_pasts"
+        )
     pasts = []
-    for layer in cache.self_attention_cache.layers:
-        pasts += [layer.keys.clone(), layer.values.clone()]
+    for key, value in pairs:
+        pasts += [key.clone(), value.clone()]
     return pasts
 
 
