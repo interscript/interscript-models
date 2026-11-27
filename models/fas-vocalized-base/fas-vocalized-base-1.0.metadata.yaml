@@ -1,0 +1,41 @@
+format: imf-v1
+id: fas-vocalized-base-1.0
+task: diacritization
+source_script: Arab
+target: Arab
+tokenizer: bytes
+opset: 14
+decoder: kv
+precision: int8
+license: BSD-3-Clause
+trained_from: 'run-078-fas-diac-base/best (model.safetensors sha256 9c4f8ac7b7854d017e73bdf7b42e8c3c1d06241409d60d6c21cd957bb574ba0b):
+  ByT5-base, init google/byt5-base, 3 epochs bs 16x2 MAXLEN 256 on the fas-dia register
+  gold train split 445,869 rows (sha256 05ea4b33aaaec7fcddabd8d6bbefa56323efd6fac30b6ae242869372026eb845)
+  — the WO66 Persian crown, re-exported through the WO94 ship chain; clean-instrument
+  of record 0.6527% row-mean CER (7,621-row contamination-controlled docs test, WO94
+  ledger models#496); the WO94 proportion-mixing ablations were falsified (models#494/#501).
+  Persian: fas-dia register gold — the recovered 528K-pair Persian corpus (WO47 lineage),
+  CC0 (WO94 ledger license gate). The crown trained on the pinned register train split
+  445,869 rows, sha256 05ea4b33aaaec7fcddabd8d6bbefa56323efd6fac30b6ae242869372026eb845.
+  No restricted corpus in any lineage.'
+metrics:
+- name: docs_cer_row_mean_clean
+  value: 0.6527
+  protocol: greedy num_beams=1 MAXLEN 256 bs 16, row-mean raw CER on the 7,621-row
+    contamination-controlled docs instrument (word_acc 0.8055)
+  source: isx-training:/run-078-fas-diac-base-best-clean-eval/eval-verdict.json (WO94
+    ledger models#496)
+- name: docs_cer_row_mean_historical
+  value: 0.603
+  protocol: greedy decode, 9,288-row docs split, row-mean (contaminated instrument
+    — 17.24% of test inputs were visible in lineage training; superseded by the clean
+    measurement)
+  source: interscript-models models.yaml fas-vocalized-base-1.0 entry (instrument
+    finding in WO94 ledger models#496)
+parity:
+  samples: 600
+  cer_delta: 0.0769
+sha256:
+  decoder-kv.onnx: bd3c3939b6a51da5a814608fedd99b257a957083c8a68892d2f9bd90e9d2db48
+  decoder.onnx: 33bab5be875a15946cf0daff8c2bd56d67495a507aca2b1a73ca52e730ead399
+  encoder.onnx: c25f6fcd54c59351e935bcb1118102bfb5a1db4b3c5c7cce48762010ef9fde77
