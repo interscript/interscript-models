@@ -185,7 +185,7 @@ def _sample_pasts(model, encoder_hidden_states):
     if hasattr(sa, "layers"):
         pairs = [(layer.keys, layer.values) for layer in sa.layers]
     elif hasattr(sa, "key_cache"):
-        pairs = list(zip(sa.key_cache, sa.value_cache))
+        pairs = list(zip(sa.key_cache, sa.value_cache, strict=False))
     else:
         raise AttributeError(
             f"unrecognized cache type {type(sa).__name__} in _sample_pasts"
