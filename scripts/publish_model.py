@@ -157,6 +157,13 @@ def main() -> None:
         "--key",
         help="models.yaml key when publishing a precision variant of an "
              "existing base id, e.g. --key <base>-int8 (default: model_id)")
+    parser.add_argument(
+        "--asset-name",
+        help="release asset / models.yaml filename override for variant "
+             "zips whose internal metadata keeps the base id (the "
+             "multi-vocalized-base-1.0-ur fold convention: both folds ride "
+             "the base release under their own names and index keys). "
+             "Default: <id>-<precision>.zip from the zip metadata")
     args = parser.parse_args()
 
     # git and gh must operate on this repo regardless of the caller's cwd
@@ -175,7 +182,12 @@ def main() -> None:
         raise SystemExit(f"metadata id {meta['id']!r} != requested {args.model_id!r}")
     key = args.key or args.model_id
 
-    canonical = canonical_filename(meta)
+    canonical = args.asset_name or canonical_filename(meta)
+    if key != args.model_id and not args.asset_name:
+        # a variant riding an existing base release must not restage to the
+        # base canonical name — that would clobber the base asset on upload
+        canonical = f"{key}-{meta['precision']}.zip"
+        print(f"variant publish: canonical filename defaults to {canonical}")
     zip_path = args.zip
     if zip_path.name != canonical:
         staged = Path(tempfile.mkdtemp(prefix="publish-")) / canonical
