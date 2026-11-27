@@ -900,23 +900,17 @@ models:
       decode_env: hf-cpu-basic (run-081-bench-decode-2, 2026-10-23; measured median 4158, 12 rows x 3 repeats)
     license: BSD-3-Clause
   fas-vocalized-base-1.0:
-    task: diac
-    scripts:
-    - Arab
-    - Arab
-    precision: fp16
-    filename: fas-diac-base-1.0-fp16.zip
-    url: https://github.com/interscript/interscript-models/releases/download/fas-diac-base-1.0/fas-diac-base-1.0-fp16.zip
-    sha256: 620b31ab96e6d7588d583fa5119406ea7c08506d483cc8ee253b3c479c6d87f0
-    size: 711254463
+    task: diacritization
+    scripts: [Arab, Arab]
+    precision: int8
+    filename: fas-vocalized-base-1.0-int8.zip
+    url: https://github.com/interscript/interscript-models/releases/download/fas-vocalized-base-1.0/fas-vocalized-base-1.0-int8.zip
+    sha256: 7c7946a96f20796f3196c912979434909e1f504442536a64e6d1be7015760d73
+    size: 1770153205
     metrics:
-    - name: cer
-      value: 0.603
-      protocol: greedy decode, 9288-row docs split, row-mean
-      source: interscript/interscript-models docs/RESULTS.md#run-077-fas-diac-base-gate-pass-and-the-five-lever-closure-2026-10-18
-    parity:
-      samples: 500
-      cer_delta: 0.0
+      - {name: docs_cer_row_mean_clean, value: 0.6527, source: isx-training:/run-078-fas-diac-base-best-clean-eval/eval-verdict.json (WO94 ledger models#496)}
+      - {name: docs_cer_row_mean_historical, value: 0.603, source: interscript-models models.yaml fas-vocalized-base-1.0 entry (instrument finding in WO94 ledger models#496)}
+    parity: {samples: 600, cer_delta: 0.0769}
     license: BSD-3-Clause
   urd-vocalized-int8static-1.0:
     task: diacritization
