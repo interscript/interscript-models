@@ -156,10 +156,25 @@ decode.
 
 ## Landed-run notes (published, not dropped)
 
-- **SPEC §9.4 cross-validation did not run in these legs:** every landed
-  record carries `crossval: null` — no ≥ 200-row iscrs cross-check per
-  system was captured. The ranking above is published with that gate
-  OPEN; adjudication is owner-side.
+- **SPEC §9.4 cross-validation: CLOSED — all systems 100% agreement.**
+  The decode legs carried `crossval: null`; the §9.4 cross-check was then
+  run decode-free as its own job
+  (`ivrb-crossval-94g`, job `6b0906e06c5d61fff1887455`, COMPLETED
+  2026-11-27) against the same pins, sampling the seed-20261125
+  200-row sample per language and comparing the in-process engine against
+  `iscrs transliterate` on each row's gold and skeleton text — exactly
+  the harness `--crossval` block, minus the vocalizer decode it does not
+  measure. Result: **7/7 systems at agreement 1.0** (urd:
+  alalc-2013, bgnpcgn-2007, din-31635-2011, odni-2015, un-1972; heb:
+  din-31636-2018, icao-9303 — 400 checks per system, zero mismatches,
+  104.6s). Per SPEC §9.4 every system clears the 100% bar, so no rows
+  are excluded and the ranking above stands. Record:
+  bucket `rhtse/jobs-artifacts/ivrb-crossval/crossval-records.json`
+  (uploaded + read-back verified). Transport note: the pinned rs binary
+  (`f054108`, release/0.2.2) builds in containers with its `parsanol`
+  path dep redirected to the same crates.io release (`=0.19.8`, the
+  version the pin names) and with the gcc linker (the ort-sys prebuilt
+  needs glibc ≥ 2.38 / libstdc++ ≥ 14 — rust:1-trixie).
 - **Hebrew direct-CER inversion:** heb-vocalized-1.1 shows direct CER
   30.46% vs heb-vocalized-1.0's 25.18%, although 1.1 is the stronger
   house model (DER greedy 16.44 vs 29.0). The shipped Hebrew anchors
