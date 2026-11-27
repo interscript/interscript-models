@@ -1,0 +1,26 @@
+{
+ "stage": "wo94-parity600",
+ "status": "EVAL SLICE for the publication parity gate (>=500 samples) of the WO94 crown export fas-vocalized-base-1.0. Gating data only, never training data.",
+ "date": "2026-11-27",
+ "provenance": {
+  "method": "seed-42 uniform sample without replacement (600 of 7,621 rows; random.Random(42).sample over sorted row indices) over the crown's own held-out gate instrument — the contamination-controlled docs test of record; rows verbatim, src/tgt whitespace-stripped (eval600 house convention). Reproducible from (instrument sha256, 7621, 600, seed 42) alone.",
+  "built_by": "hf job rhtse/6b0906396c5d61fff18872d2 (wo94-fas-eval-slice, 2026-11-27); artifacts at hf://buckets/rhtse/jobs-artifacts/20261127T042425-wo94x1/",
+  "decode_input": "src",
+  "scoring_reference": "tgt",
+  "decontamination": "inherited by construction — the instrument of record (WO94 ledger models#496, owner-approved law) excluded every row whose src.strip() appears in the stripped-src set of the original pinned register train split (run-076-fas-diac-retrain/train.jsonl, 445,869 rows, sha256 05ea4b33aaaec7fcddabd8d6bbefa56323efd6fac30b6ae242869372026eb845 — the split the crown trained on); sampling introduces no new exposure"
+ },
+ "slices": [
+  {
+   "file": "fas_eval_600.jsonl",
+   "rows": 600,
+   "sha256": "3942210940d4c12983603c60eb021920a1878e7461ac6be4787ea45b8420ecbe",
+   "source": "isx-training:/wo94-docs-instrument/docs-test-clean/docs-test-clean.jsonl (7,621 rows), seed-42 sample",
+   "channel": "hf://buckets/Interscript/isx-training/wo94-docs-instrument/docs-test-clean/docs-test-clean.jsonl",
+   "channel_full_sha256": "61f2b760d5fc5b89569998cc8a2627588495cbdd00d1521d916d61bcc8341dc9",
+   "channel_full_rows": 7621,
+   "instrument_builder": "interscript-train build_docs_test_clean.py (job rhtse/6b07529fb6a90bbe997e8057)",
+   "crown_checkpoint": "isx-training:/run-078-fas-diac-base/best (model.safetensors sha256 9c4f8ac7b7854d017e73bdf7b42e8c3c1d06241409d60d6c21cd957bb574ba0b, 2,326,643,632 B) — the torch source of the shipped fas-vocalized-base-1.0 tier (WO94 ledger models#496 triangle; clean 0.6527% row-mean CER on this instrument)",
+   "protocol": "greedy num_beams=1 MAXLEN 256 (the crown protocol of record: run-078-fas-diac-base-best-clean-eval/eval-verdict.json; WO94 ledger models#496)"
+  }
+ ]
+}
